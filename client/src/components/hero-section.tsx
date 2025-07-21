@@ -14,7 +14,7 @@ export default function HeroSection() {
 
   const handleResumeClick = () => {
     // Open resume PDF in new tab
-    const resumeUrl = "/attached_assets/ARSHIN SIKKA_RESUME_JUNE'25_1753120527090.pdf";
+    const resumeUrl = "/assets/Arshin_Sikka_Resume.pdf";
     window.open(resumeUrl, '_blank');
   };
 

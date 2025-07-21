@@ -59,7 +59,7 @@ function ProjectCard({ project }: ProjectCardProps) {
             </a>
           )}
           <a
-            href="/attached_assets/Lecture AI - Pitch Deck_1753120443469.pdf"
+            href="/assets/Lecture_AI_Pitch_Deck.pdf"
             download="Lecture_AI_Pitch_Deck.pdf"
             className="inline-flex items-center px-4 py-2 bg-purple-600 dark:bg-purple-500 text-white text-sm font-medium rounded-lg hover:bg-purple-700 dark:hover:bg-purple-600 transition-colors shadow-sm"
           >
