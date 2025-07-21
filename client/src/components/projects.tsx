@@ -44,17 +44,29 @@ function ProjectCard({ project }: ProjectCardProps) {
         {project.description}
       </p>
       
-      {/* Website Button for Lecture AI */}
-      {project.title === "Lecture AI" && project.websiteUrl && (
-        <div className="mb-4">
+      {/* Action Buttons for Lecture AI */}
+      {project.title === "Lecture AI" && (
+        <div className="mb-4 flex gap-3 flex-wrap">
+          {project.websiteUrl && (
+            <a
+              href={project.websiteUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors shadow-sm"
+            >
+              Visit Website
+              <ExternalLink className="w-4 h-4 ml-2" />
+            </a>
+          )}
           <a
-            href={project.websiteUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors shadow-sm"
+            href="/attached_assets/Lecture AI - Pitch Deck_1753120443469.pdf"
+            download="Lecture_AI_Pitch_Deck.pdf"
+            className="inline-flex items-center px-4 py-2 bg-purple-600 dark:bg-purple-500 text-white text-sm font-medium rounded-lg hover:bg-purple-700 dark:hover:bg-purple-600 transition-colors shadow-sm"
           >
-            Visit Website
-            <ExternalLink className="w-4 h-4 ml-2" />
+            Download Pitch Deck
+            <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
           </a>
         </div>
       )}
