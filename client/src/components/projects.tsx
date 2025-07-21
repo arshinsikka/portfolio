@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge";
+import { ExternalLink } from "lucide-react";
 
 interface ProjectItem {
   title: string;
@@ -6,6 +7,7 @@ interface ProjectItem {
   dates: string;
   description: string;
   tags: string[];
+  websiteUrl?: string;
 }
 
 interface ProjectCardProps {
@@ -15,9 +17,22 @@ interface ProjectCardProps {
 function ProjectCard({ project }: ProjectCardProps) {
   return (
     <div className="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-slate-100 p-8">
-      <h3 className="text-xl font-bold text-slate-800 mb-3">
-        {project.title}
-      </h3>
+      <div className="flex items-start justify-between mb-3">
+        <h3 className="text-xl font-bold text-slate-800">
+          {project.title}
+        </h3>
+        {project.websiteUrl && (
+          <a 
+            href={project.websiteUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:text-blue-800 transition-colors ml-2"
+            title="Visit Website"
+          >
+            <ExternalLink className="w-5 h-5" />
+          </a>
+        )}
+      </div>
       
       <div className="mb-4">
         <span className="text-slate-600 text-sm font-medium">{project.role}</span>
@@ -51,7 +66,8 @@ export default function Projects() {
       role: "Co-Founder",
       dates: "Mar 2025 – Present",
       description: "An AI-powered tool for summarizing university lectures using automatic transcription, topic segmentation, and intelligent structuring. Backed by BLOCK71's incubation program and currently in MVP stage.",
-      tags: ["AI", "NLP", "Startup", "Entrepreneurship"]
+      tags: ["AI", "NLP", "Startup", "Entrepreneurship"],
+      websiteUrl: "https://lectureai.co"
     },
     {
       title: "TrackUp",
