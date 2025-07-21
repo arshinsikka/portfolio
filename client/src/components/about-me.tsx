@@ -46,7 +46,7 @@ export default function AboutMe() {
         {/* Intro Paragraph */}
         <div className="mb-16">
           <p className="text-lg md:text-xl text-slate-700 leading-relaxed text-center max-w-3xl mx-auto">
-            Hi, I'm Arshin — a Computer Science student at NUS with a minor in Psychology, 
+            Hi, I'm Arshin — a Year 3 Computer Science student at NUS with a minor in Psychology, 
             a curious mind, and a big heart for building things that matter. I'm fascinated 
             by how technology can change lives, and I'm driven by the idea that the right tools, 
             built with care, can create real impact at scale.
