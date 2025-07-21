@@ -1,0 +1,31 @@
+Add an "About Me" section to my portfolio website using React and Tailwind CSS. It should match the same modern and minimal aesthetic as the hero section.
+
+This section should include the following:
+
+1. A centered title: “About Me” in bold, clean typography.
+
+2. A short intro paragraph, slightly larger than body text:
+   “Hi, I’m Arshin — a Computer Science student at NUS with a minor in Psychology, a curious mind, and a big heart for building things that matter. I’m fascinated by how technology can change lives, and I’m driven by the idea that the right tools, built with care, can create real impact at scale.”
+
+3. A subheading: “Why I Do What I Do”  
+   Followed by this paragraph in normal body text:
+   “I chose to study Computer Science because I see tech as one of the most powerful tools we have to improve the world — to solve problems, connect people, and open up new possibilities. I’ve always wanted to be part of that journey — building something that doesn’t just work, but makes someone’s life a little better.
+
+   My minor in Psychology was a natural extension of that mindset. I wanted to understand how people think, feel, and interact — because great technology isn’t just about algorithms, it’s about empathy. It’s about meeting people where they are and designing with them in mind.”
+
+4. A horizontal “Quick Highlights” section with icons and clean styling (use a grid layout with soft hover effects):
+   - 🎓 Computer Science @ NUS, Minor in Psychology  
+   - 🌏 Based in Singapore & India  
+   - 🧪 Research: LLMs, Cybersecurity, Human-AI Interfaces  
+   - 🚀 Built Lecture AI (BLOCK71), TrackUp, and ChessPhere  
+   - 🤖 Internships at KPMG, AlygnAI, StatusNeo, PharynxAI  
+   - ♟️ Chess Captain with 10+ Years Competitive Experience  
+   - 🌱 Passionate about education, AI for good, and thoughtful design  
+
+Design notes:
+- Ensure the layout is responsive and looks good on mobile.
+- Use Tailwind spacing, subtle animation on hover for icons, and proper contrast.
+- Wrap this whole section in a `<section>` tag so I can later link to it from the “Contact Me” or nav bar.
+- Leave room for a future quote or image (not needed now).
+
+Export the component cleanly as `AboutMe.jsx` or similar so I can import it later into the main page layout.

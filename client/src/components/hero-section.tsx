@@ -5,10 +5,10 @@ import profileImage from "@assets/Arshin Sikka Linkedin Picture_1753116623245.jp
 export default function HeroSection() {
   const handleContactClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    // Smooth scroll to contact section when it exists
-    const contactSection = document.getElementById('contact');
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: 'smooth' });
+    // Smooth scroll to about section for now, will update when contact section exists
+    const aboutSection = document.getElementById('about');
+    if (aboutSection) {
+      aboutSection.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
