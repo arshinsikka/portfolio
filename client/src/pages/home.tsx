@@ -5,6 +5,7 @@ import Projects from "@/components/projects";
 import ResearchExperience from "@/components/research-experience";
 import Leadership from "@/components/leadership";
 import Contact from "@/components/contact";
+import Footer from "@/components/footer";
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
       <ResearchExperience />
       <Leadership />
       <Contact />
+      <Footer />
     </div>
   );
 }
