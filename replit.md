@@ -20,6 +20,7 @@ Preferred communication style: Simple, everyday language.
 ### Backend Architecture
 - **Framework**: Express.js with TypeScript
 - **Runtime**: Node.js with ES modules
+- **Database**: PostgreSQL with Neon serverless driver
 - **Database ORM**: Drizzle ORM with PostgreSQL dialect
 - **Session Storage**: PostgreSQL-backed sessions using connect-pg-simple
 - **Development**: tsx for TypeScript execution in development
