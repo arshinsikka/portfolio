@@ -46,30 +46,26 @@ export default function AboutMe() {
         {/* Intro Paragraph */}
         <div className="mb-16">
           <p className="text-lg md:text-xl text-slate-700 leading-relaxed text-center max-w-3xl mx-auto">
-            Hi, I'm Arshin — a Year 3 Computer Science student at NUS with a minor in Psychology, 
+            Hi, I'm Arshin — a penultimate year Computer Science student at NUS with a minor in Psychology, 
             a curious mind, and a big heart for building things that matter. I'm fascinated 
             by how technology can change lives, and I'm driven by the idea that the right tools, 
             built with care, can create real impact at scale.
           </p>
         </div>
 
-        {/* Why I Do What I Do Section */}
+        {/* Main Content Section */}
         <div className="mb-16">
-          <h3 className="text-2xl font-semibold text-slate-800 mb-6 text-center">
-            Why I Do What I Do
-          </h3>
           <div className="space-y-6 text-base md:text-lg text-slate-700 leading-relaxed max-w-3xl mx-auto">
             <p>
-              I chose to study Computer Science because I see tech as one of the most powerful 
-              tools we have to improve the world — to solve problems, connect people, and open 
-              up new possibilities. I've always wanted to be part of that journey — building 
-              something that doesn't just work, but makes someone's life a little better.
+              I chose to study Computer Science because I wanted to be part of the solution — using 
+              technology to address real problems and give back to society. My minor in Psychology 
+              helps me stay grounded in the people I'm building for. Understanding how users think, 
+              feel, and behave has shaped the way I approach everything — from designing lecture 
+              summarization tools to mentoring underprivileged students.
             </p>
             <p>
-              My minor in Psychology was a natural extension of that mindset. I wanted to 
-              understand how people think, feel, and interact — because great technology isn't 
-              just about algorithms, it's about empathy. It's about meeting people where they 
-              are and designing with them in mind.
+              Whether I'm prototyping a surgical device, contributing to open source, or building 
+              a startup, I'm always asking: How can this make someone's life better?
             </p>
           </div>
         </div>

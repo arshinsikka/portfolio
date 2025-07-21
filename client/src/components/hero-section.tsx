@@ -49,9 +49,8 @@ export default function HeroSection() {
         {/* Introduction Paragraph */}
         <div className="animate-fade-in mb-12">
           <p className="text-base md:text-lg text-slate-700 max-w-2xl mx-auto leading-relaxed">
-            I'm a Computer Science student at NUS with a minor in Psychology. I love building with AI, 
-            designing for real-world impact, and working at the intersection of tech, entrepreneurship, 
-            and the society.
+            I'm a Year 3 Computer Science student at NUS with a minor in Psychology. I love building 
+            human-centered tech, creating with AI, and exploring ideas that make a real-world difference.
           </p>
         </div>
 
