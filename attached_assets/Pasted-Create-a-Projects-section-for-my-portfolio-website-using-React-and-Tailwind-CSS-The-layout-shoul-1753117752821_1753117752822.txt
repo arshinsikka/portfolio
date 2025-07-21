@@ -1,0 +1,63 @@
+Create a "Projects" section for my portfolio website using React and Tailwind CSS.
+
+The layout should be a responsive grid with stylish project cards that contain:
+1. Project title
+2. My role and dates
+3. A short 1–2 sentence description
+4. Tech tags as pill-style badges
+5. Optional: placeholder for an image or logo I will upload later (e.g., lectureai.png, trackup.png)
+
+Each card should have subtle hover effects, consistent spacing, and look good on both desktop and mobile.
+
+Use the following content for each card:
+
+---
+
+🧠 Lecture AI  
+Role: Co-Founder · Mar 2025 – Present  
+Description: An AI-powered tool for summarizing university lectures using automatic transcription, topic segmentation, and intelligent structuring. Backed by BLOCK71’s incubation program and currently in MVP stage.  
+Tags: AI, NLP, Startup, Entrepreneurship
+
+---
+
+📇 TrackUp  
+Role: Developer · Mar 2025 – May 2025  
+Description: A command-line Java application for managing contacts and events with smart parsing, category filtering, and robust test-driven backend logic.  
+Tags: Java, CLI, TDD, Software Engineering
+
+---
+
+🩺 Pediatric Tendon Stapler  
+Role: Product Designer · Jan 2025 – May 2025  
+Description: Designed a one-handed ergonomic surgical stapler for pediatric tendon repair under NUS’s Innovation & Design Programme. Focused on user research and compatibility with bioabsorbable staples.  
+Tags: Medical Device, UX Design, Hardware Prototyping
+
+---
+
+♟️ ChessPhere  
+Role: Co-Founder · Dec 2020 – May 2021  
+Description: An online platform built during the pandemic to support chess communities with virtual tournaments, workshops, and resources.  
+Tags: Community, Chess, Web Platform, Leadership
+
+---
+
+🌐 Donation-Nation  
+Role: Co-Founder · Oct 2020 – Jan 2022  
+Description: A grassroots platform created during COVID-19 to connect donors with NGOs and streamline donation drives across India.  
+Tags: Social Impact, Web, Logistics, Operations
+
+---
+
+🔧 MarkBind Contributions  
+Role: Open Source Contributor · Jun 2025 – Present  
+Description: Contributed to the NUS MarkBind open-source project through issue resolution, feature development, and collaborative workflows as part of CP3108B.  
+Tags: Open Source, Vue, Node.js, GitHub Workflow
+
+---
+
+Design Tips:
+- Use `grid-cols-1` on small screens, and `grid-cols-2` or `grid-cols-3` on medium/large.
+- Use Tailwind shadow and transition for clean hover animations.
+- Make each project block a reusable React component if possible.
+
+Wrap everything inside a `<section id="projects">` so I can link to it from the nav bar later.
