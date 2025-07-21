@@ -1,0 +1,46 @@
+Create a “Work Experience” section for my portfolio website using React and Tailwind CSS. This section should focus only on internships and professional work experience — student leadership roles will be added separately.
+
+Use a vertical timeline or clean stacked card layout. Each item should include:
+- Job Title
+- Company Name and Location
+- Dates
+- 1–2 sentence description
+- Tags displayed as pill-style badges
+
+Here is the content to display:
+
+---
+
+🔹 AI Labs Intern — KPMG, Gurugram  
+May 2025 – Aug 2025  
+Built a Retrieval-Augmented Generation (RAG) chatbot using Azure OpenAI and LangChain to streamline document intelligence for consultants. Improved internal knowledge access across teams using secure, agentic workflows.  
+Tags: AI, Chatbot, RAG, Azure OpenAI
+
+🔹 SDE Intern — AlygnAI, Remote (US)  
+Jun 2025 – Present  
+Worked on core product features for an enterprise-focused LLM platform. Built dynamic frontend components in WeWeb and contributed to research on fine-tuning strategies to improve model adaptability.  
+Tags: LLMs, Frontend Dev, WeWeb, Product
+
+🔹 SWE Intern — StatusNeo, Gurugram  
+May 2024 – Jul 2024  
+Developed scalable Spring Boot web apps for enterprise banking clients. Contributed to backend logic, REST APIs, and deployment pipelines in a high-performance agile environment.  
+Tags: Java, Spring Boot, REST APIs, Enterprise Software
+
+🔹 GenAI Intern — PharynxAI Technologies, Gurugram  
+Dec 2024 – Jan 2025  
+Tested GenAI virtual try-on features on Genie (flagship platform) and scraped commercial datasets for business intelligence and performance benchmarking.  
+Tags: Generative AI, Image Generation, Web Testing, Data Scraping
+
+🔹 Data Analytics Intern — Lagozon Technologies, New Delhi  
+May 2022 – Jun 2022  
+Built Power BI dashboards and SQL-based models to analyze sales performance. Created a business intelligence report to support better decision-making in cross-functional teams.  
+Tags: Power BI, SQL, Data Analytics, Reporting
+
+---
+
+Layout instructions:
+- Use subtle shadows and spacing between items
+- Make it responsive for mobile and desktop
+- Use a section ID of “experience” so I can link to it later
+
+Optional: If possible, make this a reusable `<ExperienceCard />` component for maintainability.

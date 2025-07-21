@@ -24,7 +24,7 @@ export default function AboutMe() {
     },
     {
       icon: Trophy,
-      text: "Chess Captain with 10+ Years Competitive Experience"
+      text: "International Chess Player with 10+ Years Competitive Experience"
     },
     {
       icon: Sprout,
