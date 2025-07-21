@@ -1,0 +1,65 @@
+Please implement the following 5 UI/UX improvements across my portfolio website using React and Tailwind CSS:
+
+---
+
+### 1. Sticky Navbar with Smooth Scroll (🔥 High Priority)
+
+- Add a responsive, sticky top navbar with smooth scroll links to all major sections:
+  - Home
+  - About
+  - Experience
+  - Projects
+  - Research
+  - Leadership
+  - Contact
+- Highlight the currently active section as the user scrolls (e.g. underline or bold)
+- On mobile, use a hamburger menu or responsive collapse behavior
+
+---
+
+### 2. “Visit Website” CTA on Lecture AI Project Card (🔥 High Priority)
+
+- In the **Lecture AI** project card, add a clearly visible “Visit Website” button below the description
+- Link it to: https://lectureai.vercel.app
+- Use a button style consistent with the rest of the site (e.g., `bg-blue-500 text-white px-4 py-2 rounded`)
+- Optional: Add a subtle hover animation or icon (`↗`) to indicate it opens a new tab
+
+---
+
+### 3. Alternate Background Colors for Sections (✅ Medium Priority)
+
+- Alternate section backgrounds to improve visual separation
+  - Example:
+    - About Me → White (`bg-white`)
+    - Work Experience → `bg-gray-50`
+    - Projects → `bg-white`
+    - Research → `bg-gray-50`
+    - Leadership → `bg-white`
+    - Contact → `bg-gray-50`
+- Keep contrast good and text readable throughout
+
+---
+
+### 4. Footer Social Icons with Tooltips (✅ Medium Priority)
+
+- Add `title` attributes or hover tooltips to all social icons in the footer:
+  - Instagram → “Follow on Instagram”
+  - Telegram → “Message on Telegram”
+  - LinkedIn → “Connect on LinkedIn”
+  - WhatsApp → “Chat on WhatsApp”
+  - GitHub → “View my GitHub”
+- Ensure tooltips appear on hover (you can use Tailwind tooltip plugin or native browser titles)
+
+---
+
+### 5. Dark Mode Toggle (⭐ Bonus)
+
+- Add a dark/light mode toggle button in the top right corner of the navbar
+- Use Tailwind’s `dark:` classes and `darkMode: 'class'` in `tailwind.config.js`
+- Toggle should persist user preference in `localStorage`
+- Ensure all text, background, and tag colors adapt cleanly to dark mode
+- Icons and buttons should remain visually accessible in both modes
+
+---
+
+Apply all changes consistently and make sure layout remains mobile-friendly.

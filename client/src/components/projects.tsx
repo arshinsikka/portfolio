@@ -16,9 +16,9 @@ interface ProjectCardProps {
 
 function ProjectCard({ project }: ProjectCardProps) {
   return (
-    <div className="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-slate-100 p-8">
+    <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-slate-100 dark:border-slate-700 p-8">
       <div className="flex items-start justify-between mb-3">
-        <h3 className="text-xl font-bold text-slate-800">
+        <h3 className="text-xl font-bold text-slate-800 dark:text-white">
           {project.title}
         </h3>
         {project.websiteUrl && (
@@ -26,7 +26,7 @@ function ProjectCard({ project }: ProjectCardProps) {
             href={project.websiteUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-600 hover:text-blue-800 transition-colors ml-2"
+            className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors ml-2"
             title="Visit Website"
           >
             <ExternalLink className="w-5 h-5" />
@@ -35,21 +35,36 @@ function ProjectCard({ project }: ProjectCardProps) {
       </div>
       
       <div className="mb-4">
-        <span className="text-slate-600 text-sm font-medium">{project.role}</span>
-        <span className="text-slate-400 text-sm mx-2">•</span>
-        <span className="text-slate-500 text-sm">{project.dates}</span>
+        <span className="text-slate-600 dark:text-slate-300 text-sm font-medium">{project.role}</span>
+        <span className="text-slate-400 dark:text-slate-500 text-sm mx-2">•</span>
+        <span className="text-slate-500 dark:text-slate-400 text-sm">{project.dates}</span>
       </div>
       
-      <p className="text-slate-700 leading-relaxed mb-6 text-sm">
+      <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-6 text-sm">
         {project.description}
       </p>
+      
+      {/* Website Button for Lecture AI */}
+      {project.title === "Lecture AI" && project.websiteUrl && (
+        <div className="mb-4">
+          <a
+            href={project.websiteUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors shadow-sm"
+          >
+            Visit Website
+            <ExternalLink className="w-4 h-4 ml-2" />
+          </a>
+        </div>
+      )}
       
       <div className="flex flex-wrap gap-2">
         {project.tags.map((tag, index) => (
           <Badge 
             key={index}
             variant="secondary"
-            className="bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs"
+            className="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 text-xs"
           >
             {tag}
           </Badge>
@@ -67,7 +82,7 @@ export default function Projects() {
       dates: "Mar 2025 – Present",
       description: "An AI-powered tool for summarizing university lectures using automatic transcription, topic segmentation, and intelligent structuring. Backed by BLOCK71's incubation program and currently in MVP stage.",
       tags: ["AI", "NLP", "Startup", "Entrepreneurship"],
-      websiteUrl: "https://lectureai.co"
+      websiteUrl: "https://lectureai.vercel.app"
     },
     {
       title: "TrackUp",
@@ -107,15 +122,15 @@ export default function Projects() {
   ];
 
   return (
-    <section id="projects" className="py-20 bg-white">
+    <section id="projects" className="py-20 bg-white dark:bg-slate-900">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Title */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-800 dark:text-white mb-4">
             Projects
           </h2>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+          <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
             A collection of projects spanning AI innovation, software development, 
             medical device design, and social impact initiatives
           </p>

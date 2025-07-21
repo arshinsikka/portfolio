@@ -19,7 +19,7 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 flex items-center justify-center px-4 sm:px-6 lg:px-8 relative">
+    <section id="home" className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex items-center justify-center px-4 sm:px-6 lg:px-8 relative pt-16">
       <div className="max-w-4xl mx-auto text-center">
         
         {/* Profile Image */}
@@ -36,19 +36,19 @@ export default function HeroSection() {
 
         {/* Name and Title */}
         <div className="animate-fade-in-up mb-6">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-800 mb-4">
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-800 dark:text-white mb-4">
+            <span className="bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
               Arshin Sikka
             </span>
           </h1>
-          <p className="text-lg md:text-xl text-slate-600 font-medium max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300 font-medium max-w-3xl mx-auto leading-relaxed">
             CS @ NUS | BLOCK71-backed Founder | AI Intern @ KPMG | SDE Intern @ Alygn AI
           </p>
         </div>
 
         {/* Introduction Paragraph */}
         <div className="animate-fade-in mb-12">
-          <p className="text-base md:text-lg text-slate-700 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base md:text-lg text-slate-700 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
             I'm a Year 3 Computer Science student at NUS with a minor in Psychology. I love building 
             human-centered tech, creating with AI, and exploring ideas that make a real-world difference.
           </p>
