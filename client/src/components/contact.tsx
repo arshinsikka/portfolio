@@ -27,10 +27,10 @@ export default function Contact() {
               <div>
                 <p className="text-sm text-slate-500 dark:text-slate-400">Singapore</p>
                 <a 
-                  href="tel:+6580119562" 
+                  href="tel:+6580164894" 
                   className="text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                 >
-                  +65 80119562
+                  +65 80164894
                 </a>
               </div>
             </div>

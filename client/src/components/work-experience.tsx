@@ -22,7 +22,7 @@ function ExperienceCard({ experience, index }: ExperienceCardProps) {
       <div className="absolute left-0 top-6 w-3 h-3 bg-blue-600 rounded-full border-4 border-white shadow-lg z-10"></div>
       
       {/* Timeline line */}
-      {index !== 4 && (
+      {index !== 5 && (
         <div className="absolute left-1.5 top-9 w-0.5 h-full bg-slate-200"></div>
       )}
       
@@ -69,6 +69,14 @@ function ExperienceCard({ experience, index }: ExperienceCardProps) {
 
 export default function WorkExperience() {
   const experiences: ExperienceItem[] = [
+    {
+      title: "Teaching Assistant",
+      company: "National University of Singapore",
+      location: "Singapore",
+      dates: "Aug 2025 – Dec 2025",
+      description: "Teaching Assistant for Digital and AI Ethics course, supporting students in understanding ethical implications of AI technologies, grading assignments, and facilitating discussions on responsible AI development.",
+      tags: ["Teaching", "AI Ethics", "Education", "Academic"]
+    },
     {
       title: "AI Labs Intern",
       company: "KPMG",
