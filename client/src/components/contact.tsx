@@ -58,10 +58,10 @@ export default function Contact() {
               <div>
                 <p className="text-sm text-slate-500 dark:text-slate-400">NUS Email</p>
                 <a 
-                  href="mailto:e1186295@u.nus.edu" 
+                  href="mailto:arshin.sikka@u.nus.edu" 
                   className="text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                 >
-                  e1186295@u.nus.edu
+                  arshin.sikka@u.nus.edu
                 </a>
               </div>
             </div>
