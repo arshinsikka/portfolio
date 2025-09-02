@@ -13,9 +13,14 @@ export default function HeroSection() {
   };
 
   const handleResumeClick = () => {
-    // Open resume PDF in new tab
     const resumeUrl = "/assets/Arshin_Sikka_Resume.pdf";
-    window.open(resumeUrl, '_blank');
+    const link = document.createElement('a');
+    link.href = resumeUrl;
+    link.download = "Arshin_Sikka_Resume.pdf";
+    link.target = "_blank";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
