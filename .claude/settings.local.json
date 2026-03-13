@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd \"/Users/arshinsikka/Desktop/IMP STUFF/PortfolioHero\" && mkdir -p client/public/assets && cp public/assets/arshin-profile.png client/public/assets/arshin-profile.png && cp public/assets/Arshin_Sikka_Resume.pdf client/public/assets/Arshin_Sikka_Resume.pdf && chmod 644 client/public/assets/Arshin_Sikka_Resume.pdf && echo \"=== copied ===\" && ls -la client/public/assets/)"
+    ]
+  }
+}

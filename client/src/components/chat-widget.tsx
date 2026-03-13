@@ -261,41 +261,54 @@ export default function ChatWidget() {
 
     const attempt = async (): Promise<string> => {
       const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+      console.log("API Key exists:", !!apiKey);
+
+      const body = JSON.stringify({
+        systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+        contents: nextMessages.map((m) => ({
+          role: m.role,
+          parts: [{ text: m.text }],
+        })),
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 1024,
+        },
+      });
+
       const res = await fetch(`${GEMINI_URL}?key=${apiKey}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-          contents: nextMessages.map((m) => ({
-            role: m.role,
-            parts: [{ text: m.text }],
-          })),
-        }),
+        body,
       });
 
-      if (res.status === 429) {
-        // Rate limited — retry once after 2 s
-        await new Promise((r) => setTimeout(r, 2000));
-        const retry = await fetch(`${GEMINI_URL}?key=${apiKey}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-            contents: nextMessages.map((m) => ({
-              role: m.role,
-              parts: [{ text: m.text }],
-            })),
-          }),
-        });
-        if (!retry.ok) throw new Error(`${retry.status}`);
-        const retryData = await retry.json();
-        return (
-          retryData.candidates?.[0]?.content?.parts?.[0]?.text ??
-          "I couldn't generate a response. Please try again."
-        );
+      console.log("Response status:", res.status);
+
+      if (!res.ok) {
+        const errText = await res.text();
+        console.error("Error body:", errText);
+        if (res.status === 429) {
+          // Rate limited — retry once after 2 s
+          await new Promise((r) => setTimeout(r, 2000));
+          const retry = await fetch(`${GEMINI_URL}?key=${apiKey}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body,
+          });
+          console.log("Retry status:", retry.status);
+          if (!retry.ok) {
+            const retryErr = await retry.text();
+            console.error("Retry error body:", retryErr);
+            throw new Error(`retry ${retry.status}`);
+          }
+          const retryData = await retry.json();
+          return (
+            retryData.candidates?.[0]?.content?.parts?.[0]?.text ??
+            "I couldn't generate a response. Please try again."
+          );
+        }
+        throw new Error(`${res.status}`);
       }
 
-      if (!res.ok) throw new Error(`${res.status}`);
       const data = await res.json();
       return (
         data.candidates?.[0]?.content?.parts?.[0]?.text ??
@@ -306,7 +319,8 @@ export default function ChatWidget() {
     try {
       const aiText = await attempt();
       setMessages([...nextMessages, { role: "model", text: aiText }]);
-    } catch {
+    } catch (err) {
+      console.error("API Error:", err);
       setMessages([
         ...nextMessages,
         {
