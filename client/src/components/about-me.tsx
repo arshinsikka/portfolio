@@ -1,4 +1,4 @@
-import { GraduationCap, Globe, FlaskConical, Rocket, Bot, Trophy, Sprout } from "lucide-react";
+import { GraduationCap, Globe, FlaskConical, Rocket, Bot, Trophy } from "lucide-react";
 
 export default function AboutMe() {
   const highlights = [
@@ -16,19 +16,15 @@ export default function AboutMe() {
     },
     {
       icon: Rocket,
-      text: "Built Lecture AI (BLOCK71), TrackUp, and ChessPhere"
+      text: "Co-founded Lecture AI (BLOCK71-backed, VIP@SoC Finalist)"
     },
     {
       icon: Bot,
-      text: "Internships at KPMG, AlygnAI, StatusNeo, PharynxAI"
+      text: "Built AI systems at SP Digital, KPMG, AlygnAI"
     },
     {
       icon: Trophy,
       text: "International Chess Player with 10+ Years Competitive Experience"
-    },
-    {
-      icon: Sprout,
-      text: "Passionate about education, AI for good, and thoughtful design"
     }
   ];
 
@@ -43,29 +39,14 @@ export default function AboutMe() {
           </h2>
         </div>
 
-        {/* Intro Paragraph */}
-        <div className="mb-16">
-          <p className="text-lg md:text-xl text-slate-700 dark:text-slate-300 leading-relaxed text-center max-w-3xl mx-auto">
-            Hi, I'm Arshin — a penultimate year Computer Science student at NUS with a minor in Psychology, 
-            a curious mind, and a big heart for building things that matter. I'm fascinated 
-            by how technology can change lives, and I'm driven by the idea that the right tools, 
-            built with care, can create real impact at scale.
-          </p>
-        </div>
-
         {/* Main Content Section */}
         <div className="mb-16">
           <div className="space-y-6 text-base md:text-lg text-slate-700 dark:text-slate-300 leading-relaxed max-w-3xl mx-auto">
             <p>
-              I chose to study Computer Science because I wanted to be part of the solution — using 
-              technology to address real problems and give back to society. My minor in Psychology 
-              helps me stay grounded in the people I'm building for. Understanding how users think, 
-              feel, and behave has shaped the way I approach everything — from designing lecture 
-              summarization tools to mentoring underprivileged students.
+              I'm a CS student at NUS specializing in AI, currently building production LLM systems at SP Digital. I co-founded Lecture AI (BLOCK71-backed) and previously shipped agentic RAG systems at KPMG.
             </p>
             <p>
-              Whether I'm prototyping a surgical device, contributing to open source, or building 
-              a startup, I'm always asking: How can this make someone's life better?
+              I approach technology through a product lens — what problem does this solve, and for whom? My minor in Psychology keeps me grounded in how users actually think and behave.
             </p>
           </div>
         </div>

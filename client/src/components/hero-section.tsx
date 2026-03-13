@@ -1,7 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Download, Mail, Github, ChevronDown } from "lucide-react";
-import profileImage from "@assets/Arshin Sikka Linkedin Picture_1753116623245.jpg";
-
 export default function HeroSection() {
   const handleContactClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -25,11 +23,9 @@ export default function HeroSection() {
         {/* Profile Image */}
         <div className="mb-8 animate-fade-in-down">
           <div className="relative inline-block">
-            <img 
-              src={profileImage}
-              alt="Arshin Sikka - Professional headshot" 
-              className="w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto object-cover shadow-xl ring-4 ring-white"
-            />
+            <div className="w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto flex items-center justify-center bg-gradient-to-br from-blue-600 to-purple-600 shadow-xl ring-4 ring-white text-white text-4xl font-bold">
+              AS
+            </div>
             <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full border-4 border-white"></div>
           </div>
         </div>
@@ -42,15 +38,14 @@ export default function HeroSection() {
             </span>
           </h1>
           <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300 font-medium max-w-3xl mx-auto leading-relaxed">
-            CS @ NUS | BLOCK71-backed Founder | AI Intern @ KPMG | SDE Intern @ Alygn AI
+            Building AI products — from BLOCK71-backed startup to enterprise LLM systems
           </p>
         </div>
 
         {/* Introduction Paragraph */}
         <div className="animate-fade-in mb-12">
           <p className="text-base md:text-lg text-slate-700 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
-            I'm a Year 3 Computer Science student at NUS with a minor in Psychology. I love building 
-            human-centered tech, creating with AI, and exploring ideas that make a real-world difference.
+            Year 3 CS student at NUS. Currently shipping production AI systems at SP Digital. Previously built agentic RAG at KPMG and co-founded Lecture AI.
           </p>
         </div>
 
@@ -65,24 +60,25 @@ export default function HeroSection() {
             View Resume
           </Button>
 
-          <Button 
+          <Button
             onClick={handleContactClick}
-            variant="outline"
-            className="inline-flex items-center px-8 py-3 bg-white text-slate-700 font-semibold rounded-lg border-2 border-slate-300 shadow-lg hover:bg-slate-50 hover:border-slate-400 hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 ease-out"
+            variant="ghost"
+            className="inline-flex items-center px-8 py-3 text-slate-600 dark:text-slate-400 font-medium rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-slate-200 transition-all duration-300 ease-out"
             size="lg"
           >
             <Mail className="w-5 h-5 mr-2" />
             Contact Me
           </Button>
 
-          <Button 
+          <Button
             asChild
-            className="inline-flex items-center px-8 py-3 bg-slate-800 text-white font-semibold rounded-lg shadow-lg hover:bg-slate-900 hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 ease-out"
+            variant="ghost"
+            className="inline-flex items-center px-8 py-3 text-slate-600 dark:text-slate-400 font-medium rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-slate-200 transition-all duration-300 ease-out"
             size="lg"
           >
-            <a 
-              href="https://github.com/arshinsikka" 
-              target="_blank" 
+            <a
+              href="https://github.com/arshinsikka"
+              target="_blank"
               rel="noopener noreferrer"
             >
               <Github className="w-5 h-5 mr-2" />
