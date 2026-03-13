@@ -1,8 +1,22 @@
 import { Github } from "lucide-react";
-import { SiInstagram, SiTelegram, SiLinkedin, SiWhatsapp } from "react-icons/si";
+import { SiInstagram, SiTelegram, SiLinkedin } from "react-icons/si";
 
 export default function Footer() {
   const socialLinks = [
+    {
+      name: "GitHub",
+      url: "https://github.com/arshinsikka",
+      icon: Github,
+      color: "hover:text-slate-900 dark:hover:text-slate-300",
+      tooltip: "View my GitHub"
+    },
+    {
+      name: "LinkedIn",
+      url: "https://www.linkedin.com/in/arshin-sikka",
+      icon: SiLinkedin,
+      color: "hover:text-blue-700 dark:hover:text-blue-400",
+      tooltip: "Connect on LinkedIn"
+    },
     {
       name: "Instagram",
       url: "https://www.instagram.com/arshinsikka",
@@ -14,30 +28,9 @@ export default function Footer() {
       name: "Telegram",
       url: "https://t.me/arshinsikka",
       icon: SiTelegram,
-      color: "hover:text-blue-500 dark:hover:text-blue-400",
+      color: "hover:text-sky-500 dark:hover:text-sky-400",
       tooltip: "Message on Telegram"
     },
-    {
-      name: "LinkedIn",
-      url: "https://www.linkedin.com/in/arshin-sikka",
-      icon: SiLinkedin,
-      color: "hover:text-blue-700 dark:hover:text-blue-400",
-      tooltip: "Connect on LinkedIn"
-    },
-    {
-      name: "WhatsApp",
-      url: "https://wa.me/917011873972",
-      icon: SiWhatsapp,
-      color: "hover:text-green-600 dark:hover:text-green-400",
-      tooltip: "Chat on WhatsApp"
-    },
-    {
-      name: "GitHub",
-      url: "https://github.com/arshinsikka",
-      icon: Github,
-      color: "hover:text-slate-900 dark:hover:text-slate-300",
-      tooltip: "View my GitHub"
-    }
   ];
 
   return (
@@ -67,7 +60,7 @@ export default function Footer() {
         {/* Copyright */}
         <div className="text-center">
           <p className="text-sm text-slate-500 dark:text-slate-400">
-            © 2025 Arshin Sikka. All rights reserved.
+            © 2026 Arshin Sikka. All rights reserved.
           </p>
         </div>
       </div>

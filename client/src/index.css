@@ -53,69 +53,141 @@
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply font-sans antialiased bg-background text-foreground;
+    line-height: 1.65;
+    /* Prevent horizontal overflow at any breakpoint */
+    overflow-x: hidden;
+  }
+
+  /* Comfortable body text sizing on mobile */
+  p, li {
+    font-size: clamp(0.9375rem, 2.5vw, 1rem);
+    line-height: 1.7;
   }
 }
 
-/* Custom animations for hero section */
+/* ─── Hero animations ─────────────────────────────────────────────────────── */
+
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Gentle float for the avatar */
+@keyframes float {
+  0%   { transform: translateY(0px); }
+  50%  { transform: translateY(-8px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-fade-in-up   { animation: fadeInUp   0.8s ease-out both; }
+.animate-fade-in-down { animation: fadeInDown 0.6s ease-out both; }
+.animate-fade-in      { animation: fadeIn     1s   ease-out both; }
+.animate-float        { animation: float 4s ease-in-out infinite; }
+
+/* ─── Profile avatar glow on hover ───────────────────────────────────────── */
+
+.avatar-glow:hover {
+  box-shadow:
+    0 0 0 4px white,
+    0 0 24px 6px rgba(37, 99, 235, 0.45);
+  transition: box-shadow 0.35s ease;
+}
+
+.dark .avatar-glow:hover {
+  box-shadow:
+    0 0 0 4px rgba(15, 23, 42, 0.9),
+    0 0 28px 8px rgba(96, 165, 250, 0.5);
+}
+
+/* ─── Scroll progress bar ─────────────────────────────────────────────────── */
+
+#scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #2563eb, #9333ea);
+  z-index: 9999;
+  transition: width 0.1s linear;
+  pointer-events: none;
+}
+
+/* ─── Card interactions ───────────────────────────────────────────────────── */
+
+/* Consistent hover lift for all portfolio cards */
+.card-hover {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.12);
+}
+.dark .card-hover:hover {
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.5);
+}
+
+/* ─── Chat widget pulse glow ─────────────────────────────────────────────── */
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow:
+      0 0 0 0   rgba(99, 102, 241, 0.7),
+      0 0 0 0   rgba(139, 92, 246, 0.4),
+      0 8px 32px rgba(0, 0, 0, 0.4);
   }
-  to {
-    opacity: 1;
+  50% {
+    box-shadow:
+      0 0 0 10px rgba(99, 102, 241, 0),
+      0 0 0 18px rgba(139, 92, 246, 0),
+      0 8px 32px rgba(0, 0, 0, 0.4);
   }
 }
 
-.animate-fade-in-up {
-  animation: fadeInUp 0.8s ease-out;
+.animate-pulse-glow {
+  animation: pulse-glow 2.5s ease-in-out infinite;
 }
 
-.animate-fade-in-down {
-  animation: fadeInDown 0.6s ease-out;
+/* Subtle bounce on hover for chat button */
+@keyframes bounce-soft {
+  0%   { transform: translateY(0); }
+  40%  { transform: translateY(-6px); }
+  70%  { transform: translateY(-2px); }
+  100% { transform: translateY(0); }
 }
 
-.animate-fade-in {
-  animation: fadeIn 1s ease-out;
+.chat-btn-hover:hover {
+  animation: bounce-soft 0.45s ease forwards;
 }
 
-/* Enhanced button hover effects */
-.transition-all {
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 300ms;
+/* Nudge speech bubble entrance */
+@keyframes nudge-in {
+  from { opacity: 0; transform: translateY(6px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0)   scale(1); }
 }
 
-/* Gradient text effect */
+.animate-nudge-in {
+  animation: nudge-in 0.3s ease-out forwards;
+}
+
+/* ─── Gradient text helper ────────────────────────────────────────────────── */
+
 .bg-clip-text {
   -webkit-background-clip: text;
   background-clip: text;
-}
-
-/* Enhanced shadows */
-.shadow-xl {
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }

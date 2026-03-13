@@ -1,4 +1,4 @@
-import { GraduationCap, Globe, FlaskConical, Rocket, Bot, Trophy } from "lucide-react";
+import { GraduationCap, Globe, FlaskConical, Rocket, Bot, Trophy, BookOpen } from "lucide-react";
 
 export default function AboutMe() {
   const highlights = [
@@ -48,6 +48,30 @@ export default function AboutMe() {
             <p>
               I approach technology through a product lens — what problem does this solve, and for whom? My minor in Psychology keeps me grounded in how users actually think and behave.
             </p>
+          </div>
+        </div>
+
+        {/* Education */}
+        <div className="mb-16">
+          <h3 className="text-2xl font-semibold text-slate-800 dark:text-white mb-6 text-center">
+            Education
+          </h3>
+          <div className="max-w-3xl mx-auto bg-slate-50 dark:bg-slate-800 rounded-lg p-6 border border-slate-100 dark:border-slate-700">
+            <div className="flex items-start gap-4">
+              <GraduationCap className="w-6 h-6 text-blue-600 dark:text-blue-400 mt-1 shrink-0" />
+              <div>
+                <p className="font-semibold text-slate-800 dark:text-white">
+                  B.Comp (Hons) Computer Science — National University of Singapore
+                </p>
+                <p className="text-sm text-slate-500 dark:text-slate-400 mb-3">Aug 2023 – May 2027 · Minor in Psychology</p>
+                <ul className="space-y-1 text-sm text-slate-700 dark:text-slate-300 list-none">
+                  <li className="flex items-start gap-2">
+                    <BookOpen className="w-4 h-4 text-slate-400 mt-0.5 shrink-0" />
+                    <span>Teaching Assistant, Digital &amp; AI Ethics (CS2101/GEA1000) — Aug 2025 – Dec 2025. Supported student learning on ethical implications of AI, graded assignments, and facilitated seminar discussions on responsible AI development.</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
 
