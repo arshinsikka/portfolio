@@ -209,7 +209,9 @@ export default function ChatWidget() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isCoolingDown, setIsCoolingDown] = useState(false);
   const [showNudge, setShowNudge] = useState(false);
+  const cooldownTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -251,7 +253,7 @@ export default function ChatWidget() {
 
   const sendMessage = async (text: string) => {
     const trimmed = text.trim();
-    if (!trimmed || isLoading) return;
+    if (!trimmed || isLoading || isCoolingDown) return;
 
     const userMsg: Message = { role: "user", text: trimmed };
     const nextMessages = [...messages, userMsg];
@@ -298,7 +300,7 @@ export default function ChatWidget() {
           if (!retry.ok) {
             const retryErr = await retry.text();
             console.error("Retry error body:", retryErr);
-            throw new Error(`retry ${retry.status}`);
+            throw new Error("rate_limited");
           }
           const retryData = await retry.json();
           return (
@@ -321,15 +323,22 @@ export default function ChatWidget() {
       setMessages([...nextMessages, { role: "model", text: aiText }]);
     } catch (err) {
       console.error("API Error:", err);
+      const isRateLimited = err instanceof Error && err.message === "rate_limited";
       setMessages([
         ...nextMessages,
         {
           role: "model",
-          text: "Sorry, I couldn't process that. Try again or reach out directly at arshin.sikka@u.nus.edu",
+          text: isRateLimited
+            ? "I'm getting a lot of questions right now. Please try again in a minute!"
+            : "Sorry, I couldn't process that. Try again or reach out directly at arshin.sikka@u.nus.edu",
         },
       ]);
     } finally {
       setIsLoading(false);
+      // 2-second cooldown after every request to prevent rapid-fire sends
+      setIsCoolingDown(true);
+      if (cooldownTimer.current) clearTimeout(cooldownTimer.current);
+      cooldownTimer.current = setTimeout(() => setIsCoolingDown(false), 2000);
     }
   };
 
@@ -441,13 +450,13 @@ export default function ChatWidget() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Ask something…"
-                className="flex-1 bg-transparent text-sm text-white placeholder-slate-500 outline-none"
-                disabled={isLoading}
+                placeholder={isLoading ? "Thinking…" : isCoolingDown ? "Just a moment…" : "Ask something…"}
+                className="flex-1 bg-transparent text-sm text-white placeholder-slate-400 outline-none"
+                disabled={isLoading || isCoolingDown}
               />
               <button
                 onClick={() => sendMessage(input)}
-                disabled={!input.trim() || isLoading}
+                disabled={!input.trim() || isLoading || isCoolingDown}
                 className="text-blue-400 hover:text-blue-300 disabled:opacity-30 disabled:cursor-not-allowed transition-colors p-0.5"
                 aria-label="Send message"
               >
