@@ -67,7 +67,7 @@ export default function AboutMe() {
                 <ul className="space-y-1 text-sm text-slate-700 dark:text-slate-300 list-none">
                   <li className="flex items-start gap-2">
                     <BookOpen className="w-4 h-4 text-slate-400 mt-0.5 shrink-0" />
-                    <span>Teaching Assistant, Digital &amp; AI Ethics (CS2101/GEA1000) — Aug 2025 – Dec 2025. Supported student learning on ethical implications of AI, graded assignments, and facilitated seminar discussions on responsible AI development.</span>
+                    <span>Teaching Assistant, Digital &amp; AI Ethics (IS1108) — Aug 2025 – Dec 2025. Supported student learning on ethical implications of AI, graded assignments, and facilitated seminar discussions on responsible AI development.</span>
                   </li>
                 </ul>
               </div>
