@@ -182,8 +182,8 @@ const STARTER_CHIPS = [
   "What makes him unique?",
 ];
 
-const GEMINI_URL =
-  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
+const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
+const GROQ_MODEL = "llama-3.3-70b-versatile";
 
 // ─── Typing indicator ─────────────────────────────────────────────────────────
 
@@ -262,24 +262,28 @@ export default function ChatWidget() {
     setIsLoading(true);
 
     const attempt = async (): Promise<string> => {
-      const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+      const apiKey = import.meta.env.VITE_GROQ_API_KEY;
       console.log("API Key exists:", !!apiKey);
 
       const body = JSON.stringify({
-        systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-        contents: nextMessages.map((m) => ({
-          role: m.role,
-          parts: [{ text: m.text }],
-        })),
-        generationConfig: {
-          temperature: 0.7,
-          maxOutputTokens: 1024,
-        },
+        model: GROQ_MODEL,
+        messages: [
+          { role: "system", content: SYSTEM_PROMPT },
+          ...nextMessages.map((m) => ({
+            role: m.role === "model" ? "assistant" : "user",
+            content: m.text,
+          })),
+        ],
+        temperature: 0.7,
+        max_tokens: 1024,
       });
 
-      const res = await fetch(`${GEMINI_URL}?key=${apiKey}`, {
+      const res = await fetch(GROQ_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
+        },
         body,
       });
 
@@ -291,9 +295,12 @@ export default function ChatWidget() {
         if (res.status === 429) {
           // Rate limited — retry once after 2 s
           await new Promise((r) => setTimeout(r, 2000));
-          const retry = await fetch(`${GEMINI_URL}?key=${apiKey}`, {
+          const retry = await fetch(GROQ_URL, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${apiKey}`,
+            },
             body,
           });
           console.log("Retry status:", retry.status);
@@ -304,7 +311,7 @@ export default function ChatWidget() {
           }
           const retryData = await retry.json();
           return (
-            retryData.candidates?.[0]?.content?.parts?.[0]?.text ??
+            retryData.choices?.[0]?.message?.content ??
             "I couldn't generate a response. Please try again."
           );
         }
@@ -313,7 +320,7 @@ export default function ChatWidget() {
 
       const data = await res.json();
       return (
-        data.candidates?.[0]?.content?.parts?.[0]?.text ??
+        data.choices?.[0]?.message?.content ??
         "I couldn't generate a response. Please try again."
       );
     };
