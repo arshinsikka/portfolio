@@ -29,11 +29,23 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   }
 
   // Parse body
-  const body: Buffer[] = [];
-  for await (const chunk of req) body.push(chunk as Buffer);
-  const { messages } = JSON.parse(Buffer.concat(body).toString()) as {
-    messages: Array<{ role: string; content: string }>;
-  };
+  let messages: Array<{ role: string; content: string }>;
+  try {
+    const raw = await new Promise<string>((resolve, reject) => {
+      const chunks: Buffer[] = [];
+      req.on("data", (chunk: Buffer) => chunks.push(chunk));
+      req.on("end", () => resolve(Buffer.concat(chunks).toString()));
+      req.on("error", reject);
+    });
+    ({ messages } = JSON.parse(raw) as {
+      messages: Array<{ role: string; content: string }>;
+    });
+  } catch (parseErr) {
+    console.error("Body parse error:", parseErr);
+    res.writeHead(400, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ error: "Invalid request body" }));
+    return;
+  }
 
   try {
     const groqRes = await fetch(GROQ_URL, {
@@ -68,6 +80,6 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   } catch (err) {
     console.error("Handler error:", err);
     res.writeHead(500, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ error: "Internal server error" }));
+    res.end(JSON.stringify({ error: err instanceof Error ? err.message : String(err) }));
   }
 }
