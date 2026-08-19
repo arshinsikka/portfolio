@@ -3,8 +3,5 @@
   "outputDirectory": "dist/public",
   "installCommand": "npm install",
   "framework": "vite",
-  "devCommand": "npm run dev",
-  "rewrites": [
-    { "source": "/api/:path*", "destination": "/api/:path*" }
-  ]
+  "devCommand": "npm run dev"
 }

@@ -21,8 +21,11 @@ export default function HeroSection() {
           <div className="relative inline-block">
             <div className="animate-float">
               <img
-                src="/assets/arshin-profile.png"
+                src="/assets/arshin-profile.webp"
                 alt="Arshin Sikka"
+                width={320}
+                height={320}
+                decoding="async"
                 className="w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto object-cover shadow-xl ring-4 ring-white dark:ring-slate-800 avatar-glow"
               />
             </div>

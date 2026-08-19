@@ -169,49 +169,183 @@ RESPONSE GUIDELINES
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 const GROQ_MODEL = "llama-3.3-70b-versatile";
 
+// ── Request limits ───────────────────────────────────────────────────────────
+const MAX_BODY_BYTES = 16 * 1024; // hard cap, enforced while streaming
+const MAX_MESSAGES = 20; // conversation turns accepted per request
+const MAX_MESSAGE_CHARS = 2000; // per individual message
+const MAX_TOTAL_CHARS = 12000; // across the whole conversation
+const MAX_TOKENS = 512; // cap on the upstream completion
+
+// ── Origin allowlist ─────────────────────────────────────────────────────────
+// Override in Vercel with ALLOWED_ORIGINS="https://a.com,https://b.com,*.vercel.app"
+const DEFAULT_ALLOWED_ORIGINS = [
+  "https://arshinsikka.com",
+  "https://www.arshinsikka.com",
+  "*.vercel.app",
+];
+
+function allowlist(): string[] {
+  const fromEnv = process.env.ALLOWED_ORIGINS;
+  if (!fromEnv) return DEFAULT_ALLOWED_ORIGINS;
+  return fromEnv
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+function isOriginAllowed(origin: string | undefined): boolean {
+  if (!origin) return false;
+  let hostname: string;
+  try {
+    hostname = new URL(origin).hostname;
+  } catch {
+    return false;
+  }
+  return allowlist().some((rule) =>
+    rule.startsWith("*.") ? hostname.endsWith(rule.slice(1)) : rule === origin,
+  );
+}
+
+// ── Best-effort rate limit ───────────────────────────────────────────────────
+// WARNING: this Map lives in one warm serverless instance. Vercel runs many
+// instances concurrently and recycles them at will, so this is NOT a shared or
+// durable counter. It raises the cost of casual abuse and nothing more. Real
+// enforcement needs external state (Vercel KV / Upstash) or a WAF rule.
+const RATE_LIMIT_MAX = 10;
+const RATE_LIMIT_WINDOW_MS = 60_000;
+const recentHits = new Map<string, number[]>();
+
+function isRateLimited(key: string): boolean {
+  const now = Date.now();
+  const recent = (recentHits.get(key) ?? []).filter(
+    (t) => now - t < RATE_LIMIT_WINDOW_MS,
+  );
+  recent.push(now);
+  recentHits.set(key, recent);
+  if (recentHits.size > 5000) recentHits.clear(); // crude growth guard
+  return recent.length > RATE_LIMIT_MAX;
+}
+
+function sendJson(res: ServerResponse, status: number, body: unknown) {
+  res.writeHead(status, { "Content-Type": "application/json" });
+  res.end(JSON.stringify(body));
+}
+
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  const origin = req.headers.origin as string | undefined;
+  const originOk = isOriginAllowed(origin);
+
+  // Only ever echo an origin we actually trust — never "*".
+  if (originOk && origin) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+  res.setHeader("Vary", "Origin");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
   if (req.method === "OPTIONS") {
-    res.writeHead(204);
+    res.writeHead(originOk ? 204 : 403);
     res.end();
     return;
   }
 
   if (req.method !== "POST") {
-    res.writeHead(405, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ error: "Method not allowed" }));
+    sendJson(res, 405, { error: "Method not allowed" });
+    return;
+  }
+
+  if (!originOk) {
+    sendJson(res, 403, { error: "Origin not allowed" });
+    return;
+  }
+
+  const ip =
+    String(req.headers["x-forwarded-for"] ?? "")
+      .split(",")[0]
+      .trim() || "unknown";
+  if (isRateLimited(ip)) {
+    sendJson(res, 429, { error: "Too many requests" });
     return;
   }
 
   const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) {
-    res.writeHead(500, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ error: "API key not configured" }));
+    sendJson(res, 500, { error: "API key not configured" });
     return;
   }
 
-  // Parse body
-  let messages: Array<{ role: string; content: string }>;
+  // ── Read the body, aborting past MAX_BODY_BYTES ────────────────────────────
+  let raw: string;
   try {
-    const raw = await new Promise<string>((resolve, reject) => {
+    raw = await new Promise<string>((resolve, reject) => {
+      const preparsed = (req as unknown as { body?: unknown }).body;
+      if (preparsed !== undefined && preparsed !== null) {
+        resolve(
+          typeof preparsed === "string" ? preparsed : JSON.stringify(preparsed),
+        );
+        return;
+      }
       const chunks: Buffer[] = [];
-      req.on("data", (chunk: Buffer) => chunks.push(chunk));
+      let total = 0;
+      req.on("data", (chunk: Buffer) => {
+        total += chunk.length;
+        if (total > MAX_BODY_BYTES) {
+          reject(new Error("payload_too_large"));
+          req.destroy();
+          return;
+        }
+        chunks.push(chunk);
+      });
       req.on("end", () => resolve(Buffer.concat(chunks).toString()));
       req.on("error", reject);
     });
-    ({ messages } = JSON.parse(raw) as {
-      messages: Array<{ role: string; content: string }>;
+  } catch (err) {
+    const tooLarge = err instanceof Error && err.message === "payload_too_large";
+    sendJson(res, tooLarge ? 413 : 400, {
+      error: tooLarge ? "Payload too large" : "Invalid request body",
     });
-  } catch (parseErr) {
-    console.error("Body parse error:", parseErr);
-    res.writeHead(400, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ error: "Invalid request body" }));
     return;
   }
 
+  // ── Parse and validate ─────────────────────────────────────────────────────
+  let messages: Array<{ role: "user" | "assistant"; content: string }>;
+  try {
+    const parsed = JSON.parse(raw) as unknown;
+    const candidate = (parsed as { messages?: unknown })?.messages;
+    if (!Array.isArray(candidate)) throw new Error("bad_shape");
+    messages = candidate as Array<{ role: "user" | "assistant"; content: string }>;
+  } catch {
+    sendJson(res, 400, { error: "Invalid request body" });
+    return;
+  }
+
+  if (messages.length === 0 || messages.length > MAX_MESSAGES) {
+    sendJson(res, 400, { error: "Invalid message count" });
+    return;
+  }
+
+  let totalChars = 0;
+  for (const m of messages) {
+    if (
+      !m ||
+      typeof m.content !== "string" ||
+      (m.role !== "user" && m.role !== "assistant")
+    ) {
+      sendJson(res, 400, { error: "Invalid message format" });
+      return;
+    }
+    if (m.content.length > MAX_MESSAGE_CHARS) {
+      sendJson(res, 400, { error: "Message too long" });
+      return;
+    }
+    totalChars += m.content.length;
+  }
+  if (totalChars > MAX_TOTAL_CHARS) {
+    sendJson(res, 400, { error: "Conversation too long" });
+    return;
+  }
+
+  // ── Upstream call ──────────────────────────────────────────────────────────
   try {
     const groqRes = await fetch(GROQ_URL, {
       method: "POST",
@@ -223,28 +357,30 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
         model: GROQ_MODEL,
         messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages],
         temperature: 0.7,
-        max_tokens: 1024,
+        max_tokens: MAX_TOKENS,
       }),
     });
 
     if (!groqRes.ok) {
-      const errText = await groqRes.text();
-      console.error("Groq error:", errText);
-      res.writeHead(groqRes.status, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ error: errText }));
+      // Log upstream detail server-side; do not leak provider payloads.
+      console.error("Groq error:", groqRes.status, await groqRes.text());
+      const status = groqRes.status === 429 ? 429 : 502;
+      sendJson(res, status, {
+        error: status === 429 ? "Too many requests" : "Upstream error",
+      });
       return;
     }
 
-    const data = (await groqRes.json()) as any;
+    const data = (await groqRes.json()) as {
+      choices?: Array<{ message?: { content?: string } }>;
+    };
     const text =
       data.choices?.[0]?.message?.content ??
       "I couldn't generate a response. Please try again.";
 
-    res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ text }));
+    sendJson(res, 200, { text });
   } catch (err) {
     console.error("Handler error:", err);
-    res.writeHead(500, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ error: err instanceof Error ? err.message : String(err) }));
+    sendJson(res, 500, { error: "Internal server error" });
   }
 }
