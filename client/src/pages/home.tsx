@@ -1,27 +1,19 @@
-import Navbar from "@/components/navbar";
 import HeroSection from "@/components/hero-section";
-import AboutMe from "@/components/about-me";
 import LookingFor from "@/components/looking-for";
-import WorkExperience from "@/components/work-experience";
-import Projects from "@/components/projects";
-import ResearchExperience from "@/components/research-experience";
-import Leadership from "@/components/leadership";
-import Contact from "@/components/contact";
-import Footer from "@/components/footer";
 
 export default function Home() {
   return (
-    <div className="min-h-screen">
-      <Navbar />
+    <>
       <HeroSection />
-      <AboutMe />
-      <LookingFor />
-      <WorkExperience />
-      <Projects />
-      <ResearchExperience />
-      <Leadership />
-      <Contact />
-      <Footer />
-    </div>
+      {/*
+        LookingFor carries no vertical padding of its own: on the old single
+        page it borrowed the 80px gaps from AboutMe's pb-20 above and
+        WorkExperience's pt-20 below. Now that it stands alone, the page
+        supplies the same rhythm so the strip is spaced exactly as before.
+      */}
+      <div className="py-20 bg-white dark:bg-slate-900">
+        <LookingFor />
+      </div>
+    </>
   );
 }

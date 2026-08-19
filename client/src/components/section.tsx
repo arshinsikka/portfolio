@@ -61,7 +61,8 @@ export function Section({
   subtitle,
   children,
 }: {
-  id: string;
+  /** Optional in-page anchor. Routing replaced the old scroll anchors. */
+  id?: string;
   tone?: SectionTone;
   width?: SectionWidth;
   heading: string;

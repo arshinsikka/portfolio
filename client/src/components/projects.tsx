@@ -10,7 +10,6 @@ import { sectionCopy } from "@/content/profile";
 export default function Projects() {
   return (
     <Section
-      id="projects"
       tone="light"
       width="wide"
       heading={sectionCopy.projects.heading}

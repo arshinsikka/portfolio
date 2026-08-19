@@ -13,7 +13,10 @@ export const projects: Project[] = [
     role: "Co-Founder",
     dates: "Mar 2025 – Present",
     tier: "featured",
-    accolades: ["BLOCK71-backed", "VIP@SoC Finalist"],
+    accolades: [
+      { text: "BLOCK71-backed", tone: "amber" },
+      { text: "VIP@SoC Finalist", tone: "purple" },
+    ],
     summary:
       "AI-powered lecture notes in minutes. An end-to-end pipeline that ingests lecture audio + slides and produces structured bilingual study notes — automatically, in <15 minutes, for <$1 per lecture.",
     body: [

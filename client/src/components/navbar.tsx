@@ -1,19 +1,27 @@
 import { useState, useEffect, useRef } from "react";
+import { Link, useLocation } from "wouter";
 import { Menu, X, Sun, Moon } from "lucide-react";
 
 const NAV_ITEMS = [
-  { id: "home",       label: "Home",       href: "#home" },
-  { id: "about",      label: "About",      href: "#about" },
-  { id: "experience", label: "Experience", href: "#experience" },
-  { id: "projects",   label: "Projects",   href: "#projects" },
-  { id: "research",   label: "Research",   href: "#research" },
-  { id: "leadership", label: "Leadership", href: "#leadership" },
-  { id: "contact",    label: "Contact",    href: "#contact" },
+  { path: "/",          label: "Home"       },
+  { path: "/about",     label: "About"      },
+  { path: "/work",      label: "Experience" },
+  { path: "/projects",  label: "Projects"   },
+  { path: "/research",  label: "Research"   },
 ];
 
+/**
+ * "/" matches only itself; every other entry also owns its sub-routes, so
+ * /projects/lecture-ai keeps the Projects tab lit.
+ */
+function isActive(path: string, location: string) {
+  if (path === "/") return location === "/";
+  return location === path || location.startsWith(`${path}/`);
+}
+
 export default function Navbar() {
+  const [location]                    = useLocation();
   const [isOpen, setIsOpen]           = useState(false);
-  const [activeSection, setActive]    = useState("home");
   const [isDarkMode, setIsDarkMode]   = useState(false);
   const mobileMenuRef                 = useRef<HTMLDivElement>(null);
 
@@ -34,24 +42,6 @@ export default function Navbar() {
     localStorage.setItem("theme", next ? "dark" : "light");
   };
 
-  // ── Active section ─────────────────────────────────────────────────────────
-  useEffect(() => {
-    const onScroll = () => {
-      // Active section
-      const offset = window.scrollY + 120;
-      for (let i = NAV_ITEMS.length - 1; i >= 0; i--) {
-        const el = document.getElementById(NAV_ITEMS[i].id);
-        if (el && el.offsetTop <= offset) {
-          setActive(NAV_ITEMS[i].id);
-          break;
-        }
-      }
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
   // ── Close mobile menu on outside click ─────────────────────────────────────
   useEffect(() => {
     if (!isOpen) return;
@@ -71,40 +61,34 @@ export default function Navbar() {
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
-  const scrollTo = (href: string) => {
-    const id = href.replace("#", "");
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-    setIsOpen(false);
-  };
-
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border-b border-slate-200 dark:border-slate-700 z-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex justify-between items-center h-[var(--nav-row-h)]">
 
             {/* Logo */}
-            <button
-              onClick={() => scrollTo("#home")}
+            <Link
+              href="/"
               className="text-xl font-bold text-slate-800 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
             >
               Arshin Sikka
-            </button>
+            </Link>
 
             {/* Desktop nav */}
             <div className="hidden md:flex items-center gap-6">
               {NAV_ITEMS.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => scrollTo(item.href)}
+                <Link
+                  key={item.path}
+                  href={item.path}
                   className={`text-sm font-medium pb-1 transition-colors ${
-                    activeSection === item.id
+                    isActive(item.path, location)
                       ? "text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400"
                       : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
                   }`}
                 >
                   {item.label}
-                </button>
+                </Link>
               ))}
 
               <button
@@ -145,17 +129,18 @@ export default function Navbar() {
         >
           <div className="px-4 pt-2 pb-4 space-y-1 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700">
             {NAV_ITEMS.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => scrollTo(item.href)}
+              <Link
+                key={item.path}
+                href={item.path}
+                onClick={() => setIsOpen(false)}
                 className={`flex w-full items-center min-h-[44px] px-4 py-2.5 text-sm font-medium rounded-lg transition-colors ${
-                  activeSection === item.id
+                  isActive(item.path, location)
                     ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20"
                     : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
                 }`}
               >
                 {item.label}
-              </button>
+              </Link>
             ))}
           </div>
         </div>

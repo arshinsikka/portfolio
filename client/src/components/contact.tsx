@@ -5,7 +5,6 @@ import { contact } from "@/content/profile";
 export default function Contact() {
   return (
     <Section
-      id="contact"
       tone="tinted"
       width="narrow"
       heading={contact.heading}

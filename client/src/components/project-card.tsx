@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { ExternalLink, Github, Download, Star } from "lucide-react";
-import type { ContentLink, Project } from "@/content/types";
+import type { Accolade, ContentLink, Project } from "@/content/types";
 
 /** Per-kind icon and button styling for the featured card's link row. */
 const LINK_STYLE: Record<ContentLink["kind"], string> = {
@@ -20,15 +20,13 @@ function LinkIcon({ kind }: { kind: ContentLink["kind"] }) {
   return <ExternalLink className="w-4 h-4 mr-2" />;
 }
 
-/**
- * Accolade pills are toned by position: the first is amber, the rest purple.
- * That reproduces the original hardcoded pair exactly. If a project ever needs
- * a different combination, give ContentLink-style `tone` to the accolade type.
- */
-const ACCOLADE_TONE = [
-  "bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800",
-  "bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-400 border border-purple-200 dark:border-purple-800",
-];
+/** Accolade pill styling, chosen explicitly per accolade via its `tone`. */
+const ACCOLADE_TONE: Record<Accolade["tone"], string> = {
+  amber:
+    "bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800",
+  purple:
+    "bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-400 border border-purple-200 dark:border-purple-800",
+};
 
 function FeaturedCard({ project }: { project: Project }) {
   return (
@@ -43,14 +41,14 @@ function FeaturedCard({ project }: { project: Project }) {
                   <Star className="w-3 h-3" />
                   Featured Project
                 </span>
-                {project.accolades?.map((accolade, i) => (
+                {project.accolades?.map((accolade) => (
                   <span
-                    key={accolade}
+                    key={accolade.text}
                     className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold ${
-                      ACCOLADE_TONE[Math.min(i, ACCOLADE_TONE.length - 1)]
+                      ACCOLADE_TONE[accolade.tone]
                     }`}
                   >
-                    {accolade}
+                    {accolade.text}
                   </span>
                 ))}
               </div>

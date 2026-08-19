@@ -14,7 +14,7 @@ const ICONS: Record<HighlightIcon, LucideIcon> = {
 
 export default function AboutMe() {
   return (
-    <Section id="about" tone="light" width="narrow" heading={about.heading}>
+    <Section tone="light" width="narrow" heading={about.heading}>
 
       {/* Main Content Section */}
       <div className="mb-16">

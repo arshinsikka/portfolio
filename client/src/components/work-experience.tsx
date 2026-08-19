@@ -6,7 +6,6 @@ import { sectionCopy } from "@/content/profile";
 export default function WorkExperience() {
   return (
     <Section
-      id="experience"
       tone="tinted"
       width="narrow"
       heading={sectionCopy.work.heading}

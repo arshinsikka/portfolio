@@ -1,19 +1,15 @@
+import { Link } from "wouter";
 import { Download, Mail, Github, ChevronDown } from "lucide-react";
 import { hero, RESUME_URL } from "@/content/profile";
 
 export default function HeroSection() {
-  const handleContactClick = () => {
-    document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-  };
-
   const handleResumeClick = () => {
     window.open(RESUME_URL, "_blank");
   };
 
   return (
     <section
-      id="home"
-      className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex items-center justify-center px-4 sm:px-6 lg:px-8 relative pt-16"
+      className="min-h-[calc(100vh-var(--nav-h))] bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-[var(--avatar-float)] relative"
     >
       <div className="max-w-4xl mx-auto text-center">
 
@@ -66,13 +62,13 @@ export default function HeroSection() {
           </button>
 
           {/* Secondary — Contact */}
-          <button
-            onClick={handleContactClick}
+          <Link
+            href="/about"
             className="inline-flex items-center justify-center w-full sm:w-auto px-7 py-3 text-sm font-medium rounded-xl border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:border-slate-400 dark:hover:border-slate-500 hover:-translate-y-0.5 active:scale-95 transition-all duration-200"
           >
             <Mail className="w-4 h-4 mr-2 shrink-0" />
             Contact Me
-          </button>
+          </Link>
 
           {/* Secondary — GitHub */}
           <a

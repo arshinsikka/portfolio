@@ -48,13 +48,25 @@
   --radius: 0.5rem;
 }
 
+/*
+ * Layout constants shared between components.
+ *
+ * These are deliberately NOT redefined under .dark — the navbar is exactly the
+ * same size in both themes, and anything that must sit clear of it reads these
+ * rather than hardcoding a matching number of its own.
+ */
+:root {
+  /* The navbar's inner row. */
+  --nav-row-h: 4rem;
+  /* Total navbar height: the row plus its 1px bottom border. */
+  --nav-h: calc(var(--nav-row-h) + 1px);
+  /* Peak upward travel of the hero avatar's float animation. */
+  --avatar-float: 8px;
+}
+
 @layer base {
   * {
     @apply border-border;
-  }
-
-  html {
-    scroll-behavior: smooth;
   }
 
   body {
@@ -88,10 +100,11 @@
   to   { opacity: 1; }
 }
 
-/* Gentle float for the avatar */
+/* Gentle float for the avatar. The hero reserves --avatar-float so this
+   transform can never lift the photo up behind the fixed navbar. */
 @keyframes float {
   0%   { transform: translateY(0px); }
-  50%  { transform: translateY(-8px); }
+  50%  { transform: translateY(calc(var(--avatar-float) * -1)); }
   100% { transform: translateY(0px); }
 }
 

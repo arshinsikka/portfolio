@@ -27,6 +27,14 @@ export interface Paragraph {
 /** Drives card size and whether the entry gets its own detail route. */
 export type ProjectTier = "featured" | "standard" | "minor";
 
+/** Colour of an accolade pill. Chosen per accolade, not by array position. */
+export type AccoladeTone = "amber" | "purple";
+
+export interface Accolade {
+  text: string;
+  tone: AccoladeTone;
+}
+
 export interface Project {
   slug: string;
   title: string;
@@ -41,8 +49,8 @@ export interface Project {
   tags: string[];
   links: ContentLink[];
   /** Short award/status pills, e.g. "BLOCK71-backed". */
-  accolades?: string[];
-  /** Reserved for the routing phase; no detail routes exist yet. */
+  accolades?: Accolade[];
+  /** Whether `/projects/:slug` resolves to a detail page for this project. */
   hasDetailPage?: boolean;
 }
 

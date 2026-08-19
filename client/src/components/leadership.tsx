@@ -6,7 +6,6 @@ import { sectionCopy } from "@/content/profile";
 export default function Leadership() {
   return (
     <Section
-      id="leadership"
       tone="light"
       width="wide"
       heading={sectionCopy.leadership.heading}

@@ -6,7 +6,6 @@ import { sectionCopy } from "@/content/profile";
 export default function ResearchExperience() {
   return (
     <Section
-      id="research"
       tone="tinted"
       width="wide"
       heading={sectionCopy.research.heading}
