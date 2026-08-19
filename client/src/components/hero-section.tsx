@@ -1,4 +1,5 @@
 import { Download, Mail, Github, ChevronDown } from "lucide-react";
+import { hero, RESUME_URL } from "@/content/profile";
 
 export default function HeroSection() {
   const handleContactClick = () => {
@@ -6,7 +7,7 @@ export default function HeroSection() {
   };
 
   const handleResumeClick = () => {
-    window.open("/assets/Arshin_Sikka_Resume.pdf", "_blank");
+    window.open(RESUME_URL, "_blank");
   };
 
   return (
@@ -21,8 +22,8 @@ export default function HeroSection() {
           <div className="relative inline-block">
             <div className="animate-float">
               <img
-                src="/assets/arshin-profile.webp"
-                alt="Arshin Sikka"
+                src={hero.imageSrc}
+                alt={hero.imageAlt}
                 width={320}
                 height={320}
                 decoding="async"
@@ -30,7 +31,7 @@ export default function HeroSection() {
               />
             </div>
             {/* Available indicator */}
-            <div className="absolute bottom-1 right-1 md:bottom-1.5 md:right-1.5 w-5 h-5 md:w-6 md:h-6 bg-green-500 rounded-full border-[3px] border-white dark:border-slate-800 shadow-sm" title="Available for opportunities" />
+            <div className="absolute bottom-1 right-1 md:bottom-1.5 md:right-1.5 w-5 h-5 md:w-6 md:h-6 bg-green-500 rounded-full border-[3px] border-white dark:border-slate-800 shadow-sm" title={hero.availabilityTitle} />
           </div>
         </div>
 
@@ -38,18 +39,18 @@ export default function HeroSection() {
         <div className="animate-fade-in-up mb-6">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-800 dark:text-white mb-4">
             <span className="bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
-              Arshin Sikka
+              {hero.name}
             </span>
           </h1>
           <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300 font-medium max-w-3xl mx-auto leading-relaxed">
-            Building AI products — from BLOCK71-backed startup to enterprise LLM systems
+            {hero.tagline}
           </p>
         </div>
 
         {/* Introduction */}
         <div className="animate-fade-in mb-12">
           <p className="text-base md:text-lg text-slate-700 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
-            Year 3 CS student at NUS. Currently shipping production AI systems at SP Digital. Previously built agentic RAG at KPMG and co-founded Lecture AI.
+            {hero.intro}
           </p>
         </div>
 
@@ -75,7 +76,7 @@ export default function HeroSection() {
 
           {/* Secondary — GitHub */}
           <a
-            href="https://github.com/arshinsikka"
+            href={hero.githubUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center w-full sm:w-auto px-7 py-3 text-sm font-medium rounded-xl border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:border-slate-400 dark:hover:border-slate-500 hover:-translate-y-0.5 active:scale-95 transition-all duration-200"

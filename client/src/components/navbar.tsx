@@ -15,7 +15,6 @@ export default function Navbar() {
   const [isOpen, setIsOpen]           = useState(false);
   const [activeSection, setActive]    = useState("home");
   const [isDarkMode, setIsDarkMode]   = useState(false);
-  const [scrollPct, setScrollPct]     = useState(0);
   const mobileMenuRef                 = useRef<HTMLDivElement>(null);
 
   // ── Dark mode init ──────────────────────────────────────────────────────────
@@ -35,14 +34,9 @@ export default function Navbar() {
     localStorage.setItem("theme", next ? "dark" : "light");
   };
 
-  // ── Active section + scroll progress ───────────────────────────────────────
+  // ── Active section ─────────────────────────────────────────────────────────
   useEffect(() => {
     const onScroll = () => {
-      // Progress
-      const docH   = document.documentElement.scrollHeight - window.innerHeight;
-      const pct    = docH > 0 ? (window.scrollY / docH) * 100 : 0;
-      setScrollPct(pct);
-
       // Active section
       const offset = window.scrollY + 120;
       for (let i = NAV_ITEMS.length - 1; i >= 0; i--) {
@@ -85,13 +79,6 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Scroll progress bar */}
-      <div
-        id="scroll-progress"
-        style={{ width: `${scrollPct}%` }}
-        aria-hidden="true"
-      />
-
       <nav className="fixed top-0 left-0 right-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border-b border-slate-200 dark:border-slate-700 z-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">

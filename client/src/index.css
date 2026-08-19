@@ -115,19 +115,6 @@
     0 0 28px 8px rgba(96, 165, 250, 0.5);
 }
 
-/* ─── Scroll progress bar ─────────────────────────────────────────────────── */
-
-#scroll-progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #2563eb, #9333ea);
-  z-index: 9999;
-  transition: width 0.1s linear;
-  pointer-events: none;
-}
-
 /* ─── Card interactions ───────────────────────────────────────────────────── */
 
 /* Consistent hover lift for all portfolio cards */
