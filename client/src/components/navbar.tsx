@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "wouter";
-import { Menu, X, Sun, Moon } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 const NAV_ITEMS = [
   { path: "/",          label: "Home"       },
@@ -29,6 +29,32 @@ const navItemClass = (active: boolean) =>
 const iconButtonClass =
   "grid h-9 w-9 place-items-center rounded-sm text-ink-muted transition-colors duration-150 hover:bg-rule hover:text-ink";
 
+/**
+ * The theme control, as a two-state mono label rather than a sun/moon glyph.
+ *
+ * A lucide icon in a 36px square was the one control on the page that belonged
+ * to no part of this system — it carried an icon set the rest of the site does
+ * not use, and it stated the state ambiguously (does the sun mean "you are in
+ * light" or "switch to light"?). This is the same 11px tracked mono the nav
+ * items use, and it borrows their active/inactive pair exactly: the current
+ * theme is --ink, the other is --ink-muted. Reading it tells you where you are
+ * and what the click will do.
+ */
+function ThemeToggle({ dark, onToggle }: { dark: boolean; onToggle: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      aria-label={dark ? "Switch to light theme" : "Switch to dark theme"}
+      className="flex items-center gap-s2 rounded-sm border border-rule-strong px-s3 py-[0.35rem] font-mono text-label uppercase transition-colors duration-150 hover:border-ink"
+    >
+      <span className={dark ? "text-ink-muted" : "text-ink"}>Light</span>
+      <span aria-hidden className="text-rule-strong">/</span>
+      <span className={dark ? "text-ink" : "text-ink-muted"}>Dark</span>
+    </button>
+  );
+}
+
 export default function Navbar() {
   const [location]                  = useLocation();
   const [isOpen, setIsOpen]         = useState(false);
@@ -36,13 +62,12 @@ export default function Navbar() {
   const mobileMenuRef               = useRef<HTMLDivElement>(null);
 
   // ── Dark mode init ──────────────────────────────────────────────────────────
+  // The blocking script in index.html has already resolved the theme and set the
+  // class before first paint. Deciding it again here would repeat that work one
+  // render too late — which is exactly what caused the flash of light theme. All
+  // this does now is sync the toggle's icon to the decision already made.
   useEffect(() => {
-    const saved       = localStorage.getItem("theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    if (saved === "dark" || (!saved && prefersDark)) {
-      setIsDarkMode(true);
-      document.documentElement.classList.add("dark");
-    }
+    setIsDarkMode(document.documentElement.classList.contains("dark"));
   }, []);
 
   const toggleDark = () => {
@@ -73,7 +98,7 @@ export default function Navbar() {
 
   return (
     <nav className="fixed inset-x-0 top-0 z-50 border-b border-rule bg-paper">
-      <div className="mx-auto max-w-page px-s5">
+      <div className="mx-auto max-w-page px-gutter">
         <div className="flex h-[var(--nav-row-h)] items-center justify-between">
 
           {/* Wordmark */}
@@ -97,16 +122,12 @@ export default function Navbar() {
               </Link>
             ))}
 
-            <button onClick={toggleDark} className={iconButtonClass} aria-label="Toggle dark mode">
-              {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            </button>
+            <ThemeToggle dark={isDarkMode} onToggle={toggleDark} />
           </div>
 
           {/* Mobile controls */}
-          <div className="flex items-center gap-s1 md:hidden" ref={mobileMenuRef}>
-            <button onClick={toggleDark} className={iconButtonClass} aria-label="Toggle dark mode">
-              {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            </button>
+          <div className="flex items-center gap-s2 md:hidden" ref={mobileMenuRef}>
+            <ThemeToggle dark={isDarkMode} onToggle={toggleDark} />
             <button
               onClick={() => setIsOpen((o) => !o)}
               className={iconButtonClass}
@@ -122,7 +143,7 @@ export default function Navbar() {
       {/* Mobile menu. Unmounted when closed, so it leaves the tab order. */}
       {isOpen && (
         <div className="border-t border-rule bg-paper md:hidden">
-          <div className="mx-auto max-w-page px-s5 py-s2">
+          <div className="mx-auto max-w-page px-gutter py-s2">
             {NAV_ITEMS.map((item) => (
               <Link
                 key={item.path}

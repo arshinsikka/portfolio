@@ -13,7 +13,7 @@ const ICONS: Record<SocialIcon, IconType | typeof Github> = {
 export default function Footer() {
   return (
     <footer className="border-t border-rule">
-      <div className="mx-auto flex max-w-page flex-col gap-s4 px-s5 py-s6 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mx-auto flex max-w-page flex-col gap-s3 px-gutter py-s5 sm:flex-row sm:items-center sm:justify-between">
         <p className="font-mono text-label uppercase text-ink-muted">
           {footerCopyright}
         </p>

@@ -1,82 +1,64 @@
-import { GraduationCap, Globe, FlaskConical, Rocket, Bot, Trophy, BookOpen } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
-import { Section } from "@/components/section";
-import { about, education, highlights, type HighlightIcon } from "@/content/profile";
+import { Block, Prose } from "@/components/primitives";
+import {
+  about,
+  education,
+  highlights,
+  highlightsHeading,
+} from "@/content/profile";
 
-const ICONS: Record<HighlightIcon, LucideIcon> = {
-  graduation: GraduationCap,
-  globe: Globe,
-  flask: FlaskConical,
-  rocket: Rocket,
-  bot: Bot,
-  trophy: Trophy,
-};
-
+/**
+ * About, Education, and Quick Highlights.
+ *
+ * Two of these are not plain lists, so neither uses IndexRow:
+ *
+ * Education is a single record — one degree, one metadata line, and a list of
+ * notes. Forcing it into a three-column index row would need the `meta` string
+ * split into a date and a minor, which is a copy edit. It instead borrows the
+ * row's *type* hierarchy without its grid: the degree at `text-org` like an
+ * organisation, the metadata in mono like a date, and the notes as hairline
+ * rows beneath.
+ *
+ * Quick Highlights are six standalone sentences with no organisation, date, or
+ * role — nothing to put in three columns. They keep the hairline row rhythm in
+ * a two-column grid. A `border-t` on each item aligns across each grid row
+ * regardless of how the text wraps, which a `border-b` would not.
+ */
 export default function AboutMe() {
   return (
-    <Section tone="light" width="narrow" heading={about.heading}>
+    <>
+      <Block className="border-t-0" label={about.heading} labelAs="h1">
+        {about.paragraphs.map((paragraph, i) => (
+          <Prose key={i} className={i > 0 ? "mt-s4" : undefined}>
+            {paragraph}
+          </Prose>
+        ))}
+      </Block>
 
-      {/* Main Content Section */}
-      <div className="mb-16">
-        <div className="space-y-6 text-base md:text-lg text-slate-700 dark:text-slate-300 leading-relaxed max-w-3xl mx-auto">
-          {about.paragraphs.map((paragraph, index) => (
-            <p key={index}>
-              {paragraph}
-            </p>
+      <Block label={education.heading}>
+        <p className="text-org font-medium text-ink">{education.degree}</p>
+        <p className="mt-s1 font-mono text-meta text-ink-muted">{education.meta}</p>
+
+        <ul className="mt-s3">
+          {education.notes.map((note, i) => (
+            <li key={i} className="border-t border-rule py-s3">
+              <Prose className="text-small">{note}</Prose>
+            </li>
           ))}
-        </div>
-      </div>
+        </ul>
+      </Block>
 
-      {/* Education */}
-      <div className="mb-16">
-        <h3 className="text-2xl font-semibold text-slate-800 dark:text-white mb-6 text-center">
-          {education.heading}
-        </h3>
-        <div className="max-w-3xl mx-auto bg-slate-50 dark:bg-slate-800 rounded-lg p-6 border border-slate-100 dark:border-slate-700">
-          <div className="flex items-start gap-4">
-            <GraduationCap className="w-6 h-6 text-blue-600 dark:text-blue-400 mt-1 shrink-0" />
-            <div>
-              <p className="font-semibold text-slate-800 dark:text-white">
-                {education.degree}
-              </p>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mb-3">{education.meta}</p>
-              <ul className="space-y-1 text-sm text-slate-700 dark:text-slate-300 list-none">
-                {education.notes.map((note, index) => (
-                  <li key={index} className="flex items-start gap-2">
-                    <BookOpen className="w-4 h-4 text-slate-400 mt-0.5 shrink-0" />
-                    <span>{note}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Quick Highlights */}
-      <div>
-        <h3 className="text-2xl font-semibold text-slate-800 dark:text-white mb-8 text-center">
-          Quick Highlights
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {highlights.map((highlight, index) => {
-            const IconComponent = ICONS[highlight.icon];
-            return (
-              <div 
-                key={index}
-                className="flex items-start space-x-4 p-6 rounded-lg bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 hover:shadow-md transition-all duration-300 ease-out hover:-translate-y-1"
-              >
-                <div className="flex-shrink-0">
-                  <IconComponent className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                </div>
-                <p className="text-slate-700 dark:text-slate-300 text-sm md:text-base leading-relaxed">
-                  {highlight.text}
-                </p>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </Section>
+      <Block label={highlightsHeading}>
+        <ul className="grid gap-x-s6 md:grid-cols-2">
+          {highlights.map((highlight) => (
+            <li
+              key={highlight.text}
+              className="border-t border-rule py-s3 text-body text-ink"
+            >
+              {highlight.text}
+            </li>
+          ))}
+        </ul>
+      </Block>
+    </>
   );
 }

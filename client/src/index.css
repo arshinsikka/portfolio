@@ -57,9 +57,26 @@
   /* Layout */
   --nav-row-h: 4rem;
   --nav-h: calc(var(--nav-row-h) + 1px);
-  --rail-w: 8.5rem;
+
+  /* The rail carries one short mono label. It was 8.5rem, which spent a third
+     of a narrow page on 11px type; 6rem still fits "WORK" / "EXPERIENCE" on two
+     lines and hands the difference back to the content column. */
+  --rail-w: 6rem;
   --rail-gap: 2rem;
+
+  /* Reading measure for prose only (~65ch). The content column is far wider
+     than this now, so paragraphs stay at measure and the surplus width is spent
+     structurally — on the index row's columns — rather than on long lines. */
   --measure: 34rem;
+
+  /* The page container, centred, border-box, gutter included. At 1440 it
+     resolves to 76rem (1216px, a 64rem content column); past ~1447px it grows
+     with the viewport and stops at 84rem, so a 1920 display gets a fuller page
+     instead of the same box with 350px of margin either side.
+       1440 → 1216px box, 1024px content column, 112px margins
+       1920 → 1344px box, 1152px content column, 288px margins */
+  --page-w: clamp(76rem, 84vw, 84rem);
+  --page-gutter: 2rem;
 
   /* shadcn compatibility layer, repointed at the tokens above so the surviving
      ui/ primitives inherit this system instead of the old blue one. */

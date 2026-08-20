@@ -4,6 +4,26 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5" />
 
+    <!--
+      Theme, resolved before first paint. This has to be a blocking inline script
+      in <head>: the previous init ran in a useEffect inside Navbar, which lands
+      after React has mounted and painted, so dark-mode visitors saw a full frame
+      of the light theme first. Navbar now only reads the class this sets.
+    -->
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem("theme");
+          var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+          if (saved === "dark" || (!saved && prefersDark)) {
+            document.documentElement.classList.add("dark");
+          }
+        } catch (e) {
+          /* Private mode can throw on localStorage. Light theme is the fallback. */
+        }
+      })();
+    </script>
+
     <!-- Primary meta -->
     <title>Arshin Sikka — AI Product Builder</title>
     <meta name="description" content="CS student at NUS building AI products. Co-founder of Lecture AI (BLOCK71-backed). Currently building production LLM systems at SP Digital. Seeking product, strategy, and AI roles." />
@@ -11,11 +31,17 @@
     <meta name="keywords" content="Arshin Sikka, AI, NUS, LLM, Lecture AI, SP Digital, KPMG, machine learning, product, Singapore" />
     <link rel="canonical" href="https://arshinsikka.com" />
 
-    <!-- Theme color (matches dark navbar) -->
-    <meta name="theme-color" content="#0f172a" />
+    <!-- Theme color. Both values are --paper, so the browser chrome continues
+         the page ground instead of the old slate navbar that no longer exists. -->
+    <meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#12110f" media="(prefers-color-scheme: dark)" />
 
-    <!-- Favicon — AS monogram -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%232563eb'/%3E%3Ctext x='50' y='68' font-family='system-ui%2Csans-serif' font-weight='700' font-size='46' fill='white' text-anchor='middle'%3EAS%3C/text%3E%3C/svg%3E" />
+    <!-- Favicon. The page's own signature at 16px: a paper tile with square
+         corners, the accent change bar in the left margin, and an ink serif
+         monogram. Dark variant first so browsers that ignore `media` fall
+         through to the light one. -->
+    <link rel="icon" type="image/svg+xml" media="(prefers-color-scheme: dark)" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%2312110f'/%3E%3Crect width='12' height='100' fill='%237fa6e3'/%3E%3Ctext x='58' y='69' font-family='Georgia%2Cserif' font-size='46' fill='%23edeae3' text-anchor='middle'%3EAS%3C/text%3E%3C/svg%3E" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23fbfaf7'/%3E%3Crect width='12' height='100' fill='%231d3a6b'/%3E%3Ctext x='58' y='69' font-family='Georgia%2Cserif' font-size='46' fill='%23171614' text-anchor='middle'%3EAS%3C/text%3E%3C/svg%3E" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />

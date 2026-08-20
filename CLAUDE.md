@@ -27,3 +27,18 @@ The current design reads as AI-generated. Specifically avoid: purple-to-blue
 gradient headings, dark navy/slate default backgrounds, centered hero with
 a row of pill buttons, Inter/Roboto/system font stacks, generic card grids.
 Aim for something that looks like a person with taste made deliberate choices.
+
+## Design system
+docs/DESIGN.md is authoritative for colour, type, spacing, and component
+specs. Read it before any styling work. Do not introduce colours, fonts,
+or spacing values that are not in it.
+
+## Current phase
+Phase 3, design. The homepage, navbar, and footer use the new system.
+/work, /projects, /research, /about, and project-detail are still on the
+old design and will look inconsistent. That is expected.
+
+## History
+docs/AUDIT.md is the original codebase audit. Parts of it are outdated,
+it was written before the Express server, shadcn purge, and routing work.
+Treat it as history, not current state.

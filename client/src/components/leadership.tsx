@@ -1,22 +1,32 @@
-import LeadershipCard from "@/components/leadership-card";
-import { Section } from "@/components/section";
+import { Block, IndexRow, Prose } from "@/components/primitives";
 import { leadership } from "@/content/leadership";
 import { sectionCopy } from "@/content/profile";
 
 export default function Leadership() {
   return (
-    <Section
-      tone="light"
-      width="wide"
-      heading={sectionCopy.leadership.heading}
-      subtitle={sectionCopy.leadership.subtitle}
-    >
-      {/* Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
+    <Block label={sectionCopy.leadership.heading}>
+      <p className="max-w-lead font-display text-lead text-ink-muted">
+        {sectionCopy.leadership.subtitle}
+      </p>
+
+      <ul className="mt-s5">
         {leadership.map((item) => (
-          <LeadershipCard key={item.slug} item={item} />
+          <IndexRow
+            key={item.slug}
+            primary={item.organization}
+            secondary={
+              item.location ? `${item.title} · ${item.location}` : item.title
+            }
+            date={item.dates}
+            tags={item.tags}
+          >
+            {/* Absent where the canonical copy lives on the project record. */}
+            {item.description && (
+              <Prose className="text-small">{item.description}</Prose>
+            )}
+          </IndexRow>
         ))}
-      </div>
-    </Section>
+      </ul>
+    </Block>
   );
 }

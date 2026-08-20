@@ -1,9 +1,10 @@
 # Design direction
 
-Status: **proposed**. Implemented on `/` (plus the global navbar, footer, and
-chat widget) only. `/work`, `/projects`, `/projects/:slug`, `/research`, and
-`/about` still carry the old design and will look inconsistent until this
-direction is approved.
+Status: **implemented on every route.** `/`, `/work`, `/projects`,
+`/projects/lecture-ai`, `/research`, `/about`, and the 404 all use the same
+container, rail, and content columns, plus the global navbar, footer, and chat
+widget. There are no per-page containers and no non-token colour values left in
+the app layer.
 
 ---
 
@@ -17,7 +18,7 @@ every block labelled in the left margin in monospace. Dates, organisations, and
 tags are set in mono and aligned into columns, so a reader scanning for "what
 has he actually done, and when" gets it from the shape of the page before
 reading a word. Hierarchy comes from size and position, not from colour, boxes,
-or shadow. There is exactly one accent, and it appears in three places.
+or shadow. There is exactly one accent, and it appears in five places.
 
 The subject is a Year 3 CS student whose work is *measurement* — LLM
 evaluation, guardrails, adversarial test suites, cost and latency tradeoffs. A
@@ -75,7 +76,7 @@ squinting.
 It is worth being explicit that the old site was also blue. The distinction is
 value and saturation, not hue: `#2563EB` is a mid-value saturated UI blue used
 as a brand primary on twelve different elements. `#1D3A6B` is a dark, quiet ink
-used on three.
+used on five.
 
 ---
 
@@ -89,14 +90,14 @@ property; nothing in the redesigned surface hardcodes a hex.
 | Token | Light | Dark | Used for |
 |---|---|---|---|
 | `--paper` | `#FBFAF7` | `#12110F` | Page ground. The only background on the page. |
-| `--ink` | `#171614` | `#EDEAE3` | Primary text. Also the primary button's fill. |
+| `--ink` | `#171614` | `#EDEAE3` | Primary text. Also the secondary button's hover fill. |
 | `--ink-muted` | `#6E6B64` | `#8B8780` | Secondary text: metadata, labels, tags, captions. |
 | `--rule` | `#E4E1D9` | `#26241F` | Decorative hairlines between blocks and rows. |
 | `--rule-strong` | `#8A8578` | `#6B6459` | Boundaries that carry meaning: input borders, secondary button outline, link underlines. |
-| `--accent` | `#1D3A6B` | `#7FA6E3` | Links, active nav, the change bar. Nothing else. |
-| `--accent-hover` | `#162E56` | `#9DBBEC` | Link and nav hover. |
+| `--accent` | `#1D3A6B` | `#7FA6E3` | Links, active nav, the change bar, the primary button, the current role. Nothing else. |
+| `--accent-hover` | `#162E56` | `#9DBBEC` | Link, nav, and primary button hover. |
 | `--on-accent` | `#FBFAF7` | `#12110F` | Text on an accent fill. |
-| `--on-ink` | `#FBFAF7` | `#12110F` | Text on the primary button. |
+| `--on-ink` | `#FBFAF7` | `#12110F` | Text on an ink fill (the secondary button on hover). |
 
 ### Contrast — light theme
 
@@ -170,8 +171,8 @@ of a second file. Fallback stacks (`Georgia`, `Helvetica Neue`, `ui-monospace`)
 only matter during the swap window.
 
 Not done: `<link rel="preload">` for the two critical faces, which would remove
-one round trip. That needs an edit to `client/index.html`, which is out of scope
-for this task.
+one round trip. `client/index.html` is no longer off limits, so this is now
+simply outstanding rather than blocked.
 
 ### Scale
 
@@ -183,7 +184,9 @@ keys, so they are used as `text-display`, `text-body`, and so on.
 | `display` | `clamp(2.5rem, 6.5vw, 4rem)` | 1.02 | −0.022em | Newsreader | The name. Once per page. |
 | `lead` | `clamp(1.25rem, 2.4vw, 1.75rem)` | 1.28 | −0.011em | Newsreader | The positioning line. |
 | `h2` | 1.375rem / 22px | 1.25 | −0.01em | Newsreader | Reserved for in-content section headings on interior pages. |
-| `h3` | 1rem / 16px | 1.4 | −0.005em | Plex Sans 500 | List row titles. |
+| `h3` | 1rem / 16px | 1.4 | −0.005em | Plex Sans 500 | Reserved for minor headings. |
+| `org` | 1.125rem / 18px | 1.3 | −0.006em | Plex Sans 500 | The organisation in an index row. |
+| `stat` | `clamp(2.25rem, 3.4vw, 3rem)` | 1.0 | −0.03em | Newsreader | Impact-strip numerals. |
 | `body` | 1rem / 16px | 1.6 | — | Plex Sans 400 | Reading text. |
 | `small` | 0.875rem / 14px | 1.55 | — | Plex Sans 400 | Secondary text, buttons, row sub-line. |
 | `meta` | 0.8125rem / 13px | 1.45 | — | Plex Mono 400 | Dates. Tabular numerals, so date columns align. |
@@ -222,10 +225,54 @@ Layout constants, also tokens:
 |---|---|---|
 | `--nav-row-h` | 4rem | Navbar inner row |
 | `--nav-h` | `calc(var(--nav-row-h) + 1px)` | Total navbar height including its border. Everything that must clear the fixed navbar reads this. |
-| `--rail-w` | 8.5rem / 136px | The margin rail |
-| `--rail-gap` | 2rem | Rail to content |
-| `--measure` | 34rem | Reading measure (~65ch) |
-| `max-w-page` | 46rem / 736px | Rail + gap + content column |
+| `--rail-w` | 6rem / 96px | The margin rail |
+| `--rail-gap` | 2rem / 32px | Rail to content |
+| `--measure` | 34rem / 544px | Reading measure (~65ch). **Prose only.** |
+| `--page-w` | `clamp(76rem, 84vw, 84rem)` | The page container, centred, border-box, gutter included |
+| `--page-gutter` | 2rem / 32px | Container inner padding |
+
+### The grid
+
+The page is **centred and wide**. Two earlier attempts are worth recording
+because both failed in instructive ways.
+
+The first was `mx-auto max-w-page` at 46rem. That left a 32.5rem content column
+— narrower than `--measure`, so `--measure` could never apply and every
+`max-w-measure` in the app was inert.
+
+The second left-anchored the page inside a centred shell. It was genuinely
+anchored, but a 712px page on a 1920px display put the entire site in one half
+of the viewport with 848px of dead margin beside it, which reads as broken
+rather than deliberate.
+
+What was wrong in both cases was the **rail**, not the alignment. At 8.5rem it
+spent a third of a narrow page on one 11px mono label. The rail is now 6rem —
+still wide enough for `WORK` / `EXPERIENCE` on two lines — and the width it gives
+back goes to the content column.
+
+| Viewport | Container | Rail | Content column | Left | Right | Container % | Content % |
+|---|---|---|---|---|---|---|---|
+| 1440px | 112 → 1328 (1216px) | 96px | **1024px** | 112px | 112px | 84.4% | **71.1%** |
+| 1920px | 288 → 1632 (1344px) | 96px | **1152px** | 288px | 288px | 70.0% | **60.0%** |
+
+`--page-w` is a `clamp`, not a literal, so 1440 resolves to the 76rem floor while
+wider displays grow to an 84rem ceiling. A single fixed max-width cannot be both
+comfortable at 1440 and full at 1920.
+
+### Spending width without stretching lines
+
+The content column is 1024–1152px, roughly twice a comfortable measure. Prose
+must never fill it. The rule:
+
+- **Prose stays at `--measure`.** `<Prose>` enforces this so it cannot be
+  forgotten per-component.
+- **Structure takes the surplus.** The index row is a real three-column grid
+  (organisation / role / date), the impact strip is a four-column band, and the
+  technical artifact runs the full column. That is what the extra width is for.
+
+The consequence is a deliberately ragged right edge — paragraphs stop at 544px
+while rows and bands run to the full column. That is the intended silhouette,
+not an alignment bug.
 
 Radius is effectively off: `--radius: 2px`, applied only to controls (buttons,
 inputs, chips). Structural elements have square corners.
@@ -274,6 +321,8 @@ live and visible in the first build of this direction.
 `client/src/lib/utils.ts` now uses `extendTailwindMerge` to declare the custom
 `font-size` and `font-family` groups. **Any new key added to the type scale must
 be added there too**, or `cn()` will start eating classes again without warning.
+`org` and `stat` were added with the impact strip and the index row; the list in
+`utils.ts` must always match the `fontSize` block in `tailwind.config.ts`.
 
 ---
 
@@ -293,7 +342,7 @@ optional: it is what makes the link identifiable without colour.
 
 ### Nav item
 
-Mono, 11px, uppercase, `+0.09em`. The second of the accent's three jobs.
+Mono, 11px, uppercase, `+0.09em`. The second of the accent's five jobs.
 
 - **Default** — `--ink-muted`
 - **Hover** — `--ink`
@@ -305,46 +354,105 @@ the active item, which fought the hairline system.
 
 ### Section heading — the rail label
 
-A real `<h2>` positioned in the margin: mono, 11px, uppercase, `--ink-muted`.
+A real heading positioned in the margin: mono, 11px, uppercase, `--ink-muted`.
+On an interior index page the rail label *is* the page title, so `Block` takes
+`labelAs="h1"` and renders it as the `<h1>` — visually identical, because the
+rail label is the heading treatment site-wide and a centred display `<h1>` would
+break it. Every route has exactly one `<h1>`.
 On the homepage index each label is also a link to the route it indexes, so it
 picks up the link hover colour. Below `md` the rail collapses and the label
 becomes an eyebrow above the content.
 
-### List row — `<ListRow>`
+### Index row — `<IndexRow>`
 
-Replaces the card. Title left in Plex Sans 500 at 16px; date right in mono 13px
-with tabular numerals; organisation and location on a sub-line in 14px muted;
-tags below. Separated by a `--rule` hairline, `1rem` padding-y.
+Replaces the card, and now a real three-column index rather than a title with a
+date pushed to the far edge.
 
-No border radius, no shadow, no hover lift, no background change. A row is only
-interactive when it links somewhere real — `href` is set only where a
-destination actually exists, which on the homepage means the two entries that
-resolve to `/projects/lecture-ai`.
+Three columns from `lg` (1024px) up; below that the row stacks, because at
+exactly `md` the middle column would squeeze to ~138px and wrap every role onto
+four lines.
 
-- **Linked title default** — `--ink` with a `--rule-strong` underline
-- **Linked title hover** — `--accent`, underline switches to `--accent`
-- **Non-linked title** — no underline, no pointer, no hover
+| Column | Width | Content | Type |
+|---|---|---|---|
+| 1 | `minmax(0, 15rem)` | **Organisation or artifact** — SP Digital, KPMG, Lecture AI | `text-org`, Plex Sans 500, `--ink` |
+| 2 | `minmax(0, 1fr)` | Role · location, then tags beneath | `text-small` `--ink-muted`, tags `text-label` |
+| 3 | `auto`, right-aligned | Date | `text-meta` mono, tabular |
 
-### Tag — `<TagList>`
+**The organisation is the headline.** It previously sat in 14px muted grey
+*below* the job title, subordinate to it — which inverted what a recruiter
+actually scans for. Putting it in column one at 18px means the left edge of the
+content column reads as a list of places, and the dates still align down column
+three. No copy changed; only which string occupies which slot.
 
-Mono, 11px, uppercase, `--ink-muted`, separated by a 1rem gap. No pill, no
-border, no background, no colour. Tags are metadata; they were pretending to be
-navigation. Semantically a `<ul>`, not a row of `<span>`s.
+Separated by a `--rule` hairline, `s3` padding-y. No radius, no shadow, no lift.
 
-### Button — `<ButtonLink>`
+**The row body.** Interior pages carry descriptions and links that the homepage
+index deliberately omits. Those go in `children`, which renders inside column two
+capped at `--measure` — so the organisation column stays a clean scannable list
+on every page, and the row's three-column head is identical everywhere.
 
-**Primary** is an inverted ink fill, *not* the accent. Keeping the accent off
-buttons is precisely what lets it stay rare enough to mean something — the brief
-allotted the accent three jobs and a button fill would have been a fourth.
+### Three things that are not lists
 
-- **Default** — `bg-ink` / `text-on-ink`, 2px radius, 14px Plex Sans 500
-- **Hover** — fill switches to `--accent`, text to `--on-accent` (150ms)
-- **Focus-visible** — 2px `--accent` outline, 3px offset
-- **Disabled** — not currently used on the homepage
+Not every section is a set of records with an organisation and a date. Three
+resisted `IndexRow`, and each borrows the row's *type hierarchy* without its
+grid rather than inventing a new treatment:
 
-**Secondary** is a hairline outline in `--rule-strong` with `--ink` text; on
-hover the border goes to `--ink` and it fills, inverting to match primary's
-resting state.
+- **Education** is a single record: one degree, one metadata line, a list of
+  notes. Its `meta` string combines the dates and the minor in one sentence, so
+  splitting it into a date column would be a copy edit. The degree is set at
+  `text-org` like an organisation, the metadata in mono like a date, and the
+  notes are hairline rows beneath.
+- **Quick Highlights** are six standalone sentences with no organisation, date,
+  or role — nothing to put in three columns. They keep the hairline row rhythm in
+  a two-column grid. Each item takes `border-t`, not `border-b`, because a top
+  border aligns across each grid row regardless of how the text wraps.
+- **Contact** is a set of labelled values. Each is a mono caption over a linked
+  address — the rail-label-over-content shape, one level down.
+
+### Impact strip — `<StatBand>`
+
+Three or four large numerals with small mono labels beneath, in a four-column
+band. Large figures against small labels is the highest contrast per pixel
+available without photography: the numeral carries at a glance, and the label
+only has to be legible once the eye has already stopped.
+
+Numerals are Newsreader at `text-stat`; labels are `text-label` mono uppercase
+`--ink-muted`. Unfilled entries carry `placeholder: true` and render in
+`--rule-strong` under a dashed rule, so a blank slot is impossible to miss.
+
+### Technical artifact — `<Artifact>`
+
+A code block or architecture diagram: hairline `--rule-strong` border, mono
+`text-meta`, optional mono caption below a `--rule` divider. `overflow-x: auto`
+on the `<pre>`, so a wide diagram scrolls inside its own box rather than widening
+the page. For an AI engineering portfolio this is what evidences depth, and it
+needs no photography.
+
+### Placeholder — `<Placeholder>`
+
+A slot whose copy has not been written: dashed `--rule-strong` border, mono
+`text-meta`, prefixed with the literal word PLACEHOLDER in `--rule-strong`.
+Capped at `--measure` so it previews where the real prose will sit.
+Deliberately conspicuous — these must not survive to production by being
+quietly forgettable.
+
+### Prose — `<Prose>`
+
+Body copy at `--measure`. Exists so the cap is structural rather than a
+`max-w-measure` that each component has to remember.
+
+### Theme toggle — `ThemeToggle`
+
+`LIGHT / DARK` in 11px tracked mono inside a hairline `--rule-strong` box. The
+active theme is `--ink`, the inactive is `--ink-muted` — the same pair the nav
+uses for active and inactive routes.
+
+It replaced a lucide sun/moon glyph in a 36px square, which was the one control
+on the page belonging to no part of this system: it carried an icon set used
+nowhere else, and it stated its state ambiguously (does a sun mean "you are in
+light" or "switch to light"?). The word pair states both where you are and what
+the click will do. `aria-label` carries the action, and dropping the two icons
+removes them from the bundle.
 
 ### Chat widget
 
@@ -396,15 +504,33 @@ Summary of every state:
 | Text link | colour → `--accent-hover`, underline → `--accent` | 2px accent outline | — | — |
 | Nav item | colour → `--ink` | 2px accent outline | colour → `--accent`, `aria-current="page"` | — |
 | Rail label link | colour → `--accent` | 2px accent outline | — | — |
-| Row title link | colour → `--accent`, underline → `--accent` | 2px accent outline | — | — |
-| Primary button | fill → `--accent` | 2px accent outline | — | — |
+| Index row (linked) | mono `→` fades into the left gutter, row hairline `--rule` → `--ink`, underline → `--accent` | 2px accent outline | — | — |
+| Index row (no destination) | **nothing** | — | — | — |
+| Theme toggle | border → `--ink` | 2px accent outline | active half is `--ink` | — |
+| Primary button | fill → `--accent-hover` | 2px accent outline | — | — |
 | Secondary button | border → `--ink`, fills and inverts | 2px accent outline | — | — |
 | Icon button | background → `--rule`, colour → `--ink` | 2px accent outline | — | — |
 | Chat input | — | border → `--accent` via `focus-within` | — | `opacity-30`, `cursor-not-allowed` |
 | Chat chip | border → `--ink`, colour → `--ink` | 2px accent outline | — | — |
 
+### The row hover, and why it earns its place
+
+One pattern, used on every index row on the site. Hovering a row that leads
+somewhere slides a mono `→` into the left gutter and promotes the row's own
+hairline from `--rule` to `--ink`. Rows with no destination do not react at all.
+
+The restraint argument is that this is not decoration: it carries information no
+static state does. Only some rows are links — the two that resolve to
+`/projects/lecture-ai` — and nothing else on the page distinguishes them, because
+underlining every title would make the index look like a link farm. The hover is
+therefore *what teaches which rows are clickable*, and the arrow says which
+direction the click goes. The hairline promotion reuses the system's existing
+vocabulary rather than introducing a fill, a shadow, or a lift, all of which §1
+rules out.
+
 All transitions are 150ms. `prefers-reduced-motion: reduce` collapses every
-animation and transition to 0.01ms globally.
+animation and transition to 0.01ms globally, which flattens the arrow's fade to
+an instant appearance rather than removing the affordance.
 
 Two accessibility fixes came along with the restyle. The mobile menu now
 unmounts when closed instead of being hidden with `max-h-0 opacity-0`, so its
@@ -416,11 +542,18 @@ is announced rather than only coloured.
 
 ## 8. The signature: the margin rail and the change bar
 
-Every block on the page is a two-column grid: a fixed 136px rail on the left
-carrying a monospace label, and the content hanging to its right at a fixed
-measure. Hairlines span both columns. On the homepage the rail's first slot holds
+Every block on the page is a two-column grid: a fixed 96px rail on the left
+carrying a monospace label, and the content hanging to its right. Hairlines span both columns. On the homepage the rail's first slot holds
 the portrait rather than a label, which is how the photo gets smaller without
 disappearing — it becomes the first entry in the margin instead of the centrepiece.
+
+**The opening statement.** The page leads with the positioning line at
+`text-display`, set wide at `max-w-lead` (54rem). The name is an eyebrow above it
+in `text-label` mono — the same treatment every other block's rail label gets, so
+the hero's label happens to be the person's name. Previously the name was the
+largest thing on the page, which spent the display slot on a fact the navbar
+already states and the tab title repeats. The `<h1>` is now the positioning line.
+No copy changed; only which string occupies which slot.
 
 **Why this and not something else.** The device comes from technical
 documentation and printed indices — marginal labels, aligned metadata, rules
@@ -441,28 +574,51 @@ redlines put in the margin to flag the passage that has changed or needs
 attention. Using it to mark the single thing the visitor is being asked to act
 on is its native meaning, not a borrowed one.
 
-It is the only non-text use of the accent anywhere on the page, which is what
-makes it work. The accent's three jobs, in full:
+The accent's jobs, in full:
 
-1. Links
-2. The active nav item
-3. The change bar — once per page
+| # | Job | Instances per page |
+|---|---|---|
+| 1 | Links | as many as there are links |
+| 2 | The active nav item | 1 |
+| 3 | The change bar | 1 |
+| 4 | The primary button fill | 1 |
+| 5 | **The current role** — the organisation name of the role I hold now | **1** |
 
-Nothing else on the page is coloured.
+Job 5 is the newest and the most load-bearing: it is the one thing on the
+homepage that answers "what is he doing *now*" before any reading happens. Two
+roles carry `isCurrent`, so the mark goes to the most recent only — colouring
+both would make it a category rather than a pointer.
+
+It is set as coloured text with no underline, so it cannot be mistaken for a
+link, and it is the only coloured item in that region of the page.
+
+Nothing else is coloured. Jobs 3 and 4 remain the only non-text uses.
+
+**One vertical rhythm down the left.** The portrait is `--rail-w` square, so it
+occupies the rail exactly, and every rail item — portrait and all four section
+labels — shares one left edge at `--page-w`'s origin. Two things previously broke
+that: the rail cell carried a `0.3rem` nudge that optically centres an 11px mono
+label against its first line of content, which pushed the portrait 4px below the
+name's cap-height; and the change bar's `-ml-s4 … pl-s4` did not account for its
+own 2px border, so the one block that carries it sat 2px right of every other
+rail item. The nudge is now skipped for arbitrary rail content, and the change
+bar's offset covers the border. Measured after: portrait and all four labels at
+11.5rem, portrait top within 0.5px of the name's cap-top.
 
 ---
 
 ## 9. Known gaps
 
-- `/work`, `/projects`, `/projects/:slug`, `/research`, `/about` are untouched
-  and inconsistent by design. They inherit the new body face, ground, and text
-  colours from the global token layer, but keep their card grids, coloured
-  badges, and centred headings.
-- `client/index.html` is untouched, so the favicon is still a `#2563EB` rounded
-  square with a system-font monogram and `<meta name="theme-color">` is still
-  `#0f172a`. Both are visible brand surfaces that contradict this direction.
 - Font preloading is not set up (see §3).
-- Dark mode still initialises in a `useEffect` inside `Navbar`, so there is a
-  flash of the light theme on load for dark-mode users. Out of scope here; the
-  new tokens make the eventual fix a two-line inline script.
-- `not-found.tsx` still carries developer template copy and no theme awareness.
+- **Unfilled placeholders.** The impact strip carries four, and the Lecture AI
+  case study carries four more (challenge, my role, key-decision rationale,
+  architecture artifact). Each is conspicuous by design and none should reach
+  production.
+- `theme-color` follows the OS rather than the in-page toggle (see §2).
+- **Orphaned vendor components.** `ui/badge.tsx` and `ui/card.tsx` have zero
+  importers now that the four cards and `not-found` are gone. The toast stack —
+  `ui/toast.tsx`, `ui/toaster.tsx`, `hooks/use-toast.ts`, and the `<Toaster />`
+  in `App.tsx` — has no caller anywhere: nothing in the app raises a toast. All
+  of it can be deleted; it was left in place because it was outside the scope of
+  the rollout. `ui/toast.tsx`'s hardcoded `red-*` classes were repointed at the
+  `--destructive` tokens in the meantime, so nothing hardcodes a colour today.

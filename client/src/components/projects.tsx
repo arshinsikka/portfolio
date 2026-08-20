@@ -1,5 +1,5 @@
-import ProjectCard from "@/components/project-card";
-import { Section } from "@/components/section";
+import type { Project } from "@/content/types";
+import { Block, IndexRow, Prose, TagList, TextLink } from "@/components/primitives";
 import {
   featuredProjects,
   standardProjects,
@@ -7,42 +7,83 @@ import {
 } from "@/content/projects";
 import { sectionCopy } from "@/content/profile";
 
+/** Only link a row where a destination actually exists. */
+const detailHref = (p: Project) =>
+  p.hasDetailPage ? `/projects/${p.slug}` : undefined;
+
+function ProjectRow({ project }: { project: Project }) {
+  return (
+    <IndexRow
+      primary={project.title}
+      secondary={project.role}
+      href={detailHref(project)}
+      date={project.dates}
+      tags={project.tags}
+    >
+      <Prose className="text-small">{project.summary}</Prose>
+
+      {/* Accolades were coloured pills; they are metadata, same as tags. */}
+      {project.accolades && project.accolades.length > 0 && (
+        <TagList
+          tags={project.accolades.map((a) => a.text)}
+          className="mt-s2"
+        />
+      )}
+
+      {project.links.length > 0 && (
+        <ul className="mt-s2 flex flex-wrap gap-x-s5 gap-y-s1">
+          {project.links.map((link) => (
+            <li key={link.url}>
+              <TextLink
+                href={link.url}
+                external={!link.url.startsWith("/")}
+                className="text-small"
+              >
+                {link.label}
+              </TextLink>
+            </li>
+          ))}
+        </ul>
+      )}
+    </IndexRow>
+  );
+}
+
 export default function Projects() {
   return (
-    <Section
-      tone="light"
-      width="wide"
-      heading={sectionCopy.projects.heading}
-      subtitle={sectionCopy.projects.subtitle}
-    >
-      {/* Featured */}
-      {featuredProjects.map((project) => (
-        <ProjectCard key={project.slug} project={project} />
-      ))}
+    <>
+      <Block
+        className="border-t-0"
+        label={sectionCopy.projects.heading}
+        labelAs="h1"
+      >
+        <p className="max-w-lead font-display text-lead text-ink-muted">
+          {sectionCopy.projects.subtitle}
+        </p>
 
-      {/* AI Projects */}
-      <div className="mb-14">
-        <h3 className="text-xl font-semibold text-slate-700 dark:text-slate-200 mb-6">
-          {sectionCopy.projects.standardHeading}
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* The featured tier carries no heading of its own in the content. */}
+        <ul className="mt-s5">
+          {featuredProjects.map((project) => (
+            <ProjectRow key={project.slug} project={project} />
+          ))}
+        </ul>
+      </Block>
+
+      <Block label={sectionCopy.projects.standardHeading}>
+        <ul>
           {standardProjects.map((project) => (
-            <ProjectCard key={project.slug} project={project} />
+            <ProjectRow key={project.slug} project={project} />
           ))}
-        </div>
-      </div>
+        </ul>
+      </Block>
 
-      {/* Other Projects */}
-      <div className="mb-10">
-        <h3 className="text-xl font-semibold text-slate-700 dark:text-slate-200 mb-6">
-          {sectionCopy.projects.minorHeading}
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <Block label={sectionCopy.projects.minorHeading}>
+        <ul>
           {minorProjects.map((project) => (
-            <ProjectCard key={project.slug} project={project} />
+            <ProjectRow key={project.slug} project={project} />
           ))}
-        </div>
-      </div>
-    </Section>
+        </ul>
+      </Block>
+    </>
   );
 }

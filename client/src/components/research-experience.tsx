@@ -1,22 +1,42 @@
-import ResearchCard from "@/components/research-card";
-import { Section } from "@/components/section";
+import { Block, IndexRow, Prose, TextLink } from "@/components/primitives";
 import { research } from "@/content/research";
 import { sectionCopy } from "@/content/profile";
 
 export default function ResearchExperience() {
   return (
-    <Section
-      tone="tinted"
-      width="wide"
-      heading={sectionCopy.research.heading}
-      subtitle={sectionCopy.research.subtitle}
+    <Block
+      className="border-t-0"
+      label={sectionCopy.research.heading}
+      labelAs="h1"
     >
-      {/* Two-column grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <p className="max-w-lead font-display text-lead text-ink-muted">
+        {sectionCopy.research.subtitle}
+      </p>
+
+      <ul className="mt-s5">
         {research.map((item) => (
-          <ResearchCard key={item.slug} item={item} />
+          <IndexRow
+            key={item.slug}
+            primary={item.organization}
+            secondary={item.title}
+            date={item.dates}
+            tags={item.tags}
+          >
+            <Prose className="text-small">{item.description}</Prose>
+            {item.links && item.links.length > 0 && (
+              <ul className="mt-s2 flex flex-wrap gap-x-s5 gap-y-s1">
+                {item.links.map((link) => (
+                  <li key={link.url}>
+                    <TextLink href={link.url} external className="text-small">
+                      {link.label}
+                    </TextLink>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </IndexRow>
         ))}
-      </div>
-    </Section>
+      </ul>
+    </Block>
   );
 }

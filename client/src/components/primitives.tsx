@@ -3,8 +3,8 @@ import { Link } from "wouter";
 import { cn } from "@/lib/utils";
 
 /* ─── Link ────────────────────────────────────────────────────────────────────
-   The accent's first of three jobs. Underlined by default so it reads as a
-   link without relying on colour alone, which also covers colour blindness.
+   Underlined by default so it reads as a link without relying on colour alone,
+   which also covers colour blindness.
    ─────────────────────────────────────────────────────────────────────────── */
 
 const LINK_CLASS =
@@ -42,8 +42,8 @@ export function TextLink({
 }
 
 /* ─── Buttons ─────────────────────────────────────────────────────────────────
-   Primary is an inverted ink fill, not the accent. Keeping the accent off
-   buttons is what lets it stay rare enough to mean something.
+   Primary is an accent fill, so the accent is the single emphasis treatment on
+   the page rather than competing with a near-black button beside blue links.
    ─────────────────────────────────────────────────────────────────────────── */
 
 const BUTTON_BASE =
@@ -64,7 +64,7 @@ export function ButtonLink({
   children: ReactNode;
 }) {
   const variants = {
-    primary: "bg-ink text-on-ink hover:bg-accent hover:text-accent-foreground",
+    primary: "bg-accent text-accent-foreground hover:bg-accent-hover",
     secondary:
       "border border-rule-strong text-ink hover:border-ink hover:bg-ink hover:text-on-ink",
   };
@@ -86,16 +86,23 @@ export function ButtonLink({
 
 /* ─── Block ───────────────────────────────────────────────────────────────────
    THE SIGNATURE. A fixed-width mono rail in the left margin carries the
-   structural label; content hangs to its right at a fixed measure. A hairline
-   opens every block, spanning rail and content together.
+   structural label; content hangs to its right. A hairline opens every block,
+   spanning rail and content together.
+
+   The container is centred and wide. It was briefly left-anchored inside a
+   centred shell, which put the whole page in one half of the viewport and read
+   as broken rather than anchored. The width is now spent on the content column
+   and the rail is narrow, so the page fills the screen without prose ever
+   running past --measure.
 
    `mark` draws a change bar in the rail — the vertical rule that technical
    documentation and legal redlines use to flag the passage that needs
-   attention. It is the only non-text use of the accent on the page.
+   attention.
    ─────────────────────────────────────────────────────────────────────────── */
 
 export function Block({
   label,
+  labelAs: Heading = "h2",
   labelHref,
   mark,
   rail,
@@ -104,6 +111,12 @@ export function Block({
 }: {
   /** Rendered in the rail as the block's heading. */
   label?: string;
+  /**
+   * On an interior index page the rail label *is* the page title, so it needs
+   * to be the h1. It stays visually identical — the rail label pattern is the
+   * heading treatment site-wide, and a centred display h1 would break it.
+   */
+  labelAs?: "h1" | "h2";
   /** Makes the label a link to the route this block indexes. */
   labelHref?: string;
   /** Draw the accent change bar. Use once per page. */
@@ -113,24 +126,30 @@ export function Block({
   className?: string;
   children: ReactNode;
 }) {
-  const labelClass =
-    "font-mono text-label uppercase text-ink-muted";
+  const labelClass = "font-mono text-label uppercase text-ink-muted";
 
   return (
     <section className={cn("border-t border-rule", className)}>
-      <div className="mx-auto max-w-page px-s5 py-s7">
+      <div className="mx-auto max-w-page px-gutter py-s6">
         <div
           className={cn(
             "md:grid md:grid-cols-[var(--rail-w)_1fr] md:gap-x-rail-gap",
             // The change bar brackets the whole passage, rail and content alike.
-            mark && "-ml-s4 border-l-2 border-accent pl-s4",
+            // The negative margin has to cover the border as well as the padding,
+            // or the bar pushes its own rail 2px right of every other rail item.
+            mark && "-ml-[calc(1rem+2px)] border-l-2 border-accent pl-s4",
           )}
         >
-          <div className="mb-s4 md:mb-0 md:pt-[0.3rem]">
+          {/*
+            The 0.3rem nudge optically centres an 11px mono label against the
+            first line of content. Arbitrary rail content — the portrait — wants
+            its true top edge instead, so it lines up with the name beside it.
+          */}
+          <div className={cn("mb-s3 md:mb-0", !rail && "md:pt-[0.3rem]")}>
             {rail}
             {label &&
               (labelHref ? (
-                <h2>
+                <Heading>
                   <Link
                     href={labelHref}
                     className={cn(
@@ -140,9 +159,9 @@ export function Block({
                   >
                     {label}
                   </Link>
-                </h2>
+                </Heading>
               ) : (
-                <h2 className={labelClass}>{label}</h2>
+                <Heading className={labelClass}>{label}</Heading>
               ))}
           </div>
 
@@ -170,45 +189,199 @@ export function TagList({ tags, className }: { tags: string[]; className?: strin
   );
 }
 
-/* ─── List row ────────────────────────────────────────────────────────────────
-   Replaces the card grid. Title left, date right in tabular mono, hairline
-   between rows. No radius, no shadow, no lift.
+/* ─── Index row ───────────────────────────────────────────────────────────────
+   Replaces the card grid, and now a real three-column index rather than a title
+   with a date pushed to the far edge.
+
+   `primary` is the organisation or the artifact — SP Digital, KPMG, Lecture AI.
+   That is the first thing a recruiter scans for, and it used to sit in 14px
+   muted grey *below* the job title, subordinate to it. It is now the largest
+   text in the row, in its own aligned column, so the left edge of the content
+   column reads as a list of places. `secondary` carries the role and location
+   that used to be the title.
+
+   Hover — one pattern, only ever on rows that lead somewhere. A mono arrow
+   slides into the left gutter and the row's own hairline promotes from --rule to
+   --ink. Rows with no destination do not react at all, so the hover is what
+   teaches which rows are clickable, rather than decorating all of them equally.
    ─────────────────────────────────────────────────────────────────────────── */
 
-export function ListRow({
-  title,
-  href,
-  meta,
+export function IndexRow({
+  primary,
+  secondary,
   date,
+  href,
   tags,
+  current,
+  children,
 }: {
-  title: string;
+  /** The organisation or artifact. The row's headline. */
+  primary: string;
+  /** Role, location — whatever qualifies the primary. */
+  secondary?: string;
+  date: string;
   /** Only set where a destination genuinely exists. */
   href?: string;
-  meta?: string;
-  date: string;
   tags?: string[];
+  /** The one accent mark on the page: what I am doing now. */
+  current?: boolean;
+  /**
+   * Description, links — whatever the interior pages carry and the homepage
+   * index deliberately omits. Renders inside column two, so the organisation
+   * column stays a clean scannable list on every page.
+   */
+  children?: ReactNode;
 }) {
-  return (
-    <li className="border-b border-rule py-s4 first:border-t-0 last:border-b-0">
-      <div className="flex flex-col gap-x-s4 gap-y-s1 sm:flex-row sm:items-baseline sm:justify-between">
-        <h3 className="text-h3 font-medium text-ink">
-          {href ? (
-            <Link
-              href={href}
-              className="underline decoration-rule-strong underline-offset-[3px] transition-colors duration-150 hover:text-accent hover:decoration-accent"
-            >
-              {title}
-            </Link>
-          ) : (
-            title
-          )}
-        </h3>
-        <span className="shrink-0 font-mono text-meta text-ink-muted">{date}</span>
-      </div>
+  const heading = (
+    <h3
+      className={cn(
+        "text-org font-medium",
+        current ? "text-accent" : "text-ink",
+        href && "underline decoration-rule-strong underline-offset-[3px]",
+        href && "transition-colors duration-150 group-hover:decoration-accent",
+      )}
+    >
+      {primary}
+    </h3>
+  );
 
-      {meta && <p className="mt-s1 text-small text-ink-muted">{meta}</p>}
-      {tags && tags.length > 0 && <TagList tags={tags} className="mt-s2" />}
+  return (
+    <li
+      className={cn(
+        "group relative border-b border-rule py-s3 last:border-b-0",
+        href && "transition-colors duration-150 hover:border-ink",
+      )}
+    >
+      {href && (
+        <span
+          aria-hidden
+          className={cn(
+            "pointer-events-none absolute left-[-1.25rem] top-s3 hidden font-mono text-meta text-ink-muted",
+            "opacity-0 transition-opacity duration-150 group-hover:opacity-100 md:block",
+          )}
+        >
+          →
+        </span>
+      )}
+
+      {/*
+        Three columns only from `lg`. At exactly `md` the content column is
+        576px, which after a 15rem organisation column and the date would leave
+        the middle column around 138px and wrap every role onto four lines.
+        Below `lg` the row stacks instead.
+      */}
+      <div className="lg:grid lg:grid-cols-[minmax(0,15rem)_minmax(0,1fr)_auto] lg:items-baseline lg:gap-x-s5">
+        {href ? (
+          <Link href={href} className="block">
+            {heading}
+          </Link>
+        ) : (
+          heading
+        )}
+
+        <div className="min-w-0">
+          {secondary && <p className="mt-s1 text-small text-ink-muted lg:mt-0">{secondary}</p>}
+          {children && <div className="mt-s2 max-w-measure">{children}</div>}
+          {tags && tags.length > 0 && <TagList tags={tags} className="mt-s2" />}
+        </div>
+
+        <span className="mt-s1 block shrink-0 font-mono text-meta text-ink-muted lg:mt-0 lg:text-right">
+          {date}
+        </span>
+      </div>
     </li>
   );
+}
+
+/* ─── Impact strip ────────────────────────────────────────────────────────────
+   Large numerals against small mono labels, in a horizontal band. The highest
+   contrast available without photography: the figure carries at a glance, the
+   label only has to be legible once the eye has already stopped.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+export interface Stat {
+  value: string;
+  label: string;
+  /** Renders as an obvious blank so unfilled slots cannot ship unnoticed. */
+  placeholder?: boolean;
+}
+
+export function StatBand({ stats }: { stats: Stat[] }) {
+  return (
+    <ul className="grid grid-cols-2 gap-x-s5 gap-y-s5 md:grid-cols-4">
+      {stats.map((s) => (
+        <li key={s.label}>
+          <p
+            className={cn(
+              "font-display text-stat",
+              s.placeholder
+                ? "border-b border-dashed border-rule-strong text-rule-strong"
+                : "text-ink",
+            )}
+          >
+            {s.value}
+          </p>
+          <p
+            className={cn(
+              "mt-s2 font-mono text-label uppercase",
+              s.placeholder ? "text-rule-strong" : "text-ink-muted",
+            )}
+          >
+            {s.label}
+          </p>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/* ─── Technical artifact ──────────────────────────────────────────────────────
+   A code block or architecture diagram. Hairline border, mono type, a mono
+   caption rule beneath. Scrolls inside itself so a wide diagram never widens
+   the page.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+export function Artifact({
+  caption,
+  children,
+}: {
+  caption?: string;
+  children: ReactNode;
+}) {
+  return (
+    <figure className="border border-rule-strong">
+      <pre className="overflow-x-auto p-s4 font-mono text-meta leading-[1.6] text-ink">
+        {children}
+      </pre>
+      {caption && (
+        <figcaption className="border-t border-rule px-s4 py-s2 font-mono text-label uppercase text-ink-muted">
+          {caption}
+        </figcaption>
+      )}
+    </figure>
+  );
+}
+
+/* ─── Placeholder ─────────────────────────────────────────────────────────────
+   A slot whose content has not been written. Deliberately conspicuous: dashed
+   hairline, mono, and the word PLACEHOLDER, so none of these reach production
+   by being quietly forgettable.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+export function Placeholder({ children }: { children: ReactNode }) {
+  return (
+    <p className="max-w-measure border border-dashed border-rule-strong px-s4 py-s3 font-mono text-meta text-ink-muted">
+      <span className="text-rule-strong">PLACEHOLDER — </span>
+      {children}
+    </p>
+  );
+}
+
+/* ─── Prose ───────────────────────────────────────────────────────────────────
+   Body copy, capped at the reading measure regardless of how wide the content
+   column gets.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+export function Prose({ className, children }: { className?: string; children: ReactNode }) {
+  return <p className={cn("max-w-measure text-body text-ink", className)}>{children}</p>;
 }

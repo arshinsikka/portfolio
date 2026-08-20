@@ -61,6 +61,8 @@ export type HighlightIcon =
   | "bot"
   | "trophy";
 
+export const highlightsHeading = "Quick Highlights";
+
 export const highlights: Array<{ icon: HighlightIcon; text: string }> = [
   { icon: "graduation", text: "Computer Science @ NUS, Minor in Psychology" },
   { icon: "globe", text: "Based in Singapore & India" },
@@ -111,35 +113,30 @@ export const socialLinks: Array<{
   name: string;
   url: string;
   icon: SocialIcon;
-  color: string;
   tooltip: string;
 }> = [
   {
     name: "GitHub",
     url: "https://github.com/arshinsikka",
     icon: "github",
-    color: "hover:text-slate-900 dark:hover:text-slate-300",
     tooltip: "View my GitHub",
   },
   {
     name: "LinkedIn",
     url: "https://www.linkedin.com/in/arshin-sikka",
     icon: "linkedin",
-    color: "hover:text-blue-700 dark:hover:text-blue-400",
     tooltip: "Connect on LinkedIn",
   },
   {
     name: "Instagram",
     url: "https://www.instagram.com/arshinsikka",
     icon: "instagram",
-    color: "hover:text-pink-600 dark:hover:text-pink-400",
     tooltip: "Follow on Instagram",
   },
   {
     name: "Telegram",
     url: "https://t.me/arshinsikka",
     icon: "telegram",
-    color: "hover:text-sky-500 dark:hover:text-sky-400",
     tooltip: "Message on Telegram",
   },
 ];
