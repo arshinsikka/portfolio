@@ -26,8 +26,11 @@ const navItemClass = (active: boolean) =>
     active ? "text-accent" : "text-ink-muted hover:text-ink",
   ].join(" ");
 
+// 36px painted, 44px touched: the pseudo-element extends the hit area by 4px on
+// every side. The square, its hover fill, and its icon are unchanged.
 const iconButtonClass =
-  "grid h-9 w-9 place-items-center rounded-sm text-ink-muted transition-colors duration-150 hover:bg-rule hover:text-ink";
+  "relative grid h-9 w-9 place-items-center rounded-sm text-ink-muted transition-colors duration-150 hover:bg-rule hover:text-ink " +
+  "after:absolute after:-inset-1 after:content-['']";
 
 /**
  * The theme control, as a two-state mono label rather than a sun/moon glyph.
@@ -41,12 +44,13 @@ const iconButtonClass =
  * and what the click will do.
  */
 function ThemeToggle({ dark, onToggle }: { dark: boolean; onToggle: () => void }) {
+  // 27px painted; 9px of hit area added above and below to clear 44px.
   return (
     <button
       type="button"
       onClick={onToggle}
       aria-label={dark ? "Switch to light theme" : "Switch to dark theme"}
-      className="flex items-center gap-s2 rounded-sm border border-rule-strong px-s3 py-[0.35rem] font-mono text-label uppercase transition-colors duration-150 hover:border-ink"
+      className="relative flex items-center gap-s2 rounded-sm border border-rule-strong px-s3 py-[0.35rem] font-mono text-label uppercase transition-colors duration-150 hover:border-ink after:absolute after:inset-x-0 after:-inset-y-[9px] after:content-['']"
     >
       <span className={dark ? "text-ink-muted" : "text-ink"}>Light</span>
       <span aria-hidden className="text-rule-strong">/</span>

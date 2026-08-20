@@ -91,7 +91,7 @@ property; nothing in the redesigned surface hardcodes a hex.
 |---|---|---|---|
 | `--paper` | `#FBFAF7` | `#12110F` | Page ground. The only background on the page. |
 | `--ink` | `#171614` | `#EDEAE3` | Primary text. Also the secondary button's hover fill. |
-| `--ink-muted` | `#6E6B64` | `#8B8780` | Secondary text: metadata, labels, tags, captions. |
+| `--ink-muted` | `#54514C` | `#A7A39A` | Secondary text: metadata, labels, tags, captions. |
 | `--rule` | `#E4E1D9` | `#26241F` | Decorative hairlines between blocks and rows. |
 | `--rule-strong` | `#8A8578` | `#6B6459` | Boundaries that carry meaning: input borders, secondary button outline, link underlines. |
 | `--accent` | `#1D3A6B` | `#7FA6E3` | Links, active nav, the change bar, the primary button, the current role. Nothing else. |
@@ -104,7 +104,7 @@ property; nothing in the redesigned surface hardcodes a hex.
 | Foreground | Background | Ratio | Needs | Result |
 |---|---|---|---|---|
 | `--ink` #171614 | `--paper` #FBFAF7 | **17.32:1** | 4.5:1 | PASS (AAA) |
-| `--ink-muted` #6E6B64 | `--paper` #FBFAF7 | **5.09:1** | 4.5:1 | PASS |
+| `--ink-muted` #54514C | `--paper` #FBFAF7 | **7.57:1** | 4.5:1 | PASS (AAA) |
 | `--accent` #1D3A6B | `--paper` #FBFAF7 | **10.76:1** | 4.5:1 | PASS (AAA) |
 | `--accent-hover` #162E56 | `--paper` #FBFAF7 | **12.90:1** | 4.5:1 | PASS (AAA) |
 | `--on-ink` #FBFAF7 | `--ink` #171614 | **17.32:1** | 4.5:1 | PASS (AAA) |
@@ -118,7 +118,7 @@ property; nothing in the redesigned surface hardcodes a hex.
 | Foreground | Background | Ratio | Needs | Result |
 |---|---|---|---|---|
 | `--ink` #EDEAE3 | `--paper` #12110F | **15.71:1** | 4.5:1 | PASS (AAA) |
-| `--ink-muted` #8B8780 | `--paper` #12110F | **5.28:1** | 4.5:1 | PASS |
+| `--ink-muted` #A7A39A | `--paper` #12110F | **7.50:1** | 4.5:1 | PASS (AAA) |
 | `--accent` #7FA6E3 | `--paper` #12110F | **7.61:1** | 4.5:1 | PASS (AAA) |
 | `--accent-hover` #9DBBEC | `--paper` #12110F | **9.66:1** | 4.5:1 | PASS (AAA) |
 | `--on-ink` #12110F | `--ink` #EDEAE3 | **15.71:1** | 4.5:1 | PASS (AAA) |
@@ -127,9 +127,26 @@ property; nothing in the redesigned surface hardcodes a hex.
 | `--rule-strong` #6B6459 | `--paper` #12110F | **3.23:1** | 3.0:1 (non-text) | PASS |
 | `--rule` #26241F | `--paper` #12110F | 1.22:1 | — | Decorative only, as above. |
 
-Nothing was adjusted to reach these numbers except the two `--rule-strong`
-values, which started as light hairline greys and were darkened until they
-cleared 3:1, because they outline real controls.
+Two adjustments were made to reach these numbers. The `--rule-strong` values
+started as light hairline greys and were darkened until they cleared 3:1,
+because they outline real controls.
+
+`--ink-muted` was darkened from `#6E6B64` / `#8B8780`, which cleared AA at
+5.09:1 and 5.28:1 but were not comfortable to read. AA is calibrated for normal
+text; the rail labels this token paints are 11px mono with `+0.09em` tracking,
+where the same ratio is meaningfully harder work. Both values now clear **AAA
+(7:1)**, the small-text bar.
+
+Weight was considered and rejected: `IBM Plex Mono` is self-hosted at **weight
+400 only** (`plex-mono-400.woff2`), so `font-medium` would trigger synthetic
+bolding, which smears the outlines and at 11px makes legibility *worse*. A real
+500 weight would mean a second font file. Size was not changed either — the
+labels are legible at 11px once the contrast is right, and enlarging them would
+break the rail width.
+
+The labels still read as secondary: 7.57:1 against `--ink`'s 17.32:1, at a third
+of the size, in a different face, in the margin. Hierarchy comes from size and
+position, as §1 states — not from making secondary text hard to read.
 
 Links never rely on colour alone — they are underlined by default, which covers
 colour blindness and the case where the accent is doing double duty as an
@@ -199,6 +216,21 @@ size instead of being frozen at a text weight.
 
 Reading measure is capped at `--measure: 34rem`, which is ~65 characters in Plex
 Sans at 16px.
+
+### Widow control
+
+Set globally in `index.css`, not per component:
+
+| Selector | Property | Why |
+|---|---|---|
+| `h1, h2, h3, .text-display, .text-lead, .text-h2, .text-h3, figcaption` | `text-wrap: balance` | Evens line lengths across the block, so a heading never drops one trailing word onto a line of its own. Browsers cap balancing at a handful of lines, which is why it is scoped to short text. |
+| `p, li, dd` | `text-wrap: pretty` | Leaves earlier lines alone and only avoids a short final line. The right trade for prose, where `balance` would be ignored past the line cap anyway. |
+| `.text-label` | `text-wrap: wrap` | Opts the rail labels back out. They sit in a fixed 6rem column where balancing gives worse breaks than simply filling the column. |
+
+Both degrade to normal wrapping where unsupported, so nothing depends on them.
+`balance` is broadly supported; `pretty` is newer and **Firefox does not
+implement it**, so Firefox users get ordinary wrapping for body copy and
+balanced headings.
 
 ---
 
@@ -460,8 +492,13 @@ Stays a corner widget. Restyled, not rebuilt — every behaviour (rate limiting,
 cooldown, the once-per-session nudge, error copy) is untouched.
 
 - **Launcher** — 48px square, 2px radius, hairline `--rule-strong` border on
-  `--paper`, message glyph in `--ink`. Was a 64px purple-gradient circle with a
-  sparkle icon and a permanent pulse animation. Hover inverts to an ink fill.
+  `--paper`, containing the letters **AI** in 11px tracked mono — the same
+  treatment as the nav items and the theme toggle. Not an icon: a speech bubble
+  is the universal mark for human customer support, which is exactly what this is
+  not, and the conventional alternatives (sparkles, a robot face) are the
+  gimmick. Was a 64px purple-gradient circle with a sparkle icon and a permanent
+  pulse animation. Hover inverts to an ink fill. The widget is named **My AI** in
+  the panel header, the nudge, and the speaker labels.
 - **Panel** — `--paper`, hairline border, 2px radius, 380×520 on desktop,
   full-screen below `md`.
 - **Header** — hairline rule underneath, two mono labels. The blue→indigo→purple
@@ -543,16 +580,18 @@ is announced rather than only coloured.
 ## 8. The signature: the margin rail and the change bar
 
 Every block on the page is a two-column grid: a fixed 96px rail on the left
-carrying a monospace label, and the content hanging to its right. Hairlines span both columns. On the homepage the rail's first slot holds
-the portrait rather than a label, which is how the photo gets smaller without
-disappearing — it becomes the first entry in the margin instead of the centrepiece.
+carrying a monospace label, and the content hanging to its right. Hairlines span
+both columns. Every rail slot on every page holds the same kind of object — a
+mono label. The homepage hero used to be the exception, holding the portrait;
+the portrait has been removed, so the left edge is now one unbroken column of
+labels from the masthead to the last section.
 
 **The opening statement.** The page leads with the positioning line at
-`text-display`, set wide at `max-w-lead` (54rem). The name is an eyebrow above it
-in `text-label` mono — the same treatment every other block's rail label gets, so
-the hero's label happens to be the person's name. Previously the name was the
-largest thing on the page, which spent the display slot on a fact the navbar
-already states and the tab title repeats. The `<h1>` is now the positioning line.
+`text-display`, set wide at `max-w-lead` (54rem). The name is the hero block's
+rail label — the same treatment every other block gets, so the hero's label
+happens to be the person's name. Previously the name was the largest thing on
+the page, which spent the display slot on a fact the navbar already states and
+the tab title repeats. The `<h1>` is now the positioning line.
 No copy changed; only which string occupies which slot.
 
 **Why this and not something else.** The device comes from technical

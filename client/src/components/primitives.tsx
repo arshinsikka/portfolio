@@ -46,9 +46,13 @@ export function TextLink({
    the page rather than competing with a near-black button beside blue links.
    ─────────────────────────────────────────────────────────────────────────── */
 
+// The painted button is 38px tall, which is right for the type size but short
+// of the 44px touch minimum. The pseudo-element adds 3px of hit area above and
+// below without changing anything visible.
 const BUTTON_BASE =
-  "inline-flex items-center gap-s2 rounded-sm px-s4 py-s2 text-small font-medium " +
-  "transition-colors duration-150";
+  "relative inline-flex items-center gap-s2 rounded-sm px-s4 py-s2 text-small font-medium " +
+  "transition-colors duration-150 " +
+  "after:absolute after:inset-x-0 after:-inset-y-[3px] after:content-['']";
 
 export function ButtonLink({
   href,
@@ -115,8 +119,12 @@ export function Block({
    * On an interior index page the rail label *is* the page title, so it needs
    * to be the h1. It stays visually identical — the rail label pattern is the
    * heading treatment site-wide, and a centred display h1 would break it.
+   *
+   * "p" is for a rail label that is not a heading at all: the homepage hero is
+   * labelled with the person's name while its h1 is the positioning line, so
+   * marking the name as a heading would put an h2 above the h1.
    */
-  labelAs?: "h1" | "h2";
+  labelAs?: "h1" | "h2" | "p";
   /** Makes the label a link to the route this block indexes. */
   labelHref?: string;
   /** Draw the accent change bar. Use once per page. */

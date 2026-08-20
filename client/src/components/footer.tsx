@@ -13,12 +13,12 @@ const ICONS: Record<SocialIcon, IconType | typeof Github> = {
 export default function Footer() {
   return (
     <footer className="border-t border-rule">
-      <div className="mx-auto flex max-w-page flex-col gap-s3 px-gutter py-s5 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mx-auto flex max-w-page flex-col gap-s3 px-gutter py-s5 pb-s9 sm:flex-row sm:pb-s5 sm:items-center sm:justify-between">
         <p className="font-mono text-label uppercase text-ink-muted">
           {footerCopyright}
         </p>
 
-        <ul className="flex items-center gap-s5">
+        <ul className="-mx-[0.875rem] flex items-center gap-s1">
           {socialLinks.map((link) => {
             const Icon = ICONS[link.icon];
             return (
@@ -27,7 +27,7 @@ export default function Footer() {
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block text-ink-muted transition-colors duration-150 hover:text-accent"
+                  className="grid h-11 w-11 place-items-center text-ink-muted transition-colors duration-150 hover:text-accent"
                   aria-label={link.name}
                   title={link.tooltip}
                 >

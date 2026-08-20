@@ -40,7 +40,7 @@
   /* Surface */
   --paper: #fbfaf7;
   --ink: #171614;
-  --ink-muted: #6e6b64;
+  --ink-muted: #54514c; /* was #6e6b64 (5.09:1) — too light at 11px mono */
 
   /* Structure */
   --rule: #e4e1d9;        /* decorative hairlines */
@@ -103,7 +103,7 @@
 .dark {
   --paper: #12110f;
   --ink: #edeae3;
-  --ink-muted: #8b8780;
+  --ink-muted: #a7a39a; /* was #8b8780 (5.28:1) — too light at 11px mono */
 
   --rule: #26241f;
   --rule-strong: #6b6459;
@@ -145,6 +145,40 @@
   /* Metadata is tabular by nature — dates should align down a column. */
   .font-mono {
     font-variant-numeric: tabular-nums;
+  }
+
+  /* ── Widow control ────────────────────────────────────────────────────────
+     Headings and display type get `balance`: the browser evens the line
+     lengths across the whole block, so a heading never drops one trailing word
+     onto a line of its own. Browsers cap this at a handful of lines, which is
+     why it is scoped to short text and not applied to prose.
+
+     Body copy gets `pretty`, which leaves the earlier lines alone and only
+     works to avoid a short final line — the right trade for multi-line prose,
+     where `balance` would be ignored past the line cap anyway.
+
+     Both degrade to normal wrapping where unsupported; nothing depends on them. */
+  h1,
+  h2,
+  h3,
+  .text-display,
+  .text-lead,
+  .text-h2,
+  .text-h3,
+  figcaption {
+    text-wrap: balance;
+  }
+
+  p,
+  li,
+  dd {
+    text-wrap: pretty;
+  }
+
+  /* The rail label is a heading but is set at 11px in a fixed 6rem column;
+     balancing it there produces worse breaks than simply filling the column. */
+  .text-label {
+    text-wrap: wrap;
   }
 
   /* The audit found zero focus-visible styles in the app. This is the floor.

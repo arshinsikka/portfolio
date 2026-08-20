@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { X, Send, MessageSquare } from "lucide-react";
+import { X, Send } from "lucide-react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -153,7 +153,7 @@ export default function ChatWidget() {
           <div className="flex shrink-0 items-start justify-between gap-s4 border-b border-rule px-s4 py-s3">
             <div className="flex flex-col gap-s1">
               <span className="font-mono text-label uppercase text-ink">
-                Chat with ArshinAI ✨
+                Chat with My AI ✨
               </span>
               <span className="font-mono text-label uppercase text-ink-muted">
                 Powered by AI · Knows everything about my work
@@ -172,7 +172,7 @@ export default function ChatWidget() {
           <div className="min-h-0 flex-1 space-y-s5 overflow-y-auto px-s4 py-s4">
             {/* Welcome message */}
             <div>
-              <p className="font-mono text-label uppercase text-ink-muted">ArshinAI</p>
+              <p className="font-mono text-label uppercase text-ink-muted">My AI</p>
               <p className="mt-s1 text-small text-ink">
                 Hi! I'm an AI assistant on Arshin's portfolio. Ask me anything
                 about his experience, projects, or background.
@@ -182,7 +182,7 @@ export default function ChatWidget() {
             {messages.map((msg, i) => (
               <div key={i} className={msg.role === "user" ? "border-l-2 border-rule-strong pl-s3" : undefined}>
                 <p className="font-mono text-label uppercase text-ink-muted">
-                  {msg.role === "user" ? "You" : "ArshinAI"}
+                  {msg.role === "user" ? "You" : "My AI"}
                 </p>
                 <p className="mt-s1 whitespace-pre-wrap text-small text-ink">{msg.text}</p>
               </div>
@@ -260,7 +260,19 @@ export default function ChatWidget() {
           className="grid h-12 w-12 place-items-center rounded-sm border border-rule-strong bg-paper text-ink transition-colors duration-150 hover:border-ink hover:bg-ink hover:text-on-ink"
           aria-label={isOpen ? "Close AI chat" : "Open AI chat"}
         >
-          {isOpen ? <X className="h-5 w-5" /> : <MessageSquare className="h-5 w-5" />}
+          {/*
+            A mono "AI" wordmark, not an icon. A speech bubble is the universal
+            mark for human customer support, which is precisely what this is not;
+            and the conventional alternatives (sparkles, a robot face) are the
+            gimmick. The site already states what things are in 11px tracked mono
+            in the margin — this is that same device applied to the launcher, and
+            it matches the theme toggle beside it in the navbar exactly.
+          */}
+          {isOpen ? (
+            <X className="h-5 w-5" />
+          ) : (
+            <span className="font-mono text-label uppercase">AI</span>
+          )}
         </button>
       </div>
     </>

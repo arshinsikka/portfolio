@@ -4,32 +4,20 @@ import { Block, ButtonLink, Prose, TextLink } from "@/components/primitives";
 /**
  * The opening statement.
  *
- * The page used to lead with the name at display size, then the positioning
- * line, then a paragraph — so the largest thing on the page was a fact the
- * navbar already states twice. The positioning line is now the headline and the
- * name is an eyebrow above it, set in the same mono label the rail uses for
- * every other block: the hero's label happens to be the person's name.
+ * The positioning line is the headline; the name is the block's rail label.
+ * The portrait that used to sit in the rail has been removed — with it gone the
+ * hero stops being the one block whose rail holds something other than a label,
+ * so every rail slot down the page is now the same kind of object.
+ *
+ * `labelAs="p"` because the h1 is the positioning line in the content column;
+ * the name is an identifier, not a heading above it.
  *
  * Copy is unchanged. Only which string occupies which slot has moved.
  */
 export default function HeroSection() {
   return (
-    <Block
-      className="border-t-0"
-      rail={
-        <img
-          src={hero.imageSrc}
-          alt={hero.imageAlt}
-          width={320}
-          height={320}
-          decoding="async"
-          className="h-20 w-20 border border-rule object-cover md:h-rail md:w-rail"
-        />
-      }
-    >
-      <p className="font-mono text-label uppercase text-ink-muted">{hero.name}</p>
-
-      <h1 className="mt-s2 max-w-lead font-display text-display text-ink">
+    <Block className="border-t-0" label={hero.name} labelAs="p">
+      <h1 className="max-w-lead font-display text-display text-ink">
         {hero.tagline}
       </h1>
 
