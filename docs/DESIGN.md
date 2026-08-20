@@ -356,6 +356,14 @@ be added there too**, or `cn()` will start eating classes again without warning.
 `org` and `stat` were added with the impact strip and the index row; the list in
 `utils.ts` must always match the `fontSize` block in `tailwind.config.ts`.
 
+**`plugins: []`.** `tailwindcss-animate` and `@tailwindcss/typography` were both
+registered and neither supplied a class used anywhere — no `animate-in`,
+`fade-in`, `zoom-in` or `slide-in` appears in the app, and no `prose` container
+exists. Removing them took the built CSS from **29.05 kB to 16.31 kB**. The one
+animation on the site is a hand-written `@keyframes nudge-in` in `index.css`, so
+nothing depended on the plugin. Do not re-add either without a class that uses
+it.
+
 ---
 
 ## 6. Components
@@ -422,6 +430,30 @@ Separated by a `--rule` hairline, `s3` padding-y. No radius, no shadow, no lift.
 index deliberately omits. Those go in `children`, which renders inside column two
 capped at `--measure` — so the organisation column stays a clean scannable list
 on every page, and the row's three-column head is identical everywhere.
+
+### Pairing blocks — the /about band
+
+A block normally fills its content column. Two do not: `About Me` and
+`Education` are both short, and each alone left prose at `--measure` with ~480px
+of void beside it, while `Quick Highlights` and `Leadership` below filled the
+column completely. Measured, that was 52% and 54% against 98% and 100% — the
+page read as two different pages stacked.
+
+They now share one block as a two-column band:
+`lg:grid-cols-[var(--measure)_minmax(0,1fr)]`. The left column is exactly the
+measure (544px) and Education takes the surplus (448px). Below `lg` they stack.
+
+This is the standing rule applied, not bent — no line of prose got wider, and
+nothing on any other page moved. The cost is one rail label: a block has one
+rail, so Education's heading sits inline in its own column in the same 11px mono
+the rail would have used. `/about` carries **four rail labels for five
+sections**, and that is the only place on the site where a section heading is not
+in the margin.
+
+Reach for this only where two short blocks genuinely belong together. The
+alternative — centring prose inside its column — was rejected: it would move
+every page lead ~240px right and break the single left edge the rail system
+depends on.
 
 ### Three things that are not lists
 

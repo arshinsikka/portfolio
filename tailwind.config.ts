@@ -88,5 +88,9 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
+  // No plugins. tailwindcss-animate and @tailwindcss/typography were both
+  // registered here and neither supplied a single class used anywhere in the
+  // app — the one animation on the site is a hand-written keyframe in index.css,
+  // and no `prose` container exists.
+  plugins: [],
 } satisfies Config;
