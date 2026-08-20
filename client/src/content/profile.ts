@@ -7,13 +7,8 @@
  * key that the component maps to a concrete component.
  */
 
-/**
- * PROVISIONAL. arshinsikka.com does not currently resolve in public DNS, so
- * this points at the Vercel deployment that does. Swap this one constant once
- * the stable production domain is confirmed. Not yet applied to index.html —
- * that happens with the metadata work in the routing phase.
- */
-export const SITE_URL = "https://portfolio-one-nu-1wnt8d6uz5.vercel.app";
+/** The production origin. Also hardcoded in client/index.html's metadata. */
+export const SITE_URL = "https://www.arshinsikka.com";
 
 export const RESUME_URL = "/assets/Arshin_Sikka_Resume.pdf";
 

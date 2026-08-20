@@ -167,14 +167,30 @@ RESPONSE GUIDELINES
 - Highlight what makes Arshin distinctive: AI technical depth + product thinking + Lecture AI startup + enterprise experience (KPMG, SP Digital) + professional chess`;
 
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
-const GROQ_MODEL = "llama-3.3-70b-versatile";
+
+// THE ONE VALUE TO CHANGE WHEN THE CHAT BREAKS WITH A 404.
+//
+// Groq retires hosted models on roughly annual cycles and returns 404 for a
+// decommissioned name — which is indistinguishable from an auth failure unless
+// the log says otherwise (see logUpstreamFailure below). The previous value,
+// llama-3.3-70b-versatile, was decommissioned on 16 August 2026.
+// Current deprecation schedule: https://console.groq.com/docs/deprecations
+const GROQ_MODEL = "openai/gpt-oss-120b";
 
 // ── Request limits ───────────────────────────────────────────────────────────
 const MAX_BODY_BYTES = 16 * 1024; // hard cap, enforced while streaming
 const MAX_MESSAGES = 20; // conversation turns accepted per request
 const MAX_MESSAGE_CHARS = 2000; // per individual message
 const MAX_TOTAL_CHARS = 12000; // across the whole conversation
-const MAX_TOKENS = 512; // cap on the upstream completion
+// Cap on the upstream completion. gpt-oss-120b is a *reasoning* model, unlike
+// the Llama model it replaced: it emits reasoning tokens before the visible
+// answer. Groq does not document whether those count against the completion
+// budget, so this is set defensively — at 512 a medium-effort reasoning pass
+// could consume the whole allowance and truncate the answer to nothing, which
+// would surface as the "I couldn't generate a response" fallback. 1024 is also
+// Groq's own documented default. The system prompt asks for 2-5 sentences, so
+// the visible answer needs well under 200 of these.
+const MAX_TOKENS = 1024;
 
 // ── Origin allowlist ─────────────────────────────────────────────────────────
 // Override in Vercel with ALLOWED_ORIGINS="https://a.com,https://b.com,*.vercel.app"
@@ -226,6 +242,56 @@ function isRateLimited(key: string): boolean {
   return recent.length > RATE_LIMIT_MAX;
 }
 
+/**
+ * Classify an upstream failure in the server log.
+ *
+ * Every one of these used to print the same "Groq error: <status> <body>" line
+ * and return the same 502, so a decommissioned model, a revoked key, and a
+ * network blip were indistinguishable without opening the Vercel dashboard and
+ * reading the raw provider payload. The client-visible response is unchanged —
+ * only the log is louder.
+ */
+function logUpstreamFailure(status: number, detail: string) {
+  const body = detail.slice(0, 500);
+
+  if (status === 401 || status === 403) {
+    console.error(
+      `[chat] AUTH FAILURE — Groq rejected the credential (HTTP ${status}). ` +
+        `GROQ_API_KEY is set but invalid, revoked, or lacks access. ` +
+        `Fix: regenerate at https://console.groq.com/keys and update the Vercel env var. detail=${body}`,
+    );
+    return;
+  }
+
+  // A retired model name returns 404. This is the failure that cost a dashboard
+  // trip in Aug 2026, so it names itself and the fix explicitly.
+  const looksLikeUnknownModel =
+    status === 404 ||
+    /model_not_found|does not exist|decommission|deprecat/i.test(detail);
+  if (looksLikeUnknownModel) {
+    console.error(
+      `[chat] UNKNOWN MODEL — Groq does not recognise "${GROQ_MODEL}" (HTTP ${status}). ` +
+        `This is NOT an auth problem; the key is fine. Groq retires models on roughly ` +
+        `annual cycles. Fix: check https://console.groq.com/docs/deprecations and update ` +
+        `GROQ_MODEL in api/chat.ts. detail=${body}`,
+    );
+    return;
+  }
+
+  if (status === 429) {
+    console.error(
+      `[chat] RATE LIMITED — Groq returned 429. This is the upstream account quota, ` +
+        `not the per-IP limiter in this handler. detail=${body}`,
+    );
+    return;
+  }
+
+  console.error(
+    `[chat] UPSTREAM ERROR — unclassified failure from Groq. HTTP ${status}. ` +
+      `model=${GROQ_MODEL} detail=${body}`,
+  );
+}
+
 function sendJson(res: ServerResponse, status: number, body: unknown) {
   res.writeHead(status, { "Content-Type": "application/json" });
   res.end(JSON.stringify(body));
@@ -270,6 +336,12 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
 
   const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) {
+    // Distinct from AUTH FAILURE below: the variable is absent, not rejected.
+    console.error(
+      "[chat] MISSING API KEY — GROQ_API_KEY is not set in this environment. " +
+        "Fix: add it in Vercel → Settings → Environment Variables, then redeploy " +
+        "(env changes do not apply to existing deployments).",
+    );
     sendJson(res, 500, { error: "API key not configured" });
     return;
   }
@@ -357,13 +429,23 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
         model: GROQ_MODEL,
         messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages],
         temperature: 0.7,
-        max_tokens: MAX_TOKENS,
+        // `max_tokens` is deprecated in Groq's API in favour of this.
+        max_completion_tokens: MAX_TOKENS,
+        // Reasoning-model controls. gpt-oss defaults to "medium" effort, which
+        // buys nothing when answering CV questions from a system prompt and
+        // costs latency and tokens on every turn.
+        reasoning_effort: "low",
+        // Keeps the response shape as plain `choices[0].message.content`. Left
+        // on, reasoning can arrive in a separate field or inline in <think>
+        // tags, and the widget renders content verbatim — so this is what stops
+        // the model's scratchpad appearing in the chat bubble.
+        include_reasoning: false,
       }),
     });
 
     if (!groqRes.ok) {
       // Log upstream detail server-side; do not leak provider payloads.
-      console.error("Groq error:", groqRes.status, await groqRes.text());
+      logUpstreamFailure(groqRes.status, await groqRes.text());
       const status = groqRes.status === 429 ? 429 : 502;
       sendJson(res, status, {
         error: status === 429 ? "Too many requests" : "Upstream error",
@@ -380,7 +462,14 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
 
     sendJson(res, 200, { text });
   } catch (err) {
-    console.error("Handler error:", err);
+    // Reached only when the request never produced a response — DNS, TLS,
+    // timeout, or a throw in parsing. Groq returning an error status is handled
+    // above and never lands here.
+    console.error(
+      `[chat] TRANSPORT/RUNTIME ERROR — the call to Groq did not complete. ` +
+        `model=${GROQ_MODEL}`,
+      err,
+    );
     sendJson(res, 500, { error: "Internal server error" });
   }
 }
