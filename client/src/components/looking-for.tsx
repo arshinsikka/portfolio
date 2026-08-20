@@ -1,28 +1,15 @@
-import { Briefcase } from "lucide-react";
 import { lookingFor, RESUME_URL } from "@/content/profile";
+import { Block, TextLink } from "@/components/primitives";
 
 export default function LookingFor() {
-  const handleResumeClick = () => {
-    window.open(RESUME_URL, "_blank");
-  };
-
   return (
-    <div className="bg-white dark:bg-slate-900 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex flex-col sm:flex-row sm:items-center gap-4 px-5 py-4 rounded-xl border border-blue-100 dark:border-blue-900 bg-blue-50/60 dark:bg-blue-950/30">
-          <Briefcase className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0" />
-          <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed flex-1">
-            <span className="font-semibold text-slate-800 dark:text-white">{lookingFor.leadIn}</span>
-            {" "}{lookingFor.body}
-          </p>
-          <button
-            onClick={handleResumeClick}
-            className="shrink-0 inline-flex items-center px-4 py-1.5 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors shadow-sm"
-          >
-            {lookingFor.ctaLabel}
-          </button>
-        </div>
-      </div>
-    </div>
+    <Block label={lookingFor.leadIn} mark>
+      <p className="max-w-measure text-body text-ink">{lookingFor.body}</p>
+      <p className="mt-s4">
+        <TextLink href={RESUME_URL} external className="text-small">
+          {lookingFor.ctaLabel}
+        </TextLink>
+      </p>
+    </Block>
   );
 }

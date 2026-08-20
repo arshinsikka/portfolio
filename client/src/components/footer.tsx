@@ -1,7 +1,6 @@
 import { Github } from "lucide-react";
 import { SiInstagram, SiTelegram, SiLinkedin } from "react-icons/si";
 import type { IconType } from "react-icons";
-import { Container } from "@/components/section";
 import { socialLinks, footerCopyright, type SocialIcon } from "@/content/profile";
 
 const ICONS: Record<SocialIcon, IconType | typeof Github> = {
@@ -13,36 +12,32 @@ const ICONS: Record<SocialIcon, IconType | typeof Github> = {
 
 export default function Footer() {
   return (
-    <footer className="bg-slate-100 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700">
-      <Container width="wide" className="py-8">
+    <footer className="border-t border-rule">
+      <div className="mx-auto flex max-w-page flex-col gap-s4 px-s5 py-s6 sm:flex-row sm:items-center sm:justify-between">
+        <p className="font-mono text-label uppercase text-ink-muted">
+          {footerCopyright}
+        </p>
 
-        {/* Social Links */}
-        <div className="flex justify-center items-center space-x-6 mb-6">
-          {socialLinks.map((link, index) => {
-            const IconComponent = ICONS[link.icon];
+        <ul className="flex items-center gap-s5">
+          {socialLinks.map((link) => {
+            const Icon = ICONS[link.icon];
             return (
-              <a
-                key={index}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`text-slate-600 dark:text-slate-400 ${link.color} transition-colors duration-300`}
-                aria-label={link.name}
-                title={link.tooltip}
-              >
-                <IconComponent className="w-6 h-6" />
-              </a>
+              <li key={link.name}>
+                <a
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-ink-muted transition-colors duration-150 hover:text-accent"
+                  aria-label={link.name}
+                  title={link.tooltip}
+                >
+                  <Icon className="h-4 w-4" />
+                </a>
+              </li>
             );
           })}
-        </div>
-
-        {/* Copyright */}
-        <div className="text-center">
-          <p className="text-sm text-slate-500 dark:text-slate-400">
-            {footerCopyright}
-          </p>
-        </div>
-      </Container>
+        </ul>
+      </div>
     </footer>
   );
 }

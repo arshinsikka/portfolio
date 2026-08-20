@@ -19,15 +19,25 @@ function isActive(path: string, location: string) {
   return location === path || location.startsWith(`${path}/`);
 }
 
+/** Accent job 2 of 3: the active route. Inactive items are ink only. */
+const navItemClass = (active: boolean) =>
+  [
+    "font-mono text-label uppercase transition-colors duration-150",
+    active ? "text-accent" : "text-ink-muted hover:text-ink",
+  ].join(" ");
+
+const iconButtonClass =
+  "grid h-9 w-9 place-items-center rounded-sm text-ink-muted transition-colors duration-150 hover:bg-rule hover:text-ink";
+
 export default function Navbar() {
-  const [location]                    = useLocation();
-  const [isOpen, setIsOpen]           = useState(false);
-  const [isDarkMode, setIsDarkMode]   = useState(false);
-  const mobileMenuRef                 = useRef<HTMLDivElement>(null);
+  const [location]                  = useLocation();
+  const [isOpen, setIsOpen]         = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const mobileMenuRef               = useRef<HTMLDivElement>(null);
 
   // ── Dark mode init ──────────────────────────────────────────────────────────
   useEffect(() => {
-    const saved     = localStorage.getItem("theme");
+    const saved       = localStorage.getItem("theme");
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     if (saved === "dark" || (!saved && prefersDark)) {
       setIsDarkMode(true);
@@ -62,89 +72,71 @@ export default function Navbar() {
   }, []);
 
   return (
-    <>
-      <nav className="fixed top-0 left-0 right-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border-b border-slate-200 dark:border-slate-700 z-50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-[var(--nav-row-h)]">
+    <nav className="fixed inset-x-0 top-0 z-50 border-b border-rule bg-paper">
+      <div className="mx-auto max-w-page px-s5">
+        <div className="flex h-[var(--nav-row-h)] items-center justify-between">
 
-            {/* Logo */}
-            <Link
-              href="/"
-              className="text-xl font-bold text-slate-800 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+          {/* Wordmark */}
+          <Link
+            href="/"
+            className="font-display text-h3 text-ink transition-colors duration-150 hover:text-accent"
+          >
+            Arshin Sikka
+          </Link>
+
+          {/* Desktop nav */}
+          <div className="hidden items-center gap-s5 md:flex">
+            {NAV_ITEMS.map((item) => (
+              <Link
+                key={item.path}
+                href={item.path}
+                className={navItemClass(isActive(item.path, location))}
+                aria-current={isActive(item.path, location) ? "page" : undefined}
+              >
+                {item.label}
+              </Link>
+            ))}
+
+            <button onClick={toggleDark} className={iconButtonClass} aria-label="Toggle dark mode">
+              {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </button>
+          </div>
+
+          {/* Mobile controls */}
+          <div className="flex items-center gap-s1 md:hidden" ref={mobileMenuRef}>
+            <button onClick={toggleDark} className={iconButtonClass} aria-label="Toggle dark mode">
+              {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </button>
+            <button
+              onClick={() => setIsOpen((o) => !o)}
+              className={iconButtonClass}
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isOpen}
             >
-              Arshin Sikka
-            </Link>
-
-            {/* Desktop nav */}
-            <div className="hidden md:flex items-center gap-6">
-              {NAV_ITEMS.map((item) => (
-                <Link
-                  key={item.path}
-                  href={item.path}
-                  className={`text-sm font-medium pb-1 transition-colors ${
-                    isActive(item.path, location)
-                      ? "text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400"
-                      : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              ))}
-
-              <button
-                onClick={toggleDark}
-                className="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                aria-label="Toggle dark mode"
-              >
-                {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-              </button>
-            </div>
-
-            {/* Mobile controls */}
-            <div className="md:hidden flex items-center gap-1" ref={mobileMenuRef}>
-              <button
-                onClick={toggleDark}
-                className="p-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                aria-label="Toggle dark mode"
-              >
-                {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-              </button>
-              <button
-                onClick={() => setIsOpen((o) => !o)}
-                className="p-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                aria-label={isOpen ? "Close menu" : "Open menu"}
-                aria-expanded={isOpen}
-              >
-                {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-              </button>
-            </div>
+              {isOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+            </button>
           </div>
         </div>
+      </div>
 
-        {/* Mobile dropdown */}
-        <div
-          className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-            isOpen ? "max-h-[480px] opacity-100" : "max-h-0 opacity-0"
-          }`}
-        >
-          <div className="px-4 pt-2 pb-4 space-y-1 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700">
+      {/* Mobile menu. Unmounted when closed, so it leaves the tab order. */}
+      {isOpen && (
+        <div className="border-t border-rule bg-paper md:hidden">
+          <div className="mx-auto max-w-page px-s5 py-s2">
             {NAV_ITEMS.map((item) => (
               <Link
                 key={item.path}
                 href={item.path}
                 onClick={() => setIsOpen(false)}
-                className={`flex w-full items-center min-h-[44px] px-4 py-2.5 text-sm font-medium rounded-lg transition-colors ${
-                  isActive(item.path, location)
-                    ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20"
-                    : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
-                }`}
+                className={`flex min-h-[44px] items-center ${navItemClass(isActive(item.path, location))}`}
+                aria-current={isActive(item.path, location) ? "page" : undefined}
               >
                 {item.label}
               </Link>
             ))}
           </div>
         </div>
-      </nav>
-    </>
+      )}
+    </nav>
   );
 }
