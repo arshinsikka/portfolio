@@ -5,10 +5,22 @@ Arshin Sikka. Year 3 Computer Science at NUS, AI focus. This site is a
 personal portfolio aimed at recruiters, hiring managers, and collaborators.
 
 ## Current phase
-Frontend and information architecture rework only. Content is being
-replaced later and is NOT to be edited, rewritten, or "improved" during
-this phase. Treat all existing copy as placeholder that must survive
-verbatim unless I explicitly say otherwise.
+**Content.** The design phase is finished. The design system in docs/DESIGN.md
+is applied across every route — `/`, `/work`, `/projects`,
+`/projects/lecture-ai`, `/research`, `/about`, and the 404 — plus the navbar,
+footer, and chat widget. There are no per-page containers and no non-token
+colour values left in the app layer.
+
+The work now is writing and expanding the copy. Until I say a specific piece of
+copy is being rewritten, existing copy still survives verbatim: do not edit,
+reword, or "improve" it on your own initiative. Re-slotting an existing string
+into a different component is fine and is not a copy change; changing the words
+is.
+
+The site currently carries eight deliberate placeholders — four in the homepage
+impact strip and four in the Lecture AI case study. They are styled to be
+conspicuous. None should reach production. docs/CONTENT-PLAN.md maps what each
+one needs.
 
 ## Working rules
 - I am not a professional developer. I supervise and verify. Explain
@@ -33,12 +45,22 @@ docs/DESIGN.md is authoritative for colour, type, spacing, and component
 specs. Read it before any styling work. Do not introduce colours, fonts,
 or spacing values that are not in it.
 
-## Current phase
-Phase 3, design. The homepage, navbar, and footer use the new system.
-/work, /projects, /research, /about, and project-detail are still on the
-old design and will look inconsistent. That is expected.
+Two traps it documents that are easy to reintroduce:
+- Any new key added to the `fontSize` scale in tailwind.config.ts must also be
+  declared in client/src/lib/utils.ts, or `cn()` silently eats the class.
+- Prose is capped at `--measure`. The content column is roughly twice that
+  width; the surplus is spent on structure (index-row columns, the impact band),
+  never on longer lines.
+
+## Content model
+All copy lives in client/src/content/ as typed data — profile.ts, roles.ts,
+projects.ts, research.ts, leadership.ts, impact.ts. Components read from there;
+nothing in content/ imports a component, and no JSX or icon lives in a content
+file. Add copy by editing those files, not by putting strings in components.
 
 ## History
-docs/AUDIT.md is the original codebase audit. Parts of it are outdated,
-it was written before the Express server, shadcn purge, and routing work.
-Treat it as history, not current state.
+docs/AUDIT.md is the original codebase audit. **It is historical and describes a
+codebase that no longer exists.** It predates the Express server removal, the
+shadcn purge, the routing work, and the entire design system. Do not use it to
+reason about current structure — read the code and docs/DESIGN.md instead. It is
+kept only as a record of where the project started.
