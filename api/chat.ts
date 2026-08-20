@@ -193,20 +193,42 @@ const MAX_TOTAL_CHARS = 12000; // across the whole conversation
 const MAX_TOKENS = 1024;
 
 // ── Origin allowlist ─────────────────────────────────────────────────────────
-// Override in Vercel with ALLOWED_ORIGINS="https://a.com,https://b.com,*.vercel.app"
+// Override in Vercel with ALLOWED_ORIGINS="https://a.com,https://b.com"
+//
+// `*.vercel.app` was removed: it matched every deployment on Vercel, including
+// other people's, so any vercel.app site could call this endpoint and spend the
+// Groq quota. Preview deploys are covered by selfOrigins() below instead, which
+// trusts only the current deployment's own hostnames.
 const DEFAULT_ALLOWED_ORIGINS = [
   "https://arshinsikka.com",
   "https://www.arshinsikka.com",
-  "*.vercel.app",
 ];
+
+/**
+ * The hostnames this very deployment is served from, supplied by Vercel:
+ *   VERCEL_URL         the immutable per-deployment URL
+ *   VERCEL_BRANCH_URL  the branch alias, e.g. portfolio-git-main-<scope>
+ * Both are absent locally. Allowing them means every preview deploy can call
+ * its own API with no configuration, while a different Vercel project still
+ * cannot — which is the part `*.vercel.app` got wrong.
+ */
+function selfOrigins(): string[] {
+  return [process.env.VERCEL_URL, process.env.VERCEL_BRANCH_URL]
+    .filter((h): h is string => Boolean(h))
+    .map((h) => `https://${h}`);
+}
 
 function allowlist(): string[] {
   const fromEnv = process.env.ALLOWED_ORIGINS;
-  if (!fromEnv) return DEFAULT_ALLOWED_ORIGINS;
-  return fromEnv
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean);
+  const base = fromEnv
+    ? fromEnv
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean)
+    : DEFAULT_ALLOWED_ORIGINS;
+  // Self-origins are appended even when ALLOWED_ORIGINS is set, so overriding
+  // the list can never accidentally lock a preview out of its own endpoint.
+  return [...base, ...selfOrigins()];
 }
 
 function isOriginAllowed(origin: string | undefined): boolean {

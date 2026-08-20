@@ -7,7 +7,16 @@
  * key that the component maps to a concrete component.
  */
 
-/** The production origin. Also hardcoded in client/index.html's metadata. */
+/**
+ * The production origin. THE ONLY PLACE THE DOMAIN IS WRITTEN.
+ *
+ * client/index.html holds `__SITE_URL__` placeholders rather than a literal;
+ * vite.config.ts imports this constant and substitutes them at transform time,
+ * in dev and in build alike. The runtime meta hook reads it too.
+ *
+ * Because vite.config.ts imports this file directly, THIS FILE MUST STAY FREE
+ * OF `@/` ALIAS IMPORTS — the Vite config is bundled before aliases exist.
+ */
 export const SITE_URL = "https://www.arshinsikka.com";
 
 export const RESUME_URL = "/assets/Arshin_Sikka_Resume.pdf";
@@ -16,7 +25,6 @@ export const hero = {
   name: "Arshin Sikka",
   imageSrc: "/assets/arshin-profile.webp",
   imageAlt: "Arshin Sikka",
-  availabilityTitle: "Available for opportunities",
   tagline:
     "Building AI products — from BLOCK71-backed startup to enterprise LLM systems",
   intro:

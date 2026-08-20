@@ -27,12 +27,8 @@ export interface Paragraph {
 /** Drives card size and whether the entry gets its own detail route. */
 export type ProjectTier = "featured" | "standard" | "minor";
 
-/** Colour of an accolade pill. Chosen per accolade, not by array position. */
-export type AccoladeTone = "amber" | "purple";
-
 export interface Accolade {
   text: string;
-  tone: AccoladeTone;
 }
 
 export interface Project {

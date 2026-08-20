@@ -7,6 +7,7 @@ import {
   TagList,
   TextLink,
 } from "@/components/primitives";
+import { useDocumentMeta } from "@/hooks/use-document-meta";
 import { projectBySlug } from "@/content/projects";
 import NotFound from "@/pages/not-found";
 
@@ -27,6 +28,13 @@ import NotFound from "@/pages/not-found";
 export default function ProjectDetail() {
   const { slug } = useParams<{ slug: string }>();
   const project = projectBySlug(slug);
+
+  // Called before the early returns so hook order stays stable across renders;
+  // an unknown slug simply falls back to the site defaults.
+  useDocumentMeta({
+    title: project?.title,
+    description: project?.summary,
+  });
 
   if (!project) return <NotFound />;
   if (!project.hasDetailPage) return <Redirect to="/projects" replace />;

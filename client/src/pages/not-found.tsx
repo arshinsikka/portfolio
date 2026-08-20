@@ -1,4 +1,5 @@
 import { Block, Prose, TextLink } from "@/components/primitives";
+import { useDocumentMeta } from "@/hooks/use-document-meta";
 
 /**
  * The body copy previously read "Did you forget to add the page to the router?"
@@ -7,6 +8,11 @@ import { Block, Prose, TextLink } from "@/components/primitives";
  * is the original string, restyled.
  */
 export default function NotFound() {
+  useDocumentMeta({
+    title: "404 Page Not Found",
+    description: "This page doesn\u2019t exist, or it has moved.",
+  });
+
   return (
     <Block className="border-t-0" label="Error">
       <h1 className="max-w-lead font-display text-display text-ink">

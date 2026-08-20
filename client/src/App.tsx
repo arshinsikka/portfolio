@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { Switch, Route, useLocation } from "wouter";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import ChatWidget from "@/components/chat-widget";
@@ -48,7 +47,7 @@ function Router() {
 
 function App() {
   return (
-    <TooltipProvider>
+    <>
       <ScrollToTop />
       <div className="min-h-screen">
         <Navbar />
@@ -64,7 +63,7 @@ function App() {
         <Footer />
       </div>
       <ChatWidget />
-    </TooltipProvider>
+    </>
   );
 }
 

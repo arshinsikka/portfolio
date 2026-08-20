@@ -24,12 +24,17 @@
       })();
     </script>
 
+    <!--
+      The SITE-URL placeholders below are substituted at transform time from
+      SITE_URL in client/src/content/profile.ts, which is the only place the
+      domain is written. Do not put a literal domain in this file.
+    -->
     <!-- Primary meta -->
     <title>Arshin Sikka — AI Product Builder</title>
     <meta name="description" content="CS student at NUS building AI products. Co-founder of Lecture AI (BLOCK71-backed). Currently building production LLM systems at SP Digital. Seeking product, strategy, and AI roles." />
     <meta name="author" content="Arshin Sikka" />
     <meta name="keywords" content="Arshin Sikka, AI, NUS, LLM, Lecture AI, SP Digital, KPMG, machine learning, product, Singapore" />
-    <link rel="canonical" href="https://www.arshinsikka.com" />
+    <link rel="canonical" href="__SITE_URL__" />
 
     <!-- Theme color. Both values are --paper, so the browser chrome continues
          the page ground instead of the old slate navbar that no longer exists. -->
@@ -45,10 +50,10 @@
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.arshinsikka.com" />
+    <meta property="og:url" content="__SITE_URL__" />
     <meta property="og:title" content="Arshin Sikka — AI Product Builder" />
     <meta property="og:description" content="CS student at NUS building AI products. Co-founder of Lecture AI. Building production LLM systems at SP Digital." />
-    <meta property="og:image" content="https://www.arshinsikka.com/og-image.png" />
+    <meta property="og:image" content="__SITE_URL__/og-image.png" />
     <meta property="og:site_name" content="Arshin Sikka" />
     <meta property="og:locale" content="en_US" />
 
@@ -56,7 +61,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Arshin Sikka — AI Product Builder" />
     <meta name="twitter:description" content="CS student at NUS building AI products. Co-founder of Lecture AI (BLOCK71-backed)." />
-    <meta name="twitter:image" content="https://www.arshinsikka.com/og-image.png" />
+    <meta name="twitter:image" content="__SITE_URL__/og-image.png" />
 
     <!-- JSON-LD structured data -->
     <script type="application/ld+json">
@@ -66,7 +71,7 @@
       "name": "Arshin Sikka",
       "jobTitle": "AI Product Builder",
       "description": "CS student at NUS building AI products and production LLM systems.",
-      "url": "https://www.arshinsikka.com",
+      "url": "__SITE_URL__",
       "email": "arshin.sikka@u.nus.edu",
       "alumniOf": {
         "@type": "CollegeOrUniversity",
