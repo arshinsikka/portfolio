@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { Switch, Route, useLocation } from "wouter";
+// Aliased: this file already has a local `Router` that owns the route table.
+import { Router as WouterRouter, Switch, Route, useLocation } from "wouter";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import ChatWidget from "@/components/chat-widget";
@@ -45,9 +46,13 @@ function Router() {
   );
 }
 
-function App() {
+/**
+ * `ssrPath` is supplied only by entry-server during the prerender build; in the
+ * browser it is undefined and wouter reads `window.location` as usual.
+ */
+function App({ ssrPath }: { ssrPath?: string } = {}) {
   return (
-    <>
+    <WouterRouter ssrPath={ssrPath}>
       <ScrollToTop />
       <div className="min-h-screen">
         <Navbar />
@@ -63,7 +68,7 @@ function App() {
         <Footer />
       </div>
       <ChatWidget />
-    </>
+    </WouterRouter>
   );
 }
 

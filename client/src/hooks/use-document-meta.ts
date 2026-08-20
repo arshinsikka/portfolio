@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useLocation } from "wouter";
-import { SITE_URL, hero } from "@/content/profile";
+import { SITE_URL } from "@/content/profile";
+import { composeTitle } from "@/lib/route-meta";
 
 /**
  * Per-route document metadata, set on mount and on every route change.
@@ -29,19 +30,24 @@ const readMeta = (selector: string) =>
  * index.html's own title and description, captured before any route overwrites
  * them, and cached on `window` so the first capture is the only one that counts.
  *
- * Without the cache this is a module-level read of a DOM that later routes
- * mutate — fine in production, where the module is evaluated exactly once on a
- * pristine head, but wrong under HMR, which re-evaluates the module after the
- * head has already been rewritten and so captures another route's metadata as
- * the site default.
+ * Without the cache this would re-read a DOM that later routes mutate — fine in
+ * production, where it is read once against a pristine head, but wrong under HMR,
+ * which re-evaluates after the head has been rewritten and would capture another
+ * route's metadata as the site default.
+ *
+ * Called lazily from inside the effect rather than at module scope: the
+ * prerender build imports this module under Node, where `window` and `document`
+ * do not exist. Effects never run on the server, so nothing here executes there.
  */
-const metaCache = window as unknown as {
-  __siteMetaDefaults?: { title: string; description: string };
-};
-const SITE_DEFAULTS = (metaCache.__siteMetaDefaults ??= {
-  title: document.title,
-  description: readMeta('meta[name="description"]'),
-});
+function siteDefaults(): { title: string; description: string } {
+  const cache = window as unknown as {
+    __siteMetaDefaults?: { title: string; description: string };
+  };
+  return (cache.__siteMetaDefaults ??= {
+    title: document.title,
+    description: readMeta('meta[name="description"]'),
+  });
+}
 
 function upsertMeta(attr: "name" | "property", key: string, content: string) {
   const selector = `meta[${attr}="${key}"]`;
@@ -78,12 +84,11 @@ export function useDocumentMeta({ title, description }: DocumentMeta) {
   const [location] = useLocation();
 
   useEffect(() => {
-    // "<page> — <name>", not "<page> — <full site title>": the site title is
-    // itself "Arshin Sikka — AI Product Builder", so appending it whole gives a
-    // triple-barrelled 50-character title that truncates in search results. The
-    // separator mirrors the one index.html already uses; it is not new copy.
-    const fullTitle = title ? `${title} — ${hero.name}` : SITE_DEFAULTS.title;
-    const desc = description || SITE_DEFAULTS.description;
+    const defaults = siteDefaults();
+    // Title composition lives in lib/route-meta so the prerender build and the
+    // client produce byte-identical titles for the same route.
+    const fullTitle = composeTitle(title, defaults.title);
+    const desc = description || defaults.description;
     const url = location === "/" ? SITE_URL : `${SITE_URL}${location}`;
 
     document.title = fullTitle;

@@ -1,4 +1,4 @@
-import { createRoot } from "react-dom/client";
+import { hydrateRoot, createRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
 
@@ -11,4 +11,14 @@ if ("scrollRestoration" in history) {
   history.scrollRestoration = "manual";
 }
 
-createRoot(document.getElementById("root")!).render(<App />);
+const root = document.getElementById("root")!;
+
+// The production build prerenders real markup into #root, which must be
+// hydrated — createRoot would throw it away and re-render, losing the whole
+// point and flashing. `npm run dev` serves an empty root, so it still mounts
+// the ordinary way.
+if (root.hasChildNodes()) {
+  hydrateRoot(root, <App />);
+} else {
+  createRoot(root).render(<App />);
+}
