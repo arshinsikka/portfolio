@@ -28,13 +28,13 @@ export const hero = {
   tagline:
     "Building AI products — from BLOCK71-backed startup to enterprise LLM systems",
   intro:
-    "Year 3 CS student at NUS. Currently shipping production AI systems at SP Digital. Previously built agentic RAG at KPMG and co-founded Lecture AI.",
+    "Final-year CS student at NUS. Currently at Garuda Robotics through NUS Overseas Colleges, building agentic systems for drone operations. Previously: guardrails and evaluation for a production LLM system at SP Digital, retrieval at KPMG, and co-founder of Lecture AI.",
   githubUrl: "https://github.com/arshinsikka",
 };
 
 export const lookingFor = {
   leadIn: "Open to opportunities.",
-  body: "Seeking product, strategy, and AI/data science roles where I can build impactful systems and ship real products. Open to internships (Summer 2026) and full-time opportunities post-graduation (May 2027).",
+  body: "Looking for full-time roles starting mid-2027, after I graduate. Software engineering, AI/ML, product, consulting, or quant — the common thread is work where the technical decisions have real consequences. Based in Singapore, open to relocating.",
   ctaLabel: "View Resume",
 };
 

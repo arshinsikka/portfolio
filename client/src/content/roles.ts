@@ -2,15 +2,25 @@ import type { Role } from "./types";
 
 export const roles: Role[] = [
   {
+    slug: "garuda-robotics-ai-engineer-intern",
+    title: "AI Engineer Intern",
+    company: "Garuda Robotics",
+    location: "Singapore",
+    dates: "Jul 2026 – Present",
+    description:
+      "Building the AI layer for autonomous drone operations — turning natural-language mission requests into executable, validated flight plans.",
+    tags: ["Agentic AI", "LLMs", "Computer Vision", "LangGraph", "FastAPI"],
+    isCurrent: true,
+  },
+  {
     slug: "sp-digital-data-science-intern",
     title: "Data Science Intern",
     company: "SP Digital",
     location: "Singapore",
-    dates: "Jan 2026 – Present",
+    dates: "Jan 2026 – Jun 2026",
     description:
       "Engineered enterprise guardrails for production LLM systems, implementing access control policies, grounding constraints, and retrieval boundaries for safe deployment. Built evaluation infrastructure with 400+ adversarial prompts, reducing unsafe model responses by ~60%.",
     tags: ["LLM Systems", "Guardrails", "Enterprise AI", "Evaluation"],
-    isCurrent: true,
   },
   {
     slug: "lecture-ai-co-founder",
