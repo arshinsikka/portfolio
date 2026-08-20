@@ -27,6 +27,16 @@ export interface Paragraph {
 /** Drives card size and whether the entry gets its own detail route. */
 export type ProjectTier = "featured" | "standard" | "minor";
 
+/**
+ * Which headed group the entry sits under on the project index.
+ *
+ * Orthogonal to `tier`: `tier` says how much weight an entry carries and
+ * whether it earns a detail route, `group` says what kind of thing it is. A
+ * group with no members renders nothing at all — no heading, no gap — so the
+ * page never shows an empty section while the content is being filled in.
+ */
+export type ProjectGroup = "production" | "research" | "ventures";
+
 export interface Accolade {
   text: string;
 }
@@ -34,10 +44,11 @@ export interface Accolade {
 export interface Project {
   slug: string;
   title: string;
-  /** May be absent where the source copy never stated one (e.g. ChessPhere). */
+  /** May be absent where the source copy never stated one. */
   role?: string;
   dates: string;
   tier: ProjectTier;
+  group: ProjectGroup;
   /** One paragraph, used on index cards. */
   summary: string;
   /** Full copy, used on a detail page. Empty where no long-form copy exists. */
@@ -57,6 +68,13 @@ export interface Role {
   location: string;
   dates: string;
   description: string;
+  /**
+   * Long-form copy, rendered inline beneath the role's index row. Roles have
+   * no detail page, so this is where the depth goes. Optional: most roles
+   * carry only `description`, and a role without a body renders exactly as it
+   * did before this field existed.
+   */
+  body?: Paragraph[];
   tags: string[];
   isCurrent?: boolean;
   links?: ContentLink[];

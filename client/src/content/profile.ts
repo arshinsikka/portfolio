@@ -157,8 +157,12 @@ export const sectionCopy = {
     heading: "Projects",
     subtitle:
       "From AI pipelines to open-source contributions and medical device design",
-    standardHeading: "AI Tools & Frameworks",
-    minorHeading: "Other Projects",
+    /** Keyed by `ProjectGroup`. A group with no records never renders. */
+    groups: {
+      production: "Production systems",
+      research: "Research",
+      ventures: "Ventures",
+    },
   },
   research: {
     heading: "Research Experience",

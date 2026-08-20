@@ -31,23 +31,4 @@ export const leadership: LeadershipItem[] = [
     tags: ["Chess", "Competition", "Leadership", "Strategy"],
     isCurrent: true,
   },
-  {
-    // Canonical description lives on the Donation Nation project record.
-    slug: "donation-nation-founder",
-    title: "Founder",
-    organization: "Donation Nation",
-    location: "New Delhi",
-    dates: "Oct 2020 – Jan 2022",
-    tags: ["Social Impact", "Logistics", "Operations"],
-    projectSlug: "donation-nation",
-  },
-  {
-    // Canonical description lives on the Pediatric Tendon Stapler project record.
-    slug: "pediatric-tendon-stapler-designer",
-    title: "Product Designer",
-    organization: "Pediatric Tendon Stapler · NUS iDP",
-    dates: "Jan 2025 – May 2025",
-    tags: ["Medical Device", "UX Design", "Hardware Prototyping"],
-    projectSlug: "pediatric-tendon-stapler",
-  },
 ];

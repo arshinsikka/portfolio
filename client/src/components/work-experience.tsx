@@ -1,3 +1,4 @@
+import type { Paragraph } from "@/content/types";
 import { Block, IndexRow, Prose, TextLink } from "@/components/primitives";
 import { roles } from "@/content/roles";
 import { sectionCopy } from "@/content/profile";
@@ -9,6 +10,33 @@ const detailHref = (slug?: string) =>
 
 /** The one accent mark on this page: the role I hold now. */
 const currentRoleSlug = roles.find((r) => r.isCurrent)?.slug;
+
+/**
+ * A role's long-form copy, rendered inline beneath its index row.
+ *
+ * Roles have no detail page, so a body has nowhere else to go. The treatment is
+ * the one a project's body already gets: `Prose` at the reading measure, with
+ * `label` as a bold lead-in on the same line as its text. It sits at
+ * `text-small` to match the description directly above it — the body is more of
+ * that paragraph, not a second voice.
+ *
+ * Renders nothing when a role has no body, so those rows are byte-identical to
+ * what they were before the field existed.
+ */
+function RoleBody({ body }: { body?: Paragraph[] }) {
+  if (!body || body.length === 0) return null;
+
+  return (
+    <div className="mt-s3 space-y-s2">
+      {body.map((para) => (
+        <Prose key={para.text} className="text-small">
+          {para.label && <span className="font-medium">{para.label} </span>}
+          {para.text}
+        </Prose>
+      ))}
+    </div>
+  );
+}
 
 export default function WorkExperience() {
   return (
@@ -29,6 +57,7 @@ export default function WorkExperience() {
             current={role.slug === currentRoleSlug}
           >
             <Prose className="text-small">{role.description}</Prose>
+            <RoleBody body={role.body} />
             {role.links && role.links.length > 0 && (
               <ul className="mt-s2 flex flex-wrap gap-x-s5 gap-y-s1">
                 {role.links.map((link) => (

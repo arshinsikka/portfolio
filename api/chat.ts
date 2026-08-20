@@ -79,21 +79,6 @@ AI Architecture Strategy Engine — Mar 2026
 - Multi-agent system helping AI product teams choose between prompting, RAG, fine-tuning under real constraints (budget, latency, quality)
 - GitHub: github.com/arshinsikka/ai-architecture-strategy-engine
 
-LLM Evaluation Framework — Mar 2026
-- Modular framework for comparing LLMs across summarization, decision analysis, retrieval ranking
-- Includes quality/cost/latency trade-off analysis
-- GitHub: github.com/arshinsikka/llm-evaluation-framework
-
-TrackUp — Java CLI app for contact/event management with TDD (NUS CS2103T)
-
-Pediatric Tendon Stapler — NUS iDP | Jan–May 2025
-- Co-designed ergonomic one-handed surgical stapler for pediatric tendon repair
-- Worked with medical stakeholders, iterated prototypes, presented at NUS iDP showcase
-
-MarkBind Contributions — Open source contributor to NUS documentation tool (Vue, Node.js)
-
-Donation Nation — Founded grassroots donor-NGO platform during COVID-19
-
 ==============================
 RESEARCH EXPERIENCE
 ==============================
