@@ -41,6 +41,29 @@ export interface Accolade {
   text: string;
 }
 
+/**
+ * One headed section of a case study.
+ *
+ * Case studies do not share a fixed skeleton: the sections a project needs
+ * depend on what the project was. So the headings are data, in the order they
+ * are meant to be read, rather than a run of hardcoded blocks that every
+ * project has to be squeezed into.
+ */
+export interface CaseStudySection {
+  heading: string;
+  paragraphs: Paragraph[];
+  /**
+   * A monospace diagram or code excerpt, rendered after the section's prose.
+   * It hangs off the section rather than off the project so that a case study
+   * decides *where* its artifact belongs — mid-argument, next to the decision
+   * it illustrates — instead of always after the last section.
+   */
+  artifact?: {
+    content: string;
+    caption?: string;
+  };
+}
+
 export interface Project {
   slug: string;
   title: string;
@@ -53,6 +76,11 @@ export interface Project {
   summary: string;
   /** Full copy, used on a detail page. Empty where no long-form copy exists. */
   body: Paragraph[];
+  /**
+   * The case study, section by section, in reading order. Only meaningful
+   * alongside `hasDetailPage`. Absent on projects that have no detail page.
+   */
+  sections?: CaseStudySection[];
   tags: string[];
   links: ContentLink[];
   /** Short award/status pills, e.g. "BLOCK71-backed". */

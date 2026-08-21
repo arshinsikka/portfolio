@@ -21,6 +21,7 @@ export const roles: Role[] = [
     description:
       "Engineered enterprise guardrails for production LLM systems, implementing access control policies, grounding constraints, and retrieval boundaries for safe deployment. Built evaluation infrastructure with 400+ adversarial prompts, reducing unsafe model responses by ~60%.",
     tags: ["LLM Systems", "Guardrails", "Enterprise AI", "Evaluation"],
+    projectSlug: "sara-guardrails",
   },
   {
     slug: "lecture-ai-co-founder",

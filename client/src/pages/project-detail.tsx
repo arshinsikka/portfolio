@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { Redirect, useParams } from "wouter";
 import {
   Artifact,
@@ -12,19 +13,71 @@ import { projectBySlug } from "@/content/projects";
 import NotFound from "@/pages/not-found";
 
 /**
- * Detail page for a single project, structured as a case study:
- * overview → the challenge → my role → key decisions → results → links.
+ * Detail page for a single project, structured as a case study.
  *
- * Only projects flagged `hasDetailPage` have one. Any other known slug sends
+ * The section list is no longer a fixed skeleton. `project.sections` supplies
+ * the headings and their copy in reading order, so a case study can carry the
+ * sections its own subject needs rather than the seven this file used to
+ * hardcode. An artifact hangs off whichever section it belongs to, so a diagram
+ * can sit mid-argument. Only the links stay fixed after the sections, being
+ * page furniture rather than copy.
+ *
+ * Only projects flagged `hasDetailPage` have a page. Any other known slug sends
  * the visitor back to the index rather than showing an empty shell. An unknown
  * slug renders the 404 page in place, leaving the bad URL in the address bar
  * so it stays visible rather than being silently rewritten.
- *
- * The section skeleton is fixed; what fills it comes from the project record.
- * Where the record has no copy for a section the slot renders a Placeholder
- * rather than borrowing a sentence written for something else — every one of
- * those is listed in the handover notes.
  */
+
+/**
+ * SCAFFOLDING — DELETE PER ENTRY AS THE COPY LANDS.
+ *
+ * Keyed by section heading. A `CaseStudySection` carries only real content,
+ * which is right: a placeholder is not content, it is a note about content that
+ * does not exist yet. Keeping these here rather than in the content file means
+ * the day a section's copy is written, its `paragraphs` or `artifact` fill in
+ * and its entry below is deleted — and nothing that ships ever had a
+ * placeholder in the data.
+ *
+ * Renders last within a section, so a section can carry real copy and an
+ * outstanding note at the same time (Key decisions does today).
+ */
+const SCAFFOLDING: Record<string, ReactNode> = {
+  "The challenge": (
+    <Placeholder>
+      The problem this project set out to solve, in two or three sentences. See
+      handover note C1 — the opening sentence of the &ldquo;Key stats&rdquo;
+      paragraph is a candidate if you want it split out.
+    </Placeholder>
+  ),
+  "My role": (
+    <Placeholder>
+      What you personally owned versus what the team owned. See handover note
+      C2.
+    </Placeholder>
+  ),
+  "Key decisions": (
+    <div className="mt-s4">
+      <Placeholder>
+        Why each of those was chosen over the alternative — the tradeoff, not the
+        list. See handover note C3.
+      </Placeholder>
+    </div>
+  ),
+  // A section with a real `artifact` renders that instead of ever reaching
+  // here; this is the stand-in for the one that has not been drawn yet.
+  Architecture: (
+    <Artifact caption="Placeholder — see handover note C4">
+{`  ┌──────────────┐      ┌──────────────┐      ┌──────────────┐
+  │  PLACEHOLDER │─────▶│  PLACEHOLDER │─────▶│  PLACEHOLDER │
+  └──────────────┘      └──────────────┘      └──────────────┘
+
+  Replace with the real pipeline diagram or a representative code
+  excerpt. Monospace, plain text — it scrolls inside its own box, so
+  a wide diagram will not widen the page.`}
+    </Artifact>
+  ),
+};
+
 export default function ProjectDetail() {
   const { slug } = useParams<{ slug: string }>();
   const project = projectBySlug(slug);
@@ -38,11 +91,6 @@ export default function ProjectDetail() {
 
   if (!project) return <NotFound />;
   if (!project.hasDetailPage) return <Redirect to="/projects" replace />;
-
-  /** `body[0]` restates `summary` verbatim, so the overview uses one of them. */
-  const [, ...supporting] = project.body;
-  const decisions = supporting.find((p) => p.label === "Built with:");
-  const stats = supporting.find((p) => p.label === "Key stats:");
 
   return (
     <>
@@ -60,87 +108,64 @@ export default function ProjectDetail() {
         )}
       </Block>
 
-      {/* ── Overview ────────────────────────────────────────────────────── */}
-      <Block label="Overview">
-        <Prose>{project.summary}</Prose>
-      </Block>
+      {/* ── The case study, section by section ──────────────────────────── */}
+      {project.sections?.map((section) => (
+        <Block key={section.heading} label={section.heading}>
+          {/*
+            "My role" states the role itself above its copy. It comes from the
+            project record rather than from the section, which is why it is not
+            just another paragraph.
+          */}
+          {section.heading === "My role" && project.role && (
+            <p className="text-org font-medium text-ink">{project.role}</p>
+          )}
 
-      {/* ── The challenge ───────────────────────────────────────────────── */}
-      <Block label="The challenge">
-        <Placeholder>
-          The problem this project set out to solve, in two or three sentences.
-          See handover note C1 — the opening sentence of the &ldquo;Key
-          stats&rdquo; paragraph is a candidate if you want it split out.
-        </Placeholder>
-      </Block>
+          {section.paragraphs.map((para, i) => (
+            // Spacing hangs off the paragraph rather than a wrapper, so a
+            // single-paragraph section renders exactly the bare <Prose> the
+            // hardcoded version did.
+            <Prose key={para.text} className={i > 0 ? "mt-s3" : undefined}>
+              {para.label && <span className="font-medium">{para.label} </span>}
+              {para.text}
+            </Prose>
+          ))}
 
-      {/* ── My role ─────────────────────────────────────────────────────── */}
-      <Block label="My role">
-        <p className="text-org font-medium text-ink">{project.role}</p>
-        <Placeholder>
-          What you personally owned versus what the team owned. See handover
-          note C2.
-        </Placeholder>
-      </Block>
+          {section.artifact && (
+            <div className={section.paragraphs.length > 0 ? "mt-s4" : undefined}>
+              <Artifact caption={section.artifact.caption}>
+                {section.artifact.content}
+              </Artifact>
+            </div>
+          )}
 
-      {/* ── Key decisions ───────────────────────────────────────────────── */}
-      <Block label="Key decisions">
-        {decisions && (
-          <Prose>
-            <span className="font-medium">{decisions.label} </span>
-            {decisions.text}
-          </Prose>
-        )}
-        <div className="mt-s4">
-          <Placeholder>
-            Why each of those was chosen over the alternative — the tradeoff, not
-            the list. See handover note C3.
-          </Placeholder>
-        </div>
-      </Block>
-
-      {/* ── Technical artifact ──────────────────────────────────────────── */}
-      <Block label="Architecture">
-        <Artifact caption="Placeholder — see handover note C4">
-{`  ┌──────────────┐      ┌──────────────┐      ┌──────────────┐
-  │  PLACEHOLDER │─────▶│  PLACEHOLDER │─────▶│  PLACEHOLDER │
-  └──────────────┘      └──────────────┘      └──────────────┘
-
-  Replace with the real pipeline diagram or a representative code
-  excerpt. Monospace, plain text — it scrolls inside its own box, so
-  a wide diagram will not widen the page.`}
-        </Artifact>
-      </Block>
-
-      {/* ── Results ─────────────────────────────────────────────────────── */}
-      <Block label="Results">
-        {stats ? (
-          <Prose>
-            <span className="font-medium">{stats.label} </span>
-            {stats.text}
-          </Prose>
-        ) : (
-          <Placeholder>Outcomes and measurements. See handover note C5.</Placeholder>
-        )}
-      </Block>
+          {SCAFFOLDING[section.heading]}
+        </Block>
+      ))}
 
       {/* ── Links ───────────────────────────────────────────────────────── */}
       <Block label="Links">
-        <ul className="flex flex-wrap gap-x-s5 gap-y-s2">
-          {project.links.map((link) => (
-            <li key={link.url}>
-              <TextLink
-                href={link.url}
-                external={!link.url.startsWith("/")}
-                className="text-small"
-              >
-                {link.label}
-              </TextLink>
-            </li>
-          ))}
-        </ul>
+        {/*
+          A project with no external links still gets the block, because "All
+          projects" is the way back out. The list itself is dropped rather than
+          rendered empty, so the back-link sits directly under the label.
+        */}
+        {project.links.length > 0 && (
+          <ul className="flex flex-wrap gap-x-s5 gap-y-s2">
+            {project.links.map((link) => (
+              <li key={link.url}>
+                <TextLink
+                  href={link.url}
+                  external={!link.url.startsWith("/")}
+                  className="text-small"
+                >
+                  {link.label}
+                </TextLink>
+              </li>
+            ))}
+          </ul>
+        )}
 
-        <p className="mt-s4">
+        <p className={project.links.length > 0 ? "mt-s4" : undefined}>
           <TextLink href="/projects" className="text-small">
             All projects
           </TextLink>
