@@ -62,7 +62,17 @@ export default function WorkExperience() {
               <ul className="mt-s2 flex flex-wrap gap-x-s5 gap-y-s1">
                 {role.links.map((link) => (
                   <li key={link.url}>
-                    <TextLink href={link.url} external className="text-small">
+                    {/*
+                      A role link can now point back into the site (SP Digital
+                      links to its own case study), so `external` is decided by
+                      the URL rather than assumed. Hardcoding it would open an
+                      internal route in a new tab.
+                    */}
+                    <TextLink
+                      href={link.url}
+                      external={!link.url.startsWith("/")}
+                      className="text-small"
+                    >
                       {link.label}
                     </TextLink>
                   </li>
