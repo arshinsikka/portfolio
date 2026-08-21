@@ -381,6 +381,82 @@ export const projects: Project[] = [
     ],
     hasDetailPage: false,
   },
+  {
+    slug: "socratic-digital-twin",
+    title: "Socratic Digital Twin",
+    role: "Developer",
+    dates: "2026 – Present",
+    tier: "standard",
+    group: "production",
+    summary:
+      "An AI tutor for dental students that is built to refuse to answer. It's for orthodontic clinical reasoning, where being handed the answer defeats the point, so the system asks questions back instead. That constraint drives everything: a multi-stage pipeline that decides what to ask next, retrieval over the faculty's own teaching material rather than the open web, and a review step where a clinician signs off on content before a student ever sees it. Paid work for a university dental faculty, currently in development.",
+    body: [],
+    tags: ["LangGraph", "RAG", "Postgres", "Clinical AI"],
+    links: [],
+    hasDetailPage: false,
+  },
+  {
+    slug: "echolens-pii",
+    title: "Echolens — PII Redaction Evaluation",
+    role: "Data Science Intern, SP Digital",
+    dates: "2026",
+    tier: "standard",
+    group: "production",
+    summary:
+      "A pipeline for measuring how well an automated system strips personal information out of customer call transcripts. Most of the work wasn't the measurement, it was deciding what counts: a receipt number isn't personal information, a partial email address probably isn't either, and those rules have to be written down and applied consistently before any score means anything. I scored it in a way that treats missing something as worse than being over-cautious, because those two errors are not equally bad here.",
+    body: [],
+    tags: ["PII", "Evaluation", "NLP"],
+    links: [],
+    hasDetailPage: false,
+  },
+  {
+    slug: "llm-evaluation-framework",
+    title: "LLM Evaluation Framework",
+    role: "Personal project",
+    dates: "2026",
+    tier: "standard",
+    group: "production",
+    summary:
+      "A tool for comparing language models on the same task and seeing what each one actually costs you in quality, money and speed. I ran it across three different kinds of work: summarising lectures, reasoning through business decisions, and ranking documents by relevance. The most useful thing it turned up was a measurement problem. The standard ways of scoring text similarity rate one model far worse than another purely because it wraps its answer in formatting, when both are ranking the documents equally well. For anything where the output has a structure, those metrics quietly mislead you, and you need one that measures the thing you actually care about.",
+    body: [],
+    tags: ["Evaluation", "Python", "Benchmarking"],
+    links: [
+      {
+        label: "GitHub",
+        url: "https://github.com/arshinsikka/llm-evaluation-framework",
+        kind: "github",
+      },
+    ],
+    hasDetailPage: false,
+  },
+  {
+    slug: "markbind",
+    title: "MarkBind — Open Source Contributions",
+    role: "Contributor",
+    dates: "2025",
+    tier: "minor",
+    group: "production",
+    summary:
+      "Contributions to MarkBind, an open-source documentation site generator maintained at NUS. I was selected for this on the strength of my performance in the software engineering course, and it was the first time I'd worked inside a codebase with an established review culture that I hadn't written any of.",
+    body: [],
+    tags: ["Open Source", "Java", "Documentation Tooling"],
+    links: [],
+    hasDetailPage: false,
+  },
+  {
+    slug: "singapore-society-simulation",
+    title: "Singapore Society Simulation",
+    role: "Researcher",
+    dates: "2026",
+    tier: "standard",
+    group: "research",
+    summary:
+      "Can AI agents grounded in real demographic data predict how a population reasons about a policy question? I built a simulation where each agent holds a demographic profile and argues from it, then compared what the group concluded against what real people said in public discussion. They diverged, substantially, and the more interesting result was that changing the demographic mix of the agents shifted the collective conclusion by a large margin. That means results from this kind of simulation depend heavily on who you put in the room, which is a caution for anyone treating synthetic populations as a substitute for asking people.",
+    body: [],
+    tags: ["LLM Agents", "Social Simulation", "Research"],
+    links: [],
+    hasDetailPage: false,
+  },
 ];
 
 export const featuredProjects = projects.filter((p) => p.tier === "featured");
