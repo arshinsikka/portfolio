@@ -24,18 +24,23 @@ export interface Paragraph {
   text: string;
 }
 
-/** Drives card size and whether the entry gets its own detail route. */
+/**
+ * Homepage eligibility, and nothing else. The homepage index takes `featured`
+ * entries first and then `standard`; `minor` can never reach it. Every project
+ * renders identically on `/projects` regardless of tier.
+ */
 export type ProjectTier = "featured" | "standard" | "minor";
 
 /**
  * Which headed group the entry sits under on the project index.
  *
- * Orthogonal to `tier`: `tier` says how much weight an entry carries and
- * whether it earns a detail route, `group` says what kind of thing it is. A
- * group with no members renders nothing at all — no heading, no gap — so the
- * page never shows an empty section while the content is being filled in.
+ * Orthogonal to `tier`: `tier` says whether an entry can reach the homepage,
+ * `group` says what kind of thing it is, and `hasDetailPage` decides whether it
+ * gets a route of its own — three separate questions. A group with no members
+ * renders nothing at all — no heading, no gap — so the page never shows an
+ * empty section while the content is being filled in.
  */
-export type ProjectGroup = "production" | "research" | "ventures";
+export type ProjectGroup = "production" | "research" | "ventures" | "earlier";
 
 export interface Accolade {
   text: string;

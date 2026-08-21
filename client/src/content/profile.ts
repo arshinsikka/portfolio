@@ -162,6 +162,7 @@ export const sectionCopy = {
       production: "Production systems",
       research: "Research",
       ventures: "Ventures",
+      earlier: "Earlier work",
     },
   },
   research: {

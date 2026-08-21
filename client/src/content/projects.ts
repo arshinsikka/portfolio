@@ -457,6 +457,90 @@ export const projects: Project[] = [
     links: [],
     hasDetailPage: false,
   },
+  {
+    slug: "fnb-trend-intelligence",
+    title: "Trend Intelligence for Singapore F&B",
+    role: "Co-founder",
+    dates: "2026 – Present",
+    tier: "standard",
+    group: "ventures",
+    summary:
+      "We started building a trend tracker for people deciding where to eat, and stopped when it became clear that consumers won't pay for that and Google already owns food discovery. So we moved to the other side of the counter, where the pain is sharper and there's an actual budget: restaurant operators trying to work out what to put on a menu. The idea is still unproven and I'd rather say so than pretend otherwise. We're running customer interviews now, and one objection has already killed a business model we liked, which is that you can't sell a monthly subscription into an industry where most operators never turn a profit.",
+    body: [],
+    tags: ["Market Research", "F&B", "Product Discovery"],
+    links: [],
+    hasDetailPage: false,
+  },
+  {
+    slug: "knocks",
+    title: "Knocks",
+    role: "Solo build",
+    dates: "2025",
+    tier: "standard",
+    group: "ventures",
+    summary:
+      "A card game my friends and I have played for years, which existed only as a physical deck, so it needed everyone in the same room. I built the online version. What I didn't expect was what happened afterwards: it spread by word of mouth to friends of friends I'd never met, and people kept playing it. Nothing about that was technically hard. It was the first time something I built reached people I hadn't told about it, and it's a very different feeling from a project that works on my laptop.",
+    body: [],
+    tags: ["Real-time", "Multiplayer", "WebSockets"],
+    links: [],
+    hasDetailPage: false,
+  },
+  {
+    slug: "sixer",
+    title: "Sixer",
+    role: "Solo build",
+    dates: "2025",
+    tier: "standard",
+    group: "ventures",
+    summary:
+      "A cricket draft game we used to run over WhatsApp, badly. Group chats are a terrible place to hold a game with rules, because someone always has to arbitrate, someone always misses a turn, and the state of play lives in whoever scrolled back furthest. So I moved it into something that actually holds the rules and keeps everyone in sync. Same lesson as Knocks, in a different shape: the interesting problem wasn't the game, it was that the medium people were using couldn't do the job.",
+    body: [],
+    tags: ["Real-time", "Multiplayer", "WebSockets"],
+    links: [],
+    hasDetailPage: false,
+  },
+  {
+    slug: "trackup",
+    title: "TrackUp",
+    role: "Team project",
+    dates: "2025",
+    tier: "minor",
+    group: "production",
+    summary:
+      "A desktop contact and event manager for founders and small business owners, built as a team software engineering project. The deliberate choice in it is that everything is driven by typed commands with a graphical view alongside, rather than the other way round. That's the opposite of what most contact tools do, and it's right for the specific person who lives in a terminal and finds clicking through forms slower than typing what they want.",
+    body: [],
+    tags: ["Java", "JavaFX", "CLI"],
+    links: [],
+    hasDetailPage: false,
+  },
+  {
+    slug: "chessphere",
+    title: "ChessPhere",
+    role: "Co-founder",
+    dates: "2020 – 2022",
+    tier: "minor",
+    group: "earlier",
+    summary:
+      "I've played competitive chess since I was young, and when the pandemic shut down every over-the-board tournament, the thing that disappeared wasn't the game. Online chess was fine. What disappeared was the community around it. So a few friends and I started running virtual tournaments and workshops, and we were drawing over a hundred players to each one. It never made money and it was never going to. What it taught me is that a small niche can matter enormously to the people inside it, and that's a reasonable thing to build for.",
+    body: [],
+    tags: ["Community", "Events", "Chess"],
+    links: [],
+    hasDetailPage: false,
+  },
+  {
+    slug: "donation-nation",
+    title: "Donation Nation",
+    role: "Co-founder",
+    dates: "2020 – 2022",
+    tier: "minor",
+    group: "earlier",
+    summary:
+      "This started with me giving away things from my own house to local NGOs during the pandemic. It worked, and it obviously didn't scale, because the bottleneck was one person with a car and a limited amount of stuff. So we built a platform to connect donors with communities that needed things, working through established NGOs and logistics partners rather than trying to move goods ourselves. The lesson I took from it is that the useful thing technology did here wasn't the donating, it was removing the coordination problem that made donating hard.",
+    body: [],
+    tags: ["Social Impact", "Platform", "NGO Partnerships"],
+    links: [],
+    hasDetailPage: false,
+  },
 ];
 
 export const featuredProjects = projects.filter((p) => p.tier === "featured");
@@ -468,7 +552,7 @@ export const standardProjects = projects.filter((p) => p.tier === "standard");
  * all" is a property of the content model rather than of one page. Heading
  * copy lives in `sectionCopy.projects.groups`, with every other heading.
  */
-export const projectGroups = (["production", "research", "ventures"] as const)
+export const projectGroups = (["production", "research", "ventures", "earlier"] as const)
   .map((group) => ({ group, projects: projects.filter((p) => p.group === group) }))
   .filter((g) => g.projects.length > 0);
 
