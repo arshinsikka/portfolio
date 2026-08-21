@@ -63,11 +63,10 @@ export const roles: Role[] = [
     title: "Co-Founder",
     company: "Lecture AI",
     location: "Singapore",
-    dates: "Mar 2025 – Present",
+    dates: "Jul 2025 – Mar 2026",
     description:
       "Built an end-to-end pipeline that converts lecture recordings into structured bilingual study notes in <15 minutes for <$1. Features Whisper transcription, slide-context RAG for correction, topic segmentation, and Mandarin translation. VIP@SoC finalist, backed by BLOCK71.",
     tags: ["AI", "NLP", "RAG", "Startup", "Product"],
-    isCurrent: true,
     projectSlug: "lecture-ai",
     links: [
       {

@@ -1,9 +1,7 @@
-import type { ReactNode } from "react";
 import { Redirect, useParams } from "wouter";
 import {
   Artifact,
   Block,
-  Placeholder,
   Prose,
   TagList,
   TextLink,
@@ -22,62 +20,14 @@ import NotFound from "@/pages/not-found";
  * can sit mid-argument. Only the links stay fixed after the sections, being
  * page furniture rather than copy.
  *
+ * Every section now carries real copy, so nothing on this page is a placeholder
+ * and no scaffolding survives here.
+ *
  * Only projects flagged `hasDetailPage` have a page. Any other known slug sends
  * the visitor back to the index rather than showing an empty shell. An unknown
  * slug renders the 404 page in place, leaving the bad URL in the address bar
  * so it stays visible rather than being silently rewritten.
  */
-
-/**
- * SCAFFOLDING — DELETE PER ENTRY AS THE COPY LANDS.
- *
- * Keyed by section heading. A `CaseStudySection` carries only real content,
- * which is right: a placeholder is not content, it is a note about content that
- * does not exist yet. Keeping these here rather than in the content file means
- * the day a section's copy is written, its `paragraphs` or `artifact` fill in
- * and its entry below is deleted — and nothing that ships ever had a
- * placeholder in the data.
- *
- * Renders last within a section, so a section can carry real copy and an
- * outstanding note at the same time (Key decisions does today).
- */
-const SCAFFOLDING: Record<string, ReactNode> = {
-  "The challenge": (
-    <Placeholder>
-      The problem this project set out to solve, in two or three sentences. See
-      handover note C1 — the opening sentence of the &ldquo;Key stats&rdquo;
-      paragraph is a candidate if you want it split out.
-    </Placeholder>
-  ),
-  "My role": (
-    <Placeholder>
-      What you personally owned versus what the team owned. See handover note
-      C2.
-    </Placeholder>
-  ),
-  "Key decisions": (
-    <div className="mt-s4">
-      <Placeholder>
-        Why each of those was chosen over the alternative — the tradeoff, not the
-        list. See handover note C3.
-      </Placeholder>
-    </div>
-  ),
-  // A section with a real `artifact` renders that instead of ever reaching
-  // here; this is the stand-in for the one that has not been drawn yet.
-  Architecture: (
-    <Artifact caption="Placeholder — see handover note C4">
-{`  ┌──────────────┐      ┌──────────────┐      ┌──────────────┐
-  │  PLACEHOLDER │─────▶│  PLACEHOLDER │─────▶│  PLACEHOLDER │
-  └──────────────┘      └──────────────┘      └──────────────┘
-
-  Replace with the real pipeline diagram or a representative code
-  excerpt. Monospace, plain text — it scrolls inside its own box, so
-  a wide diagram will not widen the page.`}
-    </Artifact>
-  ),
-};
-
 export default function ProjectDetail() {
   const { slug } = useParams<{ slug: string }>();
   const project = projectBySlug(slug);
@@ -111,15 +61,6 @@ export default function ProjectDetail() {
       {/* ── The case study, section by section ──────────────────────────── */}
       {project.sections?.map((section) => (
         <Block key={section.heading} label={section.heading}>
-          {/*
-            "My role" states the role itself above its copy. It comes from the
-            project record rather than from the section, which is why it is not
-            just another paragraph.
-          */}
-          {section.heading === "My role" && project.role && (
-            <p className="text-org font-medium text-ink">{project.role}</p>
-          )}
-
           {section.paragraphs.map((para, i) => (
             // Spacing hangs off the paragraph rather than a wrapper, so a
             // single-paragraph section renders exactly the bare <Prose> the
@@ -137,8 +78,6 @@ export default function ProjectDetail() {
               </Artifact>
             </div>
           )}
-
-          {SCAFFOLDING[section.heading]}
         </Block>
       ))}
 

@@ -106,9 +106,14 @@ bare title, date, and tags. See §4.
 
 ---
 
-## 2. Placeholders currently live on the site — 8 slots
+## 2. Placeholders currently live on the site — 4 slots
 
-All eight render with a dashed hairline and the literal word PLACEHOLDER.
+All four render with a dashed hairline and the literal word PLACEHOLDER.
+
+**The four Lecture AI case-study placeholders (C1–C4) are gone.** The case study
+was rewritten in full and every section now carries real copy, so the scaffolding
+that rendered them was deleted from `project-detail.tsx` along with them. Only
+the impact strip still has unfilled slots.
 
 ### Impact strip — 4 slots
 
@@ -139,16 +144,14 @@ reading as *60% of responses are unsafe*, the opposite of the claim. Same failur
 for `~40–50%`. The label has to be written, and it has to carry the direction of
 the change.
 
-### Lecture AI case study — 4 slots
+### Lecture AI case study — RESOLVED
 
-**File:** `client/src/pages/project-detail.tsx` · **Renders:** `/projects/lecture-ai`
-
-| ID | Section | What it needs |
-|---|---|---|
-| **C1** | The Challenge | The problem the project set out to solve, 2–3 sentences. The opening sentence of the existing "Key stats:" paragraph ("72% of surveyed NUS students rewatch lectures due to missed content.") is a candidate to split out — it is currently filed under Results but reads as the challenge. |
-| **C2** | My Role | What you owned versus what the team owned. The record supplies only `role: "Co-Founder"`, which is a title, not a scope. |
-| **C3** | Key Decisions | The existing "Built with:" paragraph lists Whisper, Gemini 2.0 Flash, slide-context RAG, FastAPI, python-docx — a stack, not decisions. This needs the tradeoff behind each: why Gemini Flash, why no vector DB, why python-docx. |
-| **C4** | Architecture | A plain-text pipeline diagram or a representative code excerpt. Renders in the `Artifact` component: monospace, hairline border, scrolls inside its own box. Needs no image. |
+C1–C4 no longer exist. The case study was rewritten as six sections — Overview,
+Who did what, The problem with the obvious build, The decisions I'd defend, What
+we got wrong, Where it landed — all carrying real copy. The Architecture section
+was removed rather than kept as an empty heading, since it only ever held the C4
+placeholder. `CaseStudySection.artifact` remains available if a real diagram is
+ever drawn.
 
 ---
 
@@ -159,7 +162,7 @@ the change.
 | `/` | 3 of 5 roles, 3 of 8 projects, 2 of 2 research | Titles, dates, tags only — no descriptions, by design |
 | `/work` | 5 of 5 roles | Full descriptions + links |
 | `/projects` | 8 of 8, in 3 tiers | Summaries + accolades + links |
-| `/projects/lecture-ai` | 1 project | Case study, 6 sections, 4 placeholders |
+| `/projects/lecture-ai` | 1 project | Case study, 6 sections, no placeholders |
 | `/research` | 2 of 2 | Full descriptions |
 | `/about` | About, Education, Quick Highlights, Leadership (5), Contact | Full |
 | 404 | — | Heading, one line, homepage link |
@@ -208,9 +211,9 @@ the change.
 
 **Broken asset references** (these render as live links today)
 
-- `/assets/Lecture_AI_Pitch_Deck.pdf` — referenced from `projects.ts` as a
-  "Pitch Deck" link, shown on `/projects` and the Lecture AI case study.
-  **The file does not exist in `client/public/assets/`.** It 404s.
+- ~~`/assets/Lecture_AI_Pitch_Deck.pdf`~~ — **RESOLVED.** The link was deleted
+  from `projects.ts`. The file never existed (only an iCloud stub, see
+  `AUDIT.md` §8), so the link is gone rather than the file restored.
 - `/og-image.png` — referenced by `og:image` and `twitter:image` in
   `index.html`. **Does not exist.** Every link shared to LinkedIn, Slack, or
   WhatsApp currently previews with no image.
@@ -244,7 +247,8 @@ one good page you have.
 
 Not content, but they sit on content surfaces and will bite during the rewrite.
 
-1. **`Lecture_AI_Pitch_Deck.pdf` is missing** — live 404 (see §4).
+1. ~~**`Lecture_AI_Pitch_Deck.pdf` is missing**~~ — **RESOLVED.** The link was
+   removed from `projects.ts`; no dead link remains.
 2. **`og-image.png` is missing** — no social preview on any share (see §4).
 3. **Domain is unresolved.** `profile.ts` says `arshinsikka.com` does not resolve
    and points `SITE_URL` at Vercel; `index.html` hardcodes `arshinsikka.com` in
@@ -281,13 +285,11 @@ once. Ordered by what that person hits, weighted by how bad the current state is
 
 **Tier 2 — the one click they make**
 
-4. **Lecture AI case study, C1–C4.** It is the only detail page, linked from both
-   `/` and `/projects`, and the site's strongest asset. Four placeholders on it.
-   Do **C3 (Key Decisions)** first — a stack list is what every portfolio has;
-   the tradeoff reasoning is what distinguishes one.
-5. **SP Digital role description.** The current role, and the one thing carrying
-   the accent mark on both `/` and `/work`. It is the same 32 words as a 2024
-   internship. It should be the deepest record you have.
+4. ~~**Lecture AI case study, C1–C4.**~~ — **RESOLVED.** Rewritten in full; no
+   placeholders remain on any detail page.
+5. ~~**SP Digital role description.**~~ — **RESOLVED.** The role now carries a
+   `body`, and links through to the SARA case study at
+   `/projects/sara-guardrails`.
 
 **Tier 3 — depth where it is claimed**
 
