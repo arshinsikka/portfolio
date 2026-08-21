@@ -230,6 +230,138 @@ export const projects: Project[] = [
     hasDetailPage: true,
   },
   {
+    slug: "ofi-regime-tradability",
+    title: "Does a Known Market Signal Survive the Cost of Trading It?",
+    role: "Independent study",
+    dates: "Aug 2026",
+    tier: "featured",
+    group: "research",
+    summary:
+      "I wrote down what I was going to do before I looked at any data. That's the only reason I caught the most interesting result I found being an illusion.",
+    body: [],
+    sections: [
+      {
+        heading: "Overview",
+        paragraphs: [
+          {
+            text: "There's a well-known signal in financial markets: if there are more buy orders than sell orders sitting on an exchange right now, the price tends to tick up in the next few seconds. That it predicts is settled. Whether it predicts well enough to make money after you pay to trade on it is a different question, and I wanted to test it properly.",
+          },
+          {
+            text: "I ran the study on ten days of order book data from one cryptocurrency market. The answer is no. The signal is real and it does not survive the cost of acting on it.",
+          },
+          {
+            text: "That's a boring headline. The interesting part is what happened in the middle.",
+          },
+        ],
+      },
+      {
+        heading: "Why this kind of work is easy to get wrong",
+        paragraphs: [
+          {
+            text: "Financial data will hand you a profitable-looking result if you keep asking. Try enough time horizons, enough ways of slicing the market into conditions, enough assumptions about trading costs, and eventually something clears. Every choice you make after seeing the data is a chance to nudge the result in the direction you were hoping for, usually without noticing you're doing it.",
+          },
+          {
+            text: "I find this genuinely difficult to guard against, because it doesn't feel like cheating. It feels like exploring.",
+          },
+          {
+            text: "So the first thing I wrote wasn't code. It was the protocol: which time horizons I'd test, how I'd define market conditions, how I'd calculate trading costs, exactly what would count as the signal being tradable, and how I'd test whether any result was statistically real. I committed that document as the very first thing in the repository, before a single line of analysis existed, so every later piece of work sits underneath it in the history and anyone can check the order.",
+          },
+          {
+            text: "The part that actually matters: I wrote down all four possible outcomes in advance and declared each of them valid, including \"there's no effect here\" and \"there isn't enough data to tell.\" Committing to a method only works if you've committed to publishing whatever it produces.",
+          },
+        ],
+      },
+      {
+        heading: "Decisions I'd defend",
+        paragraphs: [
+          {
+            text: "Rebuilding the data, then checking it against myself. The exchange doesn't publish the state of the order book. It publishes one snapshot and then a continuous stream of changes, so the actual state at any moment has to be rebuilt by replaying every update in order. One misapplied update silently corrupts everything after it, and there's no correct answer sitting anywhere to compare against. So I wrote a second, independent version of the rebuild and checked the two against each other at sampled points. Reimplementing something you've already built feels like wasted effort right up until it disagrees with itself.",
+          },
+          {
+            text: "Reading the final test data exactly once. The dataset was split into a portion for building, a portion for tuning, and a portion held back. That last portion was opened once, at the end, and every parameter applied to it was checked to be identical to values frozen before it was touched. Not \"I was careful about it.\" Verified.",
+          },
+          {
+            text: "Assuming the worst about costs. I assumed I'd pay the full gap between buy and sell prices on both entry and exit, with no favourable treatment on order queues, and I ran the whole analysis across four different fee levels rather than picking one. Picking a single fee would have made the conclusion an artifact of that choice.",
+          },
+          {
+            text: "Keeping the simpler model. I tested a more sophisticated version that uses more layers of the order book. It lost to the simple one at every horizon. The protocol said the simpler model stays unless the complex one beats it, so it stayed, and the fancier version is recorded as decorative.",
+          },
+        ],
+      },
+      {
+        heading: "The result that wasn't real",
+        paragraphs: [
+          {
+            text: "Partway through, I found what I'd set out to look for. In about a third of the tested cases, the signal's profitability appeared to diverge depending on market conditions. That's the whole thesis of the study, sitting right there.",
+          },
+          {
+            text: "I went looking for the mechanism, expecting to explain something about how markets work. What I found was arithmetic.",
+          },
+          {
+            text: "The measure I was ranking by is roughly the average profit minus the cost, divided by how volatile that period was. On this instrument the buy-sell gap is the smallest possible increment almost all of the time, so cost barely changes between conditions. And at real fees, that cost is between eighty and thirteen hundred times larger than the average profit. When you subtract a large near-constant number from a tiny one, the top of that fraction is nearly the same everywhere, and what you're left with is a ranking by volatility wearing the costume of a ranking by profitability.",
+          },
+          {
+            text: "The giveaway is that the whole effect disappears at a hypothetical zero-fee level, where the cost term nearly vanishes.",
+          },
+          {
+            text: "I recorded it as an artifact rather than a finding. It would have been the most impressive-looking thing in the study, and it would have been wrong.",
+          },
+        ],
+      },
+      {
+        heading: "What I actually found",
+        paragraphs: [
+          {
+            text: "The signal predicts. That part holds up cleanly, and the strength of it fades as you look further ahead, exactly as you'd expect.",
+          },
+          {
+            text: "It isn't tradable. The largest profit the model predicts anywhere in the held-out data is smaller than the cheapest realistic cost of making the trade. The rule I'd committed to, which was to trade only when expected profit exceeds cost, never fired once at any real fee level. This isn't a near miss where a better model closes the gap. The two distributions don't overlap.",
+          },
+          {
+            text: "The economic theory came out backwards. The standard model says this signal should work best in thin, jumpy markets. Measured, it works worst there, ranking last of four conditions at every horizon. Two separate parts of my analysis agreed on this independently, which is the only reason I trust it.",
+          },
+        ],
+      },
+      {
+        heading: "What this doesn't prove",
+        paragraphs: [
+          {
+            text: "Ten days, one asset, in a fairly quiet stretch of market. Nothing here says anything about stressed markets, other instruments, or other venues.",
+          },
+          {
+            text: "The data is snapshots roughly ten times a second, not every individual event, so this is a medium-frequency study and I've drawn no high-frequency conclusions from it.",
+          },
+          {
+            text: "The market conditions I defined turned out to flip every few seconds, which makes them a short-lived state rather than a regime in the economic sense my own framing implied. That gap between what I measured and what I said I was measuring is real and I haven't resolved it.",
+          },
+          {
+            text: "I wrote all of that into the repository myself. A study that only lists what it proves is doing half the job, and the limitations section took longer to write than most of the analysis.",
+          },
+        ],
+      },
+      {
+        heading: "Where it landed",
+        paragraphs: [
+          {
+            text: "A negative result, a contradicted hypothesis, and a striking finding I had to throw away. None of that is what I hoped for when I started.",
+          },
+          {
+            text: "What I'd point at is the order of operations. The protocol existed before the data did, which meant when the exciting result showed up I had no room to talk myself into it. I don't think I'd have caught it otherwise. It looked exactly like what I wanted to see.",
+          },
+        ],
+      },
+    ],
+    tags: ["Market Microstructure", "Pre-registration", "Statistics", "Python"],
+    links: [
+      {
+        label: "GitHub",
+        url: "https://github.com/arshinsikka/ofi-regime-tradability",
+        kind: "github",
+      },
+    ],
+    hasDetailPage: true,
+  },
+  {
     slug: "ai-architecture-strategy-engine",
     title: "AI Architecture Strategy Engine",
     role: "Developer",
