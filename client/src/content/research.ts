@@ -2,15 +2,6 @@ import type { ResearchItem } from "./types";
 
 export const research: ResearchItem[] = [
   {
-    slug: "nus-cybersecurity-research-assistant",
-    title: "Research Assistant (Cybersecurity)",
-    organization: "Dr. Ming, NUS",
-    dates: "Feb 2025 – Mar 2025",
-    description:
-      "Researched LLM-driven cybersecurity techniques using Graph Neural Networks (GNNs) and First-Order Logic (FOL) to enhance causal graph extraction and anomaly detection. Designed invariant extraction pipelines to improve log interpretation.",
-    tags: ["AI Security", "LLMs", "GNNs", "FOL", "Log Analysis"],
-  },
-  {
     slug: "medanta-telemedicine-research",
     title: "Research Intern & Author",
     organization: "Medanta Hospital, Gurugram",
@@ -20,3 +11,23 @@ export const research: ResearchItem[] = [
     tags: ["Healthcare", "UX Research", "Writing", "Telemedicine"],
   },
 ];
+
+/**
+ * Which research the homepage shows, named one slug at a time.
+ *
+ * Deliberately *not* derived from `research` by recency: what belongs on the
+ * front page is an editorial call about what represents the work best, and
+ * recency kept answering it by accident. Adding a slug here is the whole
+ * gesture; the record itself stays defined once, above.
+ *
+ * A slug with no matching record is dropped rather than crashing the page, and
+ * an empty list means the homepage renders no research section at all — no
+ * heading, no rail label, no hairline. That is the same property `projectGroups`
+ * gives an empty project group, and it lives here for the same reason: it
+ * belongs to the content model, not to whichever page happens to read it.
+ */
+const HOME_RESEARCH_SLUGS: string[] = [];
+
+export const homeResearch = HOME_RESEARCH_SLUGS.map((slug) =>
+  research.find((r) => r.slug === slug),
+).filter((item): item is ResearchItem => item !== undefined);

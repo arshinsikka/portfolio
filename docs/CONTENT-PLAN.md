@@ -49,14 +49,13 @@ Lecture AI's `body[0]` is a **verbatim duplicate** of `summary`. The case study
 uses one of them and skips the other; if you rewrite, they can diverge or the
 duplicate can be dropped.
 
-### Research — `research.ts` (2 records)
+### Research — `research.ts` (1 record)
 
 | Organisation | Title | Description | Tags | Links |
 |---|---|---|---|---|
-| Dr. Ming, NUS | Research Assistant (Cybersecurity) | 29w / 238c | 5 | **0** |
 | Medanta Hospital, Gurugram | Research Intern & Author | 28w / 214c | 4 | **0** |
 
-Two records is the whole section. The Medanta entry names an authored paper —
+One record is the whole section. The Medanta entry names an authored paper —
 *"The Future of Telemedicine in India"* — with **no link to it**. A peer-reviewed
 publication that cannot be clicked is the single largest unrealised credibility
 item in the content set.

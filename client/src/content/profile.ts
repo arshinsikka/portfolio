@@ -71,7 +71,7 @@ export const highlights: Array<{ icon: HighlightIcon; text: string }> = [
   { icon: "globe", text: "Based in Singapore & India" },
   {
     icon: "flask",
-    text: "Research: LLMs, Cybersecurity, Human-AI Interfaces",
+    text: "Research: LLMs, Human-AI Interfaces",
   },
   {
     icon: "rocket",
@@ -156,7 +156,7 @@ export const sectionCopy = {
   projects: {
     heading: "Projects",
     subtitle:
-      "From AI pipelines to open-source contributions and medical device design",
+      "Things I've built, studies I've run, and ventures I've tried to get off the ground.",
     /** Keyed by `ProjectGroup`. A group with no records never renders. */
     groups: {
       production: "Production systems",
@@ -167,7 +167,7 @@ export const sectionCopy = {
   research: {
     heading: "Research Experience",
     subtitle:
-      "Academic and clinical research contributions across cybersecurity, AI systems, and healthcare technology",
+      "Academic and clinical research contributions across AI systems and healthcare technology",
   },
   leadership: {
     heading: "Leadership & Involvement",

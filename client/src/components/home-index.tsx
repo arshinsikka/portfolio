@@ -1,7 +1,7 @@
 import { Block, IndexRow, StatBand, TextLink } from "@/components/primitives";
 import { roles } from "@/content/roles";
 import { featuredProjects, standardProjects, projectBySlug } from "@/content/projects";
-import { research } from "@/content/research";
+import { homeResearch } from "@/content/research";
 import { impact } from "@/content/impact";
 import { sectionCopy } from "@/content/profile";
 
@@ -10,14 +10,15 @@ import { sectionCopy } from "@/content/profile";
  * owns it. Showing everything here is what made /work redundant: all five roles
  * were on the front page, so the section it links to had nothing further to say.
  *
- * Selection is by recency, taking the order the content files already declare.
- * Projects and research are under their caps already — the project index shows
- * the featured and standard tiers only, and there are just two research records
- * — so in practice only the role list is actually truncated.
+ * Roles and projects are selected by recency, taking the order the content files
+ * already declare; projects are under their cap already, so in practice only the
+ * role list is actually truncated. Research is the exception: it is named record
+ * by record in `homeResearch` rather than skimmed off the top, because which
+ * research represents the work is an editorial call and recency kept answering
+ * it by accident.
  */
 const MAX_ROLES = 3;
 const MAX_PROJECTS = 3;
-const MAX_RESEARCH = 2;
 
 /** Only link a row where a destination actually exists. */
 const detailHref = (slug?: string) =>
@@ -93,20 +94,29 @@ export default function HomeIndex() {
         <MoreLink href="/projects">All projects</MoreLink>
       </Block>
 
-      <Block label={sectionCopy.research.heading} labelHref="/research">
-        <ul>
-          {research.slice(0, MAX_RESEARCH).map((item) => (
-            <IndexRow
-              key={item.slug}
-              primary={item.organization}
-              secondary={item.title}
-              date={item.dates}
-              tags={item.tags}
-            />
-          ))}
-        </ul>
-        <MoreLink href="/research">All research experience</MoreLink>
-      </Block>
+      {/*
+        No selected research means no section — not an empty one. `Block` draws
+        the hairline and rail label itself, so rendering it with nothing inside
+        would leave a labelled void where the section used to be. The list is
+        already filtered in the content file; this only declines to draw the
+        furniture around an empty result.
+      */}
+      {homeResearch.length > 0 && (
+        <Block label={sectionCopy.research.heading} labelHref="/research">
+          <ul>
+            {homeResearch.map((item) => (
+              <IndexRow
+                key={item.slug}
+                primary={item.organization}
+                secondary={item.title}
+                date={item.dates}
+                tags={item.tags}
+              />
+            ))}
+          </ul>
+          <MoreLink href="/research">All research experience</MoreLink>
+        </Block>
+      )}
     </>
   );
 }
