@@ -11,8 +11,13 @@ export default function Home() {
   return (
     <>
       <HeroSection />
-      <LookingFor />
       <HomeIndex />
+      {/*
+        Last, immediately above the footer: the availability note is the closing
+        ask, not the opening one. It sat second, which put a request in front of
+        any evidence for it.
+      */}
+      <LookingFor />
     </>
   );
 }

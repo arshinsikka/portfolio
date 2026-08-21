@@ -301,48 +301,6 @@ export function IndexRow({
   );
 }
 
-/* ─── Impact strip ────────────────────────────────────────────────────────────
-   Large numerals against small mono labels, in a horizontal band. The highest
-   contrast available without photography: the figure carries at a glance, the
-   label only has to be legible once the eye has already stopped.
-   ─────────────────────────────────────────────────────────────────────────── */
-
-export interface Stat {
-  value: string;
-  label: string;
-  /** Renders as an obvious blank so unfilled slots cannot ship unnoticed. */
-  placeholder?: boolean;
-}
-
-export function StatBand({ stats }: { stats: Stat[] }) {
-  return (
-    <ul className="grid grid-cols-2 gap-x-s5 gap-y-s5 md:grid-cols-4">
-      {stats.map((s) => (
-        <li key={s.label}>
-          <p
-            className={cn(
-              "font-display text-stat",
-              s.placeholder
-                ? "border-b border-dashed border-rule-strong text-rule-strong"
-                : "text-ink",
-            )}
-          >
-            {s.value}
-          </p>
-          <p
-            className={cn(
-              "mt-s2 font-mono text-label uppercase",
-              s.placeholder ? "text-rule-strong" : "text-ink-muted",
-            )}
-          >
-            {s.label}
-          </p>
-        </li>
-      ))}
-    </ul>
-  );
-}
-
 /* ─── Technical artifact ──────────────────────────────────────────────────────
    A code block or architecture diagram. Hairline border, mono type, a mono
    caption rule beneath. Scrolls inside itself so a wide diagram never widens
@@ -367,21 +325,6 @@ export function Artifact({
         </figcaption>
       )}
     </figure>
-  );
-}
-
-/* ─── Placeholder ─────────────────────────────────────────────────────────────
-   A slot whose content has not been written. Deliberately conspicuous: dashed
-   hairline, mono, and the word PLACEHOLDER, so none of these reach production
-   by being quietly forgettable.
-   ─────────────────────────────────────────────────────────────────────────── */
-
-export function Placeholder({ children }: { children: ReactNode }) {
-  return (
-    <p className="max-w-measure border border-dashed border-rule-strong px-s4 py-s3 font-mono text-meta text-ink-muted">
-      <span className="text-rule-strong">PLACEHOLDER — </span>
-      {children}
-    </p>
   );
 }
 

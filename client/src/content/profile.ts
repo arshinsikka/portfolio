@@ -26,7 +26,7 @@ export const hero = {
   imageSrc: "/assets/arshin-profile.webp",
   imageAlt: "Arshin Sikka",
   tagline:
-    "Building AI products — from BLOCK71-backed startup to enterprise LLM systems",
+    "I build AI systems, and I try hard to find out whether they actually work.",
   intro:
     "Final-year CS student at NUS. Currently at Garuda Robotics through NUS Overseas Colleges, building agentic systems for drone operations. Previously: guardrails and evaluation for a production LLM system at SP Digital, retrieval at KPMG, and co-founder of Lecture AI.",
   githubUrl: "https://github.com/arshinsikka",
@@ -41,8 +41,9 @@ export const lookingFor = {
 export const about = {
   heading: "About Me",
   paragraphs: [
-    "I'm a CS student at NUS specializing in AI, currently building production LLM systems at SP Digital. I co-founded Lecture AI (BLOCK71-backed) and previously shipped agentic RAG systems at KPMG.",
-    "I approach technology through a product lens — what problem does this solve, and for whom? My minor in Psychology keeps me grounded in how users actually think and behave.",
+    "I'm in my final year of Computer Science at NUS, specialising in AI. Right now I'm at Garuda Robotics through NUS Overseas Colleges, working on the layer that decides whether an AI system is allowed to act on what it just decided.",
+    "Most of what I've worked on comes back to the same question in different clothes: how do you know whether this thing actually works? Guardrails, evaluation pipelines, refusals, pre-registered studies. I've found that the interesting problem is rarely how to build something. It's working out where AI genuinely helps and where it's an expensive way to do something simpler.",
+    "I also teach. I've been a teaching assistant for Digital and AI Ethics at NUS, and for two summer programmes. Explaining something to someone who hasn't seen it before is the fastest way to find out whether you understand it yourself.",
   ],
 };
 
@@ -54,35 +55,6 @@ export const education = {
     "Teaching Assistant, Digital & AI Ethics (IS1108) — Aug 2025 – Dec 2025. Supported student learning on ethical implications of AI, graded assignments, and facilitated seminar discussions on responsible AI development.",
   ],
 };
-
-/** `icon` maps to a lucide component in about-me.tsx. */
-export type HighlightIcon =
-  | "graduation"
-  | "globe"
-  | "flask"
-  | "rocket"
-  | "bot"
-  | "trophy";
-
-export const highlightsHeading = "Quick Highlights";
-
-export const highlights: Array<{ icon: HighlightIcon; text: string }> = [
-  { icon: "graduation", text: "Computer Science @ NUS, Minor in Psychology" },
-  { icon: "globe", text: "Based in Singapore & India" },
-  {
-    icon: "flask",
-    text: "Research: LLMs, Human-AI Interfaces",
-  },
-  {
-    icon: "rocket",
-    text: "Co-founded Lecture AI (BLOCK71-backed, VIP@SoC Finalist)",
-  },
-  { icon: "bot", text: "Built AI systems at SP Digital, KPMG, AlygnAI" },
-  {
-    icon: "trophy",
-    text: "International Chess Player with 10+ Years Competitive Experience",
-  },
-];
 
 export const contact = {
   heading: "Let's Connect",
@@ -155,6 +127,13 @@ export const sectionCopy = {
   },
   projects: {
     heading: "Projects",
+    /**
+     * The homepage's label for the same records. It is a different promise —
+     * three hand-weighted entries rather than the full index — so it gets its
+     * own string instead of reusing `heading`, which also titles /projects and
+     * that page's metadata.
+     */
+    homeHeading: "Selected work",
     subtitle:
       "Things I've built, studies I've run, and ventures I've tried to get off the ground.",
     /** Keyed by `ProjectGroup`. A group with no records never renders. */

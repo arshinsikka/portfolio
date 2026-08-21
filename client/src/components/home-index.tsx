@@ -1,8 +1,7 @@
-import { Block, IndexRow, StatBand, TextLink } from "@/components/primitives";
+import { Block, IndexRow, Prose, TextLink } from "@/components/primitives";
 import { roles } from "@/content/roles";
 import { featuredProjects, standardProjects, projectBySlug } from "@/content/projects";
 import { homeResearch } from "@/content/research";
-import { impact } from "@/content/impact";
 import { sectionCopy } from "@/content/profile";
 
 /**
@@ -57,8 +56,27 @@ function MoreLink({ href, children }: { href: string; children: string }) {
 export default function HomeIndex() {
   return (
     <>
-      <Block>
-        <StatBand stats={impact} />
+      {/*
+        Not an index row. `/projects` already lists these with their role, dates
+        and tags; repeating that here made the homepage a worse copy of a page
+        one click away. What the index cannot show is the summary line, which is
+        the most persuasive copy on the site, so the homepage spends its space on
+        exactly that and drops every other field.
+      */}
+      <Block label={sectionCopy.projects.homeHeading} labelHref="/projects">
+        <ul className="space-y-s5">
+          {indexProjects.map((project) => (
+            <li key={project.slug}>
+              <h3 className="text-org font-medium">
+                <TextLink href={`/projects/${project.slug}`}>
+                  {project.title}
+                </TextLink>
+              </h3>
+              <Prose className="mt-s2">{project.summary}</Prose>
+            </li>
+          ))}
+        </ul>
+        <MoreLink href="/projects">All projects</MoreLink>
       </Block>
 
       <Block label={sectionCopy.work.heading} labelHref="/work">
@@ -76,22 +94,6 @@ export default function HomeIndex() {
           ))}
         </ul>
         <MoreLink href="/work">All work experience</MoreLink>
-      </Block>
-
-      <Block label={sectionCopy.projects.heading} labelHref="/projects">
-        <ul>
-          {indexProjects.map((project) => (
-            <IndexRow
-              key={project.slug}
-              primary={project.title}
-              secondary={project.role}
-              href={detailHref(project.slug)}
-              date={project.dates}
-              tags={project.tags}
-            />
-          ))}
-        </ul>
-        <MoreLink href="/projects">All projects</MoreLink>
       </Block>
 
       {/*

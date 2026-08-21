@@ -21,7 +21,6 @@ export default {
         h3: ["1rem", { lineHeight: "1.4", letterSpacing: "-0.005em" }],
         h2: ["1.375rem", { lineHeight: "1.25", letterSpacing: "-0.01em" }],
         org: ["1.125rem", { lineHeight: "1.3", letterSpacing: "-0.006em" }],
-        stat: ["clamp(2.25rem, 3.4vw, 3rem)", { lineHeight: "1", letterSpacing: "-0.03em" }],
         lead: ["clamp(1.25rem, 2.4vw, 1.75rem)", { lineHeight: "1.28", letterSpacing: "-0.011em" }],
         display: ["clamp(2.5rem, 6.5vw, 4rem)", { lineHeight: "1.02", letterSpacing: "-0.022em" }],
       },
