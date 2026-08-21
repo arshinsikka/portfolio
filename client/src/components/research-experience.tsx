@@ -1,6 +1,16 @@
 import { Block, IndexRow, Prose, TextLink } from "@/components/primitives";
 import { research } from "@/content/research";
 import { sectionCopy } from "@/content/profile";
+import { projectBySlug } from "@/content/projects";
+
+/**
+ * Only link a row where a destination actually exists — identical to the helper
+ * `/work` uses. An entry can name a `projectSlug` whose project has no detail
+ * page yet; that records the relationship without promising the reader a page
+ * that would only bounce them back to the index.
+ */
+const detailHref = (slug?: string) =>
+  slug && projectBySlug(slug)?.hasDetailPage ? `/projects/${slug}` : undefined;
 
 export default function ResearchExperience() {
   return (
@@ -19,6 +29,7 @@ export default function ResearchExperience() {
             key={item.slug}
             primary={item.organization}
             secondary={item.title}
+            href={detailHref(item.projectSlug)}
             date={item.dates}
             tags={item.tags}
           >

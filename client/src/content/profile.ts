@@ -168,7 +168,7 @@ export const sectionCopy = {
   research: {
     heading: "Research Experience",
     subtitle:
-      "Academic and clinical research contributions across AI systems and healthcare technology",
+      "Studies I've run, across markets, social systems, and healthcare.",
   },
   leadership: {
     heading: "Leadership & Involvement",

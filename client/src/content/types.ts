@@ -123,6 +123,13 @@ export interface ResearchItem {
   description: string;
   tags: string[];
   links?: ContentLink[];
+  /**
+   * Cross-reference to the canonical Project record, where one exists — the
+   * same field `Role` carries, for the same reason: the study is written up
+   * once, on the project, and referenced from here rather than restated.
+   * Renders a link only where that project actually has a detail page.
+   */
+  projectSlug?: string;
 }
 
 export interface LeadershipItem {
