@@ -63,7 +63,7 @@ export default function Navbar() {
   const [location]                  = useLocation();
   const [isOpen, setIsOpen]         = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const mobileMenuRef               = useRef<HTMLDivElement>(null);
+  const navRef                      = useRef<HTMLElement>(null);
 
   // ── Dark mode init ──────────────────────────────────────────────────────────
   // The blocking script in index.html has already resolved the theme and set the
@@ -82,10 +82,16 @@ export default function Navbar() {
   };
 
   // ── Close mobile menu on outside click ─────────────────────────────────────
+  // The ref must cover the whole nav, including the dropdown panel. It used to
+  // cover only the mobile control cluster (theme toggle + burger), which put the
+  // menu links *outside* it: mousedown on a link counted as an outside click,
+  // unmounted the panel, and the anchor was gone before the browser could
+  // dispatch click — so the tap did nothing. mousedown fires before click, and a
+  // click is only dispatched if the element survives from press to release.
   useEffect(() => {
     if (!isOpen) return;
     const handler = (e: MouseEvent) => {
-      if (mobileMenuRef.current && !mobileMenuRef.current.contains(e.target as Node)) {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
         setIsOpen(false);
       }
     };
@@ -101,7 +107,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className="fixed inset-x-0 top-0 z-50 border-b border-rule bg-paper">
+    <nav ref={navRef} className="fixed inset-x-0 top-0 z-50 border-b border-rule bg-paper">
       <div className="mx-auto max-w-page px-gutter">
         <div className="flex h-[var(--nav-row-h)] items-center justify-between">
 
@@ -130,7 +136,7 @@ export default function Navbar() {
           </div>
 
           {/* Mobile controls */}
-          <div className="flex items-center gap-s2 md:hidden" ref={mobileMenuRef}>
+          <div className="flex items-center gap-s2 md:hidden">
             <ThemeToggle dark={isDarkMode} onToggle={toggleDark} />
             <button
               onClick={() => setIsOpen((o) => !o)}
