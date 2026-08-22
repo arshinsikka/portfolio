@@ -116,7 +116,21 @@ export const roles: Role[] = [
     location: "Remote (US)",
     dates: "Jun 2025 – Aug 2025",
     description:
-      "Led migration from a Bubble prototype to a production FastAPI backend with JWT, refresh tokens, bcrypt, and 2FA. Compared two ways of adapting a language model to the company's domain — fine-tuning it on their data versus retrieving from their documents at query time — and set out the tradeoff behind the founding team's architecture decision.",
+      "A remote internship with a Bay Area startup, run alongside a full-time one in Singapore. Same summer, two jobs.",
+    body: [
+      {
+        text: "I ran this alongside KPMG. Same summer, one in person and full time, this one remote. I don't recommend it, but I wanted it badly enough to try.",
+      },
+      {
+        text: "The reason was specific. I'd read a lot about how Bay Area startups work and I wanted to find out whether the version in my head matched the real thing. So I spent that spring applying to American startups from Singapore, which is a slower and more discouraging process than it sounds, and eventually got one.",
+      },
+      {
+        text: "What I found was mostly what I'd hoped for. The team was small and moved quickly, and nobody had time to hand me a scoped task and check on it. I ended up owning a migration from a prototype built on a no-code tool to a real backend, start to finish. That's more ownership than I'd have got anywhere with more people in it, and it's the thing I'd point at from that summer. I also compared two ways of adapting a language model to their domain, fine-tuning it on their data against retrieving from their documents at query time, and wrote up the tradeoff for the founding team's architecture decision.",
+      },
+      {
+        text: "The double summer was probably one summer too many. It was also the only way I was going to find out what I wanted to know.",
+      },
+    ],
     tags: ["FastAPI", "Auth", "LLMs", "Startup"],
   },
   {
