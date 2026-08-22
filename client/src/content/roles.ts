@@ -8,13 +8,13 @@ export const roles: Role[] = [
     location: "Singapore",
     dates: "Jul 2026 – Present",
     description:
-      "Building an AI tool for drone operations end to end. A pilot asks for something in plain English and the system works out what they mean, checks whether they're allowed to do it, and either does it or refuses.",
+      "Building an AI tool for drone operations end to end. A pilot asks for a flight in plain English and gets an answer in seconds. Before this it took someone cross-checking five screens by hand.",
     body: [
       {
-        text: "I own this one end to end: the app a pilot uses, everything running behind it, and the part that decides whether a request is allowed to happen at all. A pilot types a question in plain English, a language model works out what they're asking for, and the system either does it or refuses. Before this, approving a single flight meant a person cross-checking five different screens by hand.",
+        text: "I own this one end to end: the app the pilot uses, the services behind it, and the checks that decide whether a request goes through at all.",
       },
       {
-        text: "The interesting part has been working out where a refusal has to live when the thing on the other end is hardware and there's no undo. I've written that up properly as a case study.",
+        text: "Most of the work has gone into those checks, and where they belong given the thing on the other end is a drone rather than a document. That's written up as a case study.",
       },
     ],
     tags: ["Agentic AI", "LLMs", "Computer Vision", "LangGraph", "FastAPI"],
@@ -35,10 +35,10 @@ export const roles: Role[] = [
     location: "Singapore",
     dates: "Jan 2026 – Jun 2026",
     description:
-      "Engineered enterprise guardrails for production LLM systems, implementing access control policies, grounding constraints, and retrieval boundaries for safe deployment. Built evaluation infrastructure with 400+ adversarial prompts, reducing unsafe model responses by ~60%.",
+      "Six months on the guardrails for an internal assistant used by frontline staff at a utility, plus the adversarial test suite that showed whether they worked. Unsafe responses dropped roughly 60%.",
     body: [
       {
-        text: "Six months on an internal assistant used by people doing physical work on electrical infrastructure, almost all of it spent on the layer that decides what the system will and won't answer.",
+        text: "The assistant is used by people doing physical work on electrical infrastructure. Almost all my time went on the guardrails: deciding what it answers and what it declines.",
       },
       {
         text: "This was the first thing I'd built where someone was paid to break it, and it changed what I think the work is. I've written that up properly as a case study.",
@@ -61,7 +61,7 @@ export const roles: Role[] = [
     location: "Singapore",
     dates: "Jul 2025 – Mar 2026",
     description:
-      "The one where I spent months building for the wrong customer. We surveyed 500 students, found a gap nobody was serving, and then discovered students don't control access to the thing our product needed.",
+      "Co-founded a startup that turned lecture recordings into bilingual study notes. We built what students asked for and then hit a problem that had nothing to do with the product.",
     tags: ["AI", "NLP", "RAG", "Startup", "Product"],
     projectSlug: "lecture-ai",
     links: [
