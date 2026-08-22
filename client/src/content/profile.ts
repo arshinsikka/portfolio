@@ -48,7 +48,7 @@ export const hero = {
    * are read. Deliberately not a sentence — this is the machine-set metadata
    * the rail carries everywhere else on the site, applied to the person.
    */
-  facts: ["NUS · final year", "Garuda Robotics", "Singapore"],
+  facts: ["NUS · CS, final year", "Garuda Robotics", "Singapore"],
   /**
    * The phrase inside `tagline` that becomes the interactive cue. It is not a
    * second copy of the copy: the component finds this substring inside
