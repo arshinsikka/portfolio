@@ -403,7 +403,7 @@ export const projects: Project[] = [
     tier: "standard",
     group: "production",
     summary:
-      "A pipeline for measuring how well an automated system strips personal information out of customer call transcripts. Most of the work wasn't the measurement, it was deciding what counts: a receipt number isn't personal information, a partial email address probably isn't either, and those rules have to be written down and applied consistently before any score means anything. I scored it in a way that treats missing something as worse than being over-cautious, because those two errors are not equally bad here.",
+      "Echolens is a product that strips personal information out of customer call transcripts. I built the evaluation pipeline that measures how well it does that. Most of the work wasn't the measurement, it was deciding what counts: a receipt number isn't personal information, a partial email address probably isn't either, and those rules have to be written down and applied consistently before any score means anything. I scored it in a way that treats missing something as worse than being over-cautious, because those two errors are not equally bad here.",
     body: [],
     tags: ["PII", "Evaluation", "NLP"],
     links: [],

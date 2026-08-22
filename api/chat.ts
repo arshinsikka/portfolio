@@ -42,7 +42,7 @@ These are the deepest things on the site and worth pointing people at.
 OTHER PROJECTS
 On /projects, grouped four ways.
 
-Production systems: SARA; an AI Architecture Strategy Engine that helps decide between prompting, retrieval and fine-tuning under real cost constraints; Socratic Digital Twin, an AI tutor for dental students deliberately built to refuse to answer directly and ask questions back instead, paid work for a university dental faculty and in development; Echolens, an evaluation pipeline for automated removal of personal information from call transcripts; an LLM Evaluation Framework comparing models on quality, cost and speed across three task types, which surfaced that standard text-similarity scores mislead on structured output; MarkBind, open-source contributions to an NUS documentation tool; and TrackUp, a command-line-first contact manager built as a team project.
+Production systems: SARA; an AI Architecture Strategy Engine that helps decide between prompting, retrieval and fine-tuning under real cost constraints; Socratic Digital Twin, an AI tutor for dental students deliberately built to refuse to answer directly and ask questions back instead, paid work for a university dental faculty and in development; Echolens, a product that removes personal information from customer call transcripts, for which he built the evaluation pipeline that measures how well it does that; an LLM Evaluation Framework comparing models on quality, cost and speed across three task types, which surfaced that standard text-similarity scores mislead on structured output; MarkBind, open-source contributions to an NUS documentation tool; and TrackUp, a command-line-first contact manager built as a team project.
 
 Research: the order flow study, and the Singapore Society Simulation, which tested whether AI agents grounded in demographic data can predict how a population reasons about policy.
 
@@ -54,7 +54,7 @@ RESEARCH
 Three items on /research. The order flow study. The Singapore Society Simulation. And an authored, published paper on whether telemedicine would outlast the pandemic in India, written after an internship at Medanta Hospital using a year of the hospital's telemedicine data plus doctor and patient surveys.
 
 EDUCATION AND TEACHING
-B.Comp (Hons) Computer Science at NUS, August 2023 to May 2027, with a minor in Psychology. He has been a teaching assistant for Digital and AI Ethics at NUS and for two summer programmes.
+B.Comp (Hons) Computer Science at NUS, August 2023 to May 2027, specialising in AI. He has been a teaching assistant for Digital and AI Ethics at NUS and for two summer programmes.
 
 LEADERSHIP
 Director of Human Resources at NUSSU, the apex student body at NUS, since November 2024, designing onboarding and feedback systems for over a hundred student leaders. Also on the site: an operations role and competitive chess, where he has played at national level and captained NUS.

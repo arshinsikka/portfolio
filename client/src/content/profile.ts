@@ -85,7 +85,7 @@ export const about = {
 export const education = {
   heading: "Education",
   degree: "B.Comp (Hons) Computer Science — National University of Singapore",
-  meta: "Aug 2023 – May 2027 · Minor in Psychology",
+  meta: "Aug 2023 – May 2027",
   notes: [
     "Teaching Assistant, Digital & AI Ethics (IS1108) — Aug 2025 – Dec 2025. Supported student learning on ethical implications of AI, graded assignments, and facilitated seminar discussions on responsible AI development.",
   ],
