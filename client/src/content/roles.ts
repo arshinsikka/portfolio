@@ -144,3 +144,30 @@ export const roles: Role[] = [
     tags: ["Java", "Spring Boot", "REST APIs", "Enterprise"],
   },
 ];
+
+/**
+ * Which roles the homepage shows, named one slug at a time.
+ *
+ * Deliberately *not* the first N of `roles`. That list is in date order and
+ * must stay that way, because /work is a chronology and reordering it to serve
+ * the front page would make the CV lie about which job came first. But recency
+ * and representativeness are different questions, and taking the top three was
+ * letting the calendar answer the second one by accident.
+ *
+ * Naming the slugs makes the two independent: a record's position in `roles`
+ * decides where it sits on /work, and its presence here decides whether it
+ * reaches the homepage. Same device, and the same reasoning, as
+ * `homeResearch` in research.ts.
+ *
+ * A slug with no matching record is dropped rather than crashing the page, and
+ * the homepage renders whatever survives in the order written here.
+ */
+const HOME_ROLE_SLUGS = [
+  "garuda-robotics-ai-engineer-intern",
+  "sp-digital-data-science-intern",
+  "kpmg-ai-labs-intern",
+];
+
+export const homeRoles = HOME_ROLE_SLUGS.map((slug) =>
+  roles.find((r) => r.slug === slug),
+).filter((role): role is Role => role !== undefined);

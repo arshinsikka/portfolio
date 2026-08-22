@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { Block, IndexRow, Prose, TextLink } from "@/components/primitives";
-import { roles } from "@/content/roles";
+import { homeRoles } from "@/content/roles";
 import { featuredProjects, standardProjects, projectBySlug } from "@/content/projects";
 import { homeResearch } from "@/content/research";
 import { sectionCopy } from "@/content/profile";
@@ -11,14 +11,13 @@ import { cn } from "@/lib/utils";
  * owns it. Showing everything here is what made /work redundant: all five roles
  * were on the front page, so the section it links to had nothing further to say.
  *
- * Roles and projects are selected by recency, taking the order the content files
- * already declare; projects are under their cap already, so in practice only the
- * role list is actually truncated. Research is the exception: it is named record
- * by record in `homeResearch` rather than skimmed off the top, because which
- * research represents the work is an editorial call and recency kept answering
- * it by accident.
+ * Projects are still skimmed off the top, in the order the content file
+ * declares, and are under their cap already. Roles and research are not: each
+ * is named record by record, in `homeRoles` and `homeResearch`, because which
+ * entries represent the work is an editorial call and recency kept answering it
+ * by accident. Those two lists carry their own length, so there is no cap here
+ * to keep in step with them.
  */
-const MAX_ROLES = 3;
 const MAX_PROJECTS = 3;
 
 /** Only link a row where a destination actually exists. */
@@ -26,14 +25,13 @@ const detailHref = (slug?: string) =>
   slug && projectBySlug(slug)?.hasDetailPage ? `/projects/${slug}` : undefined;
 
 const indexProjects = [...featuredProjects, ...standardProjects].slice(0, MAX_PROJECTS);
-const indexRoles = roles.slice(0, MAX_ROLES);
 
 /**
  * The single accent mark on the page. Two roles carry `isCurrent`, so the mark
  * goes to the most recent one only — colouring both would make it a category
  * rather than a pointer at what I am doing now.
  */
-const currentRoleSlug = indexRoles.find((r) => r.isCurrent)?.slug;
+const currentRoleSlug = homeRoles.find((r) => r.isCurrent)?.slug;
 
 /**
  * Closes the handoff the truncation opens. The rail label links to the same
@@ -150,7 +148,7 @@ export default function HomeIndex({ cued = false }: { cued?: boolean }) {
 
       <Block label={sectionCopy.work.heading} labelHref="/work">
         <ul>
-          {indexRoles.map((role) => (
+          {homeRoles.map((role) => (
             <IndexRow
               key={role.slug}
               primary={role.company}
