@@ -24,7 +24,14 @@ export const RESUME_URL = "/assets/Arshin_Sikka_Resume.pdf";
 export const hero = {
   name: "Arshin Sikka",
   imageSrc: "/assets/arshin-portrait.webp",
-  imageAlt: "Arshin Sikka",
+  /**
+   * Deliberately empty. The portrait sits directly beside the name in text —
+   * above it on mobile, next to it on desktop — so alt text naming the person
+   * makes a screen reader say "Arshin Sikka" twice in a row. An image that
+   * adds nothing the adjacent text does not already say is decorative, and the
+   * correct markup for decorative is an empty alt, not a missing one.
+   */
+  imageAlt: "",
   tagline:
     "I build AI systems, and I try hard to find out whether they actually work.",
   intro:

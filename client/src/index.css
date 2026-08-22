@@ -65,26 +65,30 @@
   --rail-gap: 2rem;
 
   /* The homepage rail only. The hero portrait is the one thing that ever sits
-     in a rail, and 6rem is a width sized for 11px type — at a 15px root that is
-     a 90px photo beside a 60px headline, which reads as a chat avatar rather
-     than a portrait.
+     in a rail, and 6rem is a width sized for 11px type — a 96px photo beside a
+     64px headline reads as a chat avatar, not a portrait.
 
      Why a clamp and not a flat 14rem: the rail appears from `md` (768px) up, and
-     every pixel it takes comes out of the content column. Root font-size is
-     15px, so 14rem is 210px — and a *flat* 210px rail at a 768px viewport leaves
-     708 − 210 − 30 = 468px of content, which is narrower than --measure (510px).
-     Prose would stop reaching its own measure, which §4 says must never happen.
-     15vw tracks the viewport instead: 115px at 768 (563px of content, clear of
-     the measure), 210px from 1400 up, and the 14rem ceiling stops the rail
-     running away on a 1920 display. The 6rem floor means it can never be
-     narrower than the site-wide rail.
+     every pixel it takes comes out of the content column. A flat 14rem (224px)
+     at a 768px viewport leaves 704 − 224 − 32 = 448px of content, which is
+     narrower than --measure (544px). Prose would stop reaching its own measure,
+     which §4 says must never happen. 15vw tracks the viewport instead: 115px at
+     768, which leaves 557px — still clear of the measure, though only by 13px,
+     so this is the binding constraint and not a comfortable one. It reaches the
+     224px ceiling at about 1493px, which stops the rail running away on a wide
+     display, and the 6rem floor means it can never be narrower than the
+     site-wide rail.
 
-     Measured, prose is exactly 510px at 768 / 900 / 1024 / 1280 / 1440 / 1920.
-     The h1 is capped at max-w-lead (54rem/810px) and the content column never
-     drops below 563px, so from 1024 up the h1 renders at its full 810px and its
-     line breaks are untouched: 3 lines with this rail, 3 lines with the old
-     6rem one. Applied by `.rail-home` on a wrapper around the home route, so
-     every other page keeps 6rem. */
+     The h1 is capped at max-w-lead (54rem/864px) and the content column is 904px
+     at 1440, so the tagline's line breaks are untouched: measured, 3 lines with
+     this rail and 3 lines with the old 6rem one, at every width from 768 up.
+
+     Pixel figures here assume the 16px root the rest of DESIGN.md assumes. They
+     were verified on a browser configured to a 15px root, where every number
+     scales by 15/16 — the ratios, and so the conclusions, are unchanged.
+
+     Applied by `.rail-home` on a wrapper around the home route, so every other
+     page keeps 6rem. */
   --rail-w-home: clamp(6rem, 15vw, 14rem);
 
   /* Signed distance from a text-display element's border-box top to the cap top
@@ -93,9 +97,9 @@
      the exact baseline, and a pixel scan of flat-topped caps ("HIT") gives
      Newsreader's cap height at 0.755em. At line-height 1.02 the font's own
      ascent+descent slightly exceeds the line box, so the half-leading is
-     *negative* and the cap top lands 0.8px ABOVE the box top at 60px — hence the
-     minus sign. It is sub-pixel, but it is the right sign, and an earlier guess
-     of +0.0704 was wrong by 5px. The hero portrait is offset by this plus the
+     *negative* and the cap top lands ABOVE the box top — hence the minus sign.
+     At the 4rem display ceiling that is 0.85px. It is sub-pixel, but it is the
+     right sign, and an earlier guess of +0.0704 pointed the wrong way. The hero portrait is offset by this plus the
      name label above the h1, so the photo's top edge meets the cap height of the
      tagline's first line rather than its line box. */
   --display-cap-offset: -0.01333;
@@ -247,8 +251,8 @@
 /* Homepage-only rail width. Scoped to a wrapper so the token cascades to every
    Block on the route — hero and index blocks alike — which keeps one content
    left edge down the page. Widening the hero alone would step the h1 120px
-   right of the rows beneath it (210px rail vs 90px) and break the page's
-   spine. */
+   right of the rows beneath it (a 216px rail against 96px at 1440) and break
+   the page's spine. */
 .rail-home {
   --rail-w: var(--rail-w-home);
 }

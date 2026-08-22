@@ -203,7 +203,6 @@ keys, so they are used as `text-display`, `text-body`, and so on.
 | `h2` | 1.375rem / 22px | 1.25 | −0.01em | Newsreader | Reserved for in-content section headings on interior pages. |
 | `h3` | 1rem / 16px | 1.4 | −0.005em | Plex Sans 500 | Reserved for minor headings. |
 | `org` | 1.125rem / 18px | 1.3 | −0.006em | Plex Sans 500 | The organisation in an index row. |
-| `stat` | `clamp(2.25rem, 3.4vw, 3rem)` | 1.0 | −0.03em | Newsreader | Impact-strip numerals. |
 | `body` | 1rem / 16px | 1.6 | — | Plex Sans 400 | Reading text. |
 | `small` | 0.875rem / 14px | 1.55 | — | Plex Sans 400 | Secondary text, buttons, row sub-line. |
 | `meta` | 0.8125rem / 13px | 1.45 | — | Plex Mono 400 | Dates. Tabular numerals, so date columns align. |
@@ -257,7 +256,8 @@ Layout constants, also tokens:
 |---|---|---|
 | `--nav-row-h` | 4rem | Navbar inner row |
 | `--nav-h` | `calc(var(--nav-row-h) + 1px)` | Total navbar height including its border. Everything that must clear the fixed navbar reads this. |
-| `--rail-w` | 6rem / 96px | The margin rail |
+| `--rail-w` | 6rem / 96px | The margin rail. Every route except the homepage. |
+| `--rail-w-home` | `clamp(6rem, 15vw, 14rem)` | The homepage rail, applied by `.rail-home`. See below. |
 | `--rail-gap` | 2rem / 32px | Rail to content |
 | `--measure` | 34rem / 544px | Reading measure (~65ch). **Prose only.** |
 | `--page-w` | `clamp(76rem, 84vw, 84rem)` | The page container, centred, border-box, gutter included |
@@ -290,6 +290,46 @@ back goes to the content column.
 `--page-w` is a `clamp`, not a literal, so 1440 resolves to the 76rem floor while
 wider displays grow to an 84rem ceiling. A single fixed max-width cannot be both
 comfortable at 1440 and full at 1920.
+
+#### The homepage rail is wider
+
+The homepage is the one route whose rail holds a photograph rather than an 11px
+label, and 96px of photograph is a chat avatar. `.rail-home`, a wrapper around
+the whole route, repoints `--rail-w` at `--rail-w-home`:
+
+```css
+--rail-w-home: clamp(6rem, 15vw, 14rem);
+```
+
+| Viewport | Rail | Content column | Prose |
+|---|---|---|---|
+| 768px | 115px | 557px | 544px |
+| 1024px | 154px | 774px | 544px |
+| 1280px | 192px | 928px | 544px |
+| 1440px | 216px | **904px** | 544px |
+| 1920px | 224px (ceiling) | 1024px | 544px |
+
+**Why a clamp and not a flat 14rem.** The rail exists from `md` (768px) up, and
+every pixel it takes comes out of the content column. A flat 224px rail at a
+768px viewport leaves `704 − 224 − 32 = 448px` of content — *narrower than
+`--measure`*, so prose could no longer reach its own measure, which this section
+says must never happen. `15vw` tracks the viewport instead and gives 115px at
+768, leaving 557px. That clears 544px by 13px, which makes 768px the binding
+constraint on this token, not a comfortable one: anything wider than ~15vw at
+the low end starts eating the measure. The 14rem ceiling stops the rail running
+away on a large display (it caps out around 1493px), and the 6rem floor means it
+can never be narrower than the site-wide rail.
+
+The `<h1>` is capped at `max-w-lead` (54rem/864px) and the content column is
+904px at 1440, so the wider rail does not touch the tagline's line breaks —
+measured, three lines with either rail at every width from 768 up. Below `md`
+the rail collapses and stacks, and the portrait is capped at 9rem so it does not
+become a billboard on a phone.
+
+**It is scoped to the route, not to the hero.** Every `Block` reads `--rail-w`,
+so widening only the hero would step its content edge 120px right of every
+section beneath it and break the single left edge the rail system exists to
+draw.
 
 ### Spending width without stretching lines
 
@@ -337,7 +377,7 @@ primitives inherit this system instead of the old blue one:
 ```
 
 **`tailwind.config.ts`** extends `fontFamily` (`display` / `sans` / `mono`),
-replaces the `fontSize` scale with the eight keys above, maps the colour tokens
+replaces the `fontSize` scale with the nine keys above, maps the colour tokens
 (`paper`, `ink`, `ink-muted`, `rule`, `rule-strong`, `accent`, `accent-hover`,
 `accent-foreground`, `on-ink`), adds the `s1`–`s9` spacing scale plus `rail` and
 `rail-gap`, and adds `max-w-measure` / `max-w-page`.
@@ -353,8 +393,11 @@ live and visible in the first build of this direction.
 `client/src/lib/utils.ts` now uses `extendTailwindMerge` to declare the custom
 `font-size` and `font-family` groups. **Any new key added to the type scale must
 be added there too**, or `cn()` will start eating classes again without warning.
-`org` and `stat` were added with the impact strip and the index row; the list in
-`utils.ts` must always match the `fontSize` block in `tailwind.config.ts`.
+`org` was added with the index row; the list in `utils.ts` must always match the
+`fontSize` block in `tailwind.config.ts`. A `stat` key was documented here for a
+long time and existed in neither file, so `text-stat` would have been silently
+eaten by `cn()` had anything used it. Nothing did — see the note on `<StatBand>`
+in §6.
 
 **`plugins: []`.** `tailwindcss-animate` and `@tailwindcss/typography` were both
 registered and neither supplied a class used anywhere — no `animate-in`,
@@ -475,12 +518,18 @@ grid rather than inventing a new treatment:
 
 ### Impact strip — `<StatBand>`
 
+**Not implemented.** No `StatBand`, no `Placeholder`, and no `content/impact.ts`
+exist in the app, and no route renders an impact strip. The `stat` type key this
+section depended on has been removed from §3 because it was never added to
+`tailwind.config.ts` or `utils.ts` either. What follows is the design as
+specified, kept as a brief for if it gets built — not a description of the code.
+
 Three or four large numerals with small mono labels beneath, in a four-column
 band. Large figures against small labels is the highest contrast per pixel
 available without photography: the numeral carries at a glance, and the label
 only has to be legible once the eye has already stopped.
 
-Numerals are Newsreader at `text-stat`; labels are `text-label` mono uppercase
+Numerals would be Newsreader at a display size; labels are `text-label` mono uppercase
 `--ink-muted`. Unfilled entries carry `placeholder: true` and render in
 `--rule-strong` under a dashed rule, so a blank slot is impossible to miss.
 
@@ -611,17 +660,23 @@ is announced rather than only coloured.
 
 ## 8. The signature: the margin rail and the change bar
 
-Every block on the page is a two-column grid: a fixed 96px rail on the left
-carrying a monospace label, and the content hanging to its right. Hairlines span
-both columns. Every rail slot on every page holds the same kind of object — a
-mono label. The homepage hero used to be the exception, holding the portrait;
-the portrait has been removed, so the left edge is now one unbroken column of
-labels from the masthead to the last section.
+Every block on the page is a two-column grid: a fixed rail on the left carrying
+a monospace label, and the content hanging to its right. Hairlines span both
+columns. The rail is 96px on every interior route; the homepage widens it to
+`clamp(6rem, 15vw, 14rem)` because its first rail slot holds a photograph (§4).
+
+Almost every rail slot on the site holds the same kind of object — a mono label.
+The homepage hero is the one exception: it holds the portrait, with the mono
+fact block beneath it, which is why `Block` takes a `rail` prop for arbitrary
+content at all. The left edge is still one unbroken column from the masthead to
+the last section, because the rail's *origin* does not move — only its width.
 
 **The opening statement.** The page leads with the positioning line at
-`text-display`, set wide at `max-w-lead` (54rem). The name is the hero block's
-rail label — the same treatment every other block gets, so the hero's label
-happens to be the person's name. Previously the name was the largest thing on
+`text-display`, set wide at `max-w-lead` (54rem). The name is set in the rail
+label's treatment — 11px mono, uppercase, muted — but it sits at the top of the
+*content* column rather than in the rail, because the rail is occupied by the
+portrait. It is marked up as a `<p>`, not a heading: the `<h1>` is the
+positioning line beneath it, and a heading above the h1 would invert that. Previously the name was the largest thing on
 the page, which spent the display slot on a fact the navbar already states and
 the tab title repeats. The `<h1>` is now the positioning line.
 No copy changed; only which string occupies which slot.
@@ -673,8 +728,20 @@ label against its first line of content, which pushed the portrait 4px below the
 name's cap-height; and the change bar's `-ml-s4 … pl-s4` did not account for its
 own 2px border, so the one block that carries it sat 2px right of every other
 rail item. The nudge is now skipped for arbitrary rail content, and the change
-bar's offset covers the border. Measured after: portrait and all four labels at
-11.5rem, portrait top within 0.5px of the name's cap-top.
+bar's offset covers the border. Measured after: portrait and all four labels
+share one left edge, and the portrait's top edge lands on the cap height of the
+`<h1>`'s first line to within 0.02px.
+
+That alignment is not eyeballed. `--display-cap-offset` in `index.css` carries
+the signed distance from a `text-display` element's border-box top to its cap
+top, as a fraction of the font size, measured in the browser with a baseline
+strut and a pixel scan of flat-topped capitals rather than read off font tables.
+At line-height 1.02 Newsreader's own ascent and descent slightly exceed the line
+box, so the half-leading is negative and the cap top sits *above* the box top —
+the offset is `-0.01333`, and getting its sign wrong is the easy mistake.
+`.hero-rail-offset` adds that to the name label's line box and the `s3` gap
+below it. It carries its own `md` media query, because it is a hand-written
+class and not a Tailwind utility: `md:hero-rail-offset` compiles to nothing.
 
 ---
 
