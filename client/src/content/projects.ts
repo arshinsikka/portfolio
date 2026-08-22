@@ -15,94 +15,68 @@ export const projects: Project[] = [
     tier: "featured",
     group: "production",
     summary:
-      "Most software safety assumes you can undo things. You cannot undo a drone that has taken off, and that changes the whole shape of the problem.",
+      "You can delete a bad answer. You can't un-fly a drone. That changes where the checks go.",
     body: [],
     sections: [
       {
-        heading: "What's different about this one",
+        heading: "The constraint",
         paragraphs: [
           {
-            text: "Every guardrail I'd built before this was, underneath, a filter in front of something reversible. A bad answer gets deleted. A bad write gets rolled back. A bad deploy gets reverted. You design for detection, because you can always correct afterwards.",
+            text: "Before this, everything I built could be undone. A bad answer gets deleted. A bad write gets rolled back. So you design for catching mistakes after they happen.",
           },
           {
-            text: "I'm now building a tool, end to end, where a pilot asks for something in plain English, a language model works out what they mean, and the system either does it or refuses. On the other end of that are drones.",
+            text: "Now I'm building a tool for drone pilots. They ask for a flight in plain English. The system either runs it or refuses.",
           },
           {
-            text: "A drone that has taken off has taken off. There's no undo, there's no rollback, and whatever happens next happens in physical space, at speed, in front of people. The moment that's true, the shape of the safety problem inverts. You can't lean on detecting and correcting, because detection arrives after the fact and there's nowhere for the correction to happen. All you have left is prevention.",
-          },
-          {
-            text: "That sounds obvious written down. It took me a while to notice it was true, and longer to notice how much of what I already knew quietly assumed the opposite.",
+            text: "Catching mistakes afterwards doesn't help here. By the time you notice, the drone is already flying. You have to stop it before it starts.",
           },
         ],
       },
       {
-        heading: "A polite refusal is not a control",
+        heading: "Why asking the model nicely isn't enough",
         paragraphs: [
           {
-            text: "The easy version of this is to tell the model what it isn't allowed to do and trust it to decline. Models are good at declining. They do it politely and they do it most of the time.",
+            text: "The easy approach is to tell the model what it can't do. Models are good at saying no. They get it right most of the time.",
           },
           {
-            text: "Most of the time is exactly the problem.",
+            text: "Most of the time is fine if the mistake is a bad paragraph. It isn't fine if the mistake is in the air.",
           },
           {
-            text: "If your model refuses correctly ninety-nine times in a hundred, that's fine when the hundredth failure is a bad paragraph someone rereads and ignores. It isn't fine when the hundredth failure is airborne. A model that usually refuses isn't a control. It's a habit, and habits are the wrong thing to put between a person and a machine that can hurt someone.",
-          },
-          {
-            text: "So the refusal can't be something the model chooses to do. It has to be something that happens to the request, somewhere the model can't argue with, and what the pilot sees on screen has to come from that stop rather than from the model's account of it.",
+            text: "So the model doesn't get to make that call. Something else does. And what the pilot sees has to come from that check, not from the model's summary of it.",
           },
         ],
       },
       {
-        heading: "Where the check has to live",
+        heading: "Where the check goes",
         paragraphs: [
           {
-            text: "Once you accept that, the question stops being how to refuse and becomes where.",
+            text: "Not on the pilot's laptop. Anyone can edit an app on their own machine. A limit you can delete isn't a limit.",
           },
           {
-            text: "Not on the pilot's own machine. Anyone can edit an app running on their own laptop, and a limit enforced by the thing being limited isn't a limit at all. That one's quick.",
+            text: "Not at the login layer either. That part knows who's asking. It doesn't see the numbers in the request. And the approval limit is all about numbers. Is this location inside the area you're cleared for? You need to see the coordinates to answer that.",
           },
           {
-            text: "Not at the layer that checks credentials, which was less obvious and took me longer. That layer knows who's asking and roughly what they're asking for, but it doesn't see the actual numbers inside the request. And an approval limit is entirely about numbers. Whether a location is inside the area someone is cleared to fly in is a question you can only answer if you can read the location.",
+            text: "That leaves one place. The first point that sees the real numbers and sits outside the pilot's control.",
           },
           {
-            text: "So the check has to happen at the first point that both sees the real values and sits outside the user's control. Not because that's convenient, but because everywhere else either can't see enough or can't be trusted.",
-          },
-          {
-            text: "I like this kind of problem. There's no cleverness in the answer, and the entire difficulty is in ruling out the places it can't go until only one is left.",
+            text: "There's nothing clever about the answer. The work was ruling out everywhere else.",
           },
         ],
       },
       {
-        heading: "The scariest thing I've found",
+        heading: "A failure I didn't expect",
         paragraphs: [
           {
-            text: "I was running the tool with an old conversation still on screen. I asked a question I'd asked earlier, and the model answered from what it had already said instead of actually checking anything.",
+            text: "I was testing with an old chat still open. I asked something I'd asked earlier. The model answered from its own history instead of running the check.",
           },
           {
-            text: "The answer was perfect. Correct limits, correct conclusion, stated with complete confidence. Nothing had been checked. Nothing had been refused. No record of it existed anywhere, because nothing had happened.",
+            text: "The answer was right. Correct limits, correct conclusion, stated with confidence. Nothing had actually been checked.",
           },
           {
-            text: "The only way to tell was that no check appeared on screen, and that's an absence. You don't notice absences, especially not glancing at a display while doing something else.",
+            text: "The only clue was what wasn't there. No check appeared on screen. Missing things are easy to miss.",
           },
           {
-            text: "That's the failure mode I think about most now, and it isn't the one people expect. Everyone worries about AI saying something obviously wrong, and obviously wrong is survivable, because people catch it. The dangerous version is fluent, confident, and completely fabricated, describing a safety check that never ran. Put that in front of hardware and it's genuinely frightening.",
-          },
-          {
-            text: "It also changed what I think the interface is for. An answer that came from a real check has to look different from one that didn't. That's not decoration, it's part of the safety system.",
-          },
-        ],
-      },
-      {
-        heading: "What I think this generalises to",
-        paragraphs: [
-          {
-            text: "Most of the work on making AI safe has grown up around AI that produces text. Text is reversible. You can read it, disagree with it, delete it, try again. Almost every technique in that space quietly assumes there's a person in the loop with time to notice.",
-          },
-          {
-            text: "AI is now being handed the ability to act, and actions don't come with an undo. Drones are an obvious case because the consequence is physical and fast, but the same thing is true of anything that moves money, changes records, or sends something irreversibly to someone else.",
-          },
-          {
-            text: "I don't think the answer is better models. A better model still fails sometimes, and sometimes is what you can't accept. I think it's that the parts of these systems that can refuse have to sit outside the parts that can be persuaded, and we should be designing them that way now rather than after something goes wrong.",
+            text: "That changed how I think about the interface. It isn't just showing the result. An answer that came from a real check has to look different from one that didn't. That's part of the safety system, not decoration.",
           },
         ],
       },
@@ -254,7 +228,7 @@ export const projects: Project[] = [
             text: "So the first thing I wrote wasn't code. It was the protocol: which time horizons I'd test, how I'd define market conditions, how I'd calculate trading costs, exactly what would count as the signal being tradable, and how I'd test whether any result was statistically real. I committed that document as the very first thing in the repository, before a single line of analysis existed, so every later piece of work sits underneath it in the history and anyone can check the order.",
           },
           {
-            text: "The part that actually matters: I wrote down all four possible outcomes in advance and declared each of them valid, including \"there's no effect here\" and \"there isn't enough data to tell.\" Committing to a method only works if you've committed to publishing whatever it produces.",
+            text: 'The part that actually matters: I wrote down all four possible outcomes in advance and declared each of them valid, including "there\'s no effect here" and "there isn\'t enough data to tell." Committing to a method only works if you\'ve committed to publishing whatever it produces.',
           },
         ],
       },
@@ -265,7 +239,7 @@ export const projects: Project[] = [
             text: "Rebuilding the data, then checking it against myself. The exchange doesn't publish the state of the order book. It publishes one snapshot and then a continuous stream of changes, so the actual state at any moment has to be rebuilt by replaying every update in order. One misapplied update silently corrupts everything after it, and there's no correct answer sitting anywhere to compare against. So I wrote a second, independent version of the rebuild and checked the two against each other at sampled points. Reimplementing something you've already built feels like wasted effort right up until it disagrees with itself.",
           },
           {
-            text: "Reading the final test data exactly once. The dataset was split into a portion for building, a portion for tuning, and a portion held back. That last portion was opened once, at the end, and every parameter applied to it was checked to be identical to values frozen before it was touched. Not \"I was careful about it.\" Verified.",
+            text: 'Reading the final test data exactly once. The dataset was split into a portion for building, a portion for tuning, and a portion held back. That last portion was opened once, at the end, and every parameter applied to it was checked to be identical to values frozen before it was touched. Not "I was careful about it." Verified.',
           },
           {
             text: "Assuming the worst about costs. I assumed I'd pay the full gap between buy and sell prices on both entry and exit, with no favourable treatment on order queues, and I ran the whole analysis across four different fee levels rather than picking one. Picking a single fee would have made the conclusion an artifact of that choice.",
@@ -355,10 +329,7 @@ export const projects: Project[] = [
     dates: "Jul 2025 – Mar 2026",
     tier: "featured",
     group: "ventures",
-    accolades: [
-      { text: "BLOCK71-backed" },
-      { text: "VIP@SoC Finalist" },
-    ],
+    accolades: [{ text: "BLOCK71-backed" }, { text: "VIP@SoC Finalist" }],
     summary:
       "We surveyed 500 students, found a gap nobody was serving, and built it. The thing that stopped us wasn't in the product at all.",
     body: [],
@@ -665,8 +636,13 @@ export const standardProjects = projects.filter((p) => p.tier === "standard");
  * all" is a property of the content model rather than of one page. Heading
  * copy lives in `sectionCopy.projects.groups`, with every other heading.
  */
-export const projectGroups = (["production", "research", "ventures", "earlier"] as const)
-  .map((group) => ({ group, projects: projects.filter((p) => p.group === group) }))
+export const projectGroups = (
+  ["production", "research", "ventures", "earlier"] as const
+)
+  .map((group) => ({
+    group,
+    projects: projects.filter((p) => p.group === group),
+  }))
   .filter((g) => g.projects.length > 0);
 
 export const projectBySlug = (slug: string): Project | undefined =>
