@@ -19,8 +19,8 @@ import { cn } from "@/lib/utils";
  * positioning line in the content column, so marking the name up as a heading
  * would put an h2 above the h1.
  *
- * Copy is unchanged. `hero.currently`, `hero.facts`, and the two `taglineCue`
- * strings are new; nothing existing was reworded.
+ * Copy is unchanged. `hero.currently` and `hero.facts` are new; nothing
+ * existing was reworded.
  */
 
 /** The rail label treatment, which the name borrows in both its positions. */
@@ -78,72 +78,14 @@ function HeroRail() {
   );
 }
 
-/**
- * The positioning line, with `hero.taglineCue` promoted to a control that
- * highlights the evidence for it further down the page.
- *
- * The sentence is never retyped here — the cue is located inside `hero.tagline`
- * and the string is split around it, so the rendered headline is byte-identical
- * to the content file and a rewrite that drops the phrase degrades to plain
- * text rather than breaking.
- *
- * Below `md` the phrase renders as an ordinary span and the button is
- * `display:none`, which takes it out of the tab order and out of the
- * accessibility tree entirely. Two reasons. The rows it points at start 6px
- * below the fold at 390x844, so the connection would be invisible; and a narrow
- * viewport is a touch viewport, where a dotted-underlined phrase that invites a
- * tap and then does nothing is worse than no affordance at all. Swapping two
- * elements with CSS rather than branching on a media query in JS also keeps the
- * prerendered HTML and the hydrated HTML identical.
- */
-function Tagline({ onCue }: { onCue: (on: boolean) => void }) {
-  const at = hero.tagline.indexOf(hero.taglineCue);
-  if (at === -1) return <>{hero.tagline}</>;
-
-  const before = hero.tagline.slice(0, at);
-  const after = hero.tagline.slice(at + hero.taglineCue.length);
-
-  return (
-    <>
-      {before}
-      <span className="md:hidden">{hero.taglineCue}</span>
-      <button
-        type="button"
-        // The visible words stay in the accessible name, so the heading still
-        // reads as its own sentence; the purpose is appended rather than
-        // replacing it, which a bare aria-label would do.
-        aria-label={`${hero.taglineCue}: ${hero.taglineCueHint}`}
-        onMouseEnter={() => onCue(true)}
-        onMouseLeave={() => onCue(false)}
-        onFocus={() => onCue(true)}
-        onBlur={() => onCue(false)}
-        className={cn(
-          // `inline`, not the button default of inline-block, so the phrase can
-          // break across lines with the rest of the sentence.
-          "hidden cursor-pointer bg-transparent p-0 text-inherit md:inline",
-          // A hint that it is interactive, deliberately short of a link: no
-          // accent fill, no solid rule, the colour of a hairline rather than of
-          // a link.
-          "underline decoration-rule-strong decoration-dotted decoration-[2px] underline-offset-[0.1em]",
-          "transition-colors duration-150",
-          "hover:decoration-accent focus-visible:decoration-accent",
-        )}
-      >
-        {hero.taglineCue}
-      </button>
-      {after}
-    </>
-  );
-}
-
-export default function HeroSection({ onCue }: { onCue: (on: boolean) => void }) {
+export default function HeroSection() {
   return (
     <Block className="border-t-0" rail={<HeroRail />}>
       {/* Desktop only; the mobile copy lives above the portrait in the rail. */}
       <p className={cn(NAME_CLASS, "hidden md:block")}>{hero.name}</p>
 
       <h1 className="mt-s3 max-w-lead font-display text-display text-ink">
-        <Tagline onCue={onCue} />
+        {hero.tagline}
       </h1>
 
       <Prose className="mt-s5">{hero.intro}</Prose>

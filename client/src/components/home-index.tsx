@@ -53,7 +53,7 @@ function MoreLink({ href, children }: { href: string; children: string }) {
  * stay on the pages the rail labels link to, so this reads as an index rather
  * than a second copy of the site.
  */
-export default function HomeIndex({ cued = false }: { cued?: boolean }) {
+export default function HomeIndex() {
   return (
     <>
       {/*
@@ -71,12 +71,6 @@ export default function HomeIndex({ cued = false }: { cued?: boolean }) {
               className={cn(
                 "group relative border-b border-rule py-s3 last:border-b-0",
                 "transition-colors duration-150",
-                // The tagline cue. The hairline is the half of this that reads
-                // from the top of the page: three near-invisible --rule lines
-                // across ~900px becoming three accent ones is a large-area
-                // change, where the title colour is a small-area one. Colour
-                // only — promoting the border's *width* would shift layout.
-                cued && "border-accent",
                 "hover:border-ink focus-within:border-ink",
               )}
             >
@@ -98,17 +92,7 @@ export default function HomeIndex({ cued = false }: { cued?: boolean }) {
                 treatment, so the two lists now read as one system — and it
                 leaves the accent free to mean something here.
               */}
-              <h3
-                className={cn(
-                  "text-org font-medium transition-colors duration-150",
-                  // Accent already means "this is the one being pointed at" in
-                  // this system — it is what IndexRow's `current` role uses. At
-                  // rest these titles are --ink like every other linked index
-                  // heading, so the unity with IndexRow is a resting state and
-                  // this transient mark does not break it.
-                  cued ? "text-accent" : "text-ink",
-                )}
-              >
+              <h3 className="text-org font-medium text-ink">
                 <Link
                   href={`/projects/${project.slug}`}
                   className={cn(

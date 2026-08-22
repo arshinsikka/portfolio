@@ -49,21 +49,6 @@ export const hero = {
    * the rail carries everywhere else on the site, applied to the person.
    */
   facts: ["NUS · CS, final year", "Garuda Robotics", "Singapore"],
-  /**
-   * The phrase inside `tagline` that becomes the interactive cue. It is not a
-   * second copy of the copy: the component finds this substring inside
-   * `tagline` and splits around it, so the rendered sentence is always exactly
-   * `tagline` and the two can never drift. If the tagline is ever rewritten
-   * without this phrase in it, the cue quietly disappears and the headline
-   * renders as plain text.
-   */
-  taglineCue: "try to break them",
-  /**
-   * What the cue does, for screen readers. Composed with `taglineCue` into the
-   * button's accessible name, so the heading still reads as its own sentence
-   * instead of being interrupted by a bare instruction.
-   */
-  taglineCueHint: "highlight my case studies",
   githubUrl: "https://github.com/arshinsikka",
 };
 
