@@ -33,16 +33,16 @@ export const hero = {
    */
   imageAlt: "",
   tagline:
-    "I build AI systems, and I try hard to find out whether they actually work.",
+    "I build AI systems and then try to break them.",
   intro:
-    "Final-year CS student at NUS. Currently at Garuda Robotics through NUS Overseas Colleges, building agentic systems for drone operations. Previously: guardrails and evaluation for a production LLM system at SP Digital, retrieval at KPMG, and co-founder of Lecture AI.",
+    "Final year at NUS, studying CS. I've spent the last two years building AI things and finding out which parts of them survive contact with real users.",
   /**
    * The one line that answers "what is he doing right now". Kept as a single
    * string so it can be edited in one place — it is the copy on the page most
    * likely to go stale.
    */
   currently:
-    "Currently: building the refusal layer for drone mission planning at Garuda.",
+    "Currently at Garuda Robotics through NUS Overseas Colleges, building the layer that decides whether a drone mission is allowed to happen.",
   /**
    * The rail fact block under the portrait: one line each, in the order they
    * are read. Deliberately not a sentence — this is the machine-set metadata
@@ -57,7 +57,7 @@ export const hero = {
    * without this phrase in it, the cue quietly disappears and the headline
    * renders as plain text.
    */
-  taglineCue: "actually work",
+  taglineCue: "try to break them",
   /**
    * What the cue does, for screen readers. Composed with `taglineCue` into the
    * button's accessible name, so the heading still reads as its own sentence
@@ -69,7 +69,7 @@ export const hero = {
 
 export const lookingFor = {
   leadIn: "Open to opportunities.",
-  body: "Looking for full-time roles starting mid-2027, after I graduate. Software engineering, AI/ML, product, consulting, or quant — the common thread is work where the technical decisions have real consequences. Based in Singapore, open to relocating.",
+  body: "Looking for full-time roles starting mid-2027, after I graduate. Software engineering, AI/ML, product, consulting, or quant. I'm less attached to the label than to whether the work is hard and someone actually uses the result. Based in Singapore, open to relocating.",
   ctaLabel: "View Resume",
 };
 
