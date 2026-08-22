@@ -25,11 +25,9 @@ export const roles: Role[] = [
       {
         text: "That reframed what I think the risk is with tools like this. It isn't that the model says something obviously wrong, because people catch that. It's that it says something fluent and reassuring that nobody verified. Which means the interface has a job too: an answer that came from a real check has to look different from one that didn't.",
       },
-      {
-        text: "Some of this is still unfinished and I'd rather say so. Approval limits are currently the same for everyone rather than per person, because the layer enforcing them can't see who's asking, and the record of what got refused can't name who did it for the same reason. Both come down to the same missing piece, and that's the next thing.",
-      },
     ],
     tags: ["Agentic AI", "LLMs", "Computer Vision", "LangGraph", "FastAPI"],
+    projectSlug: "garuda-refusal-layer",
     isCurrent: true,
   },
   {

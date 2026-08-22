@@ -8,120 +8,107 @@ import type { Project } from "./types";
  */
 export const projects: Project[] = [
   {
-    slug: "lecture-ai",
-    title: "Lecture AI",
-    role: "Co-Founder",
-    dates: "Jul 2025 – Mar 2026",
+    slug: "garuda-refusal-layer",
+    title: "The Refusal Layer — When AI Controls Hardware",
+    role: "AI Engineer Intern, Garuda Robotics",
+    dates: "Jul 2026 – Present",
     tier: "featured",
-    group: "ventures",
-    accolades: [
-      { text: "BLOCK71-backed" },
-      { text: "VIP@SoC Finalist" },
-    ],
+    group: "production",
     summary:
-      "We surveyed 500 students, found a gap nobody was serving, built for it, and then discovered we'd picked the wrong customer entirely.",
+      "Most software safety assumes you can undo things. You cannot undo a drone that has taken off, and that changes the whole shape of the problem.",
     body: [],
     sections: [
       {
-        heading: "Overview",
+        heading: "What's different about this one",
         paragraphs: [
           {
-            text: "Lecture AI turned recorded lectures into structured study notes, in two languages, for under a dollar a lecture. I co-founded it in July 2025. We shipped a working product, got into an incubation programme, reached the finals of a university venture competition, and stopped in March 2026 without meaningful adoption.",
+            text: "Every guardrail I'd built before this was, underneath, a filter in front of something reversible. A bad answer gets deleted. A bad write gets rolled back. A bad deploy gets reverted. You design for detection, because you can always correct afterwards.",
           },
           {
-            text: "It started with a survey rather than an idea, which I still think was the right way round. My co-founder ran it: 500 students, and two numbers came back that mattered. Most of them rewatched recorded lectures because they'd missed something the first time. And a couple of hundred wanted study material in Mandarin, which essentially didn't exist.",
+            text: "I'm now working on a tool where a pilot asks for something in plain English, a language model works out what they mean, and the system either does it or refuses. On the other end of that are drones.",
           },
           {
-            text: "The second number was the interesting one. Everyone building in this space was serving students who study in English. Nobody was serving students who follow the lecture fine but revise in a different language.",
+            text: "A drone that has taken off has taken off. There's no undo, there's no rollback, and whatever happens next happens in physical space, at speed, in front of people. The moment that's true, the shape of the safety problem inverts. You can't lean on detecting and correcting, because detection arrives after the fact and there's nowhere for the correction to happen. All you have left is prevention.",
+          },
+          {
+            text: "That sounds obvious written down. It took me a while to notice it was true, and longer to notice how much of what I already knew quietly assumed the opposite.",
           },
         ],
       },
       {
-        heading: "Who did what",
+        heading: "A polite refusal is not a control",
         paragraphs: [
           {
-            text: "I designed and built the whole technical pipeline, and I did the market research and go-to-market work. My co-founder ran the student survey and handled conversations with potential customers, including the university's teaching technology team.",
+            text: "The easy version of this is to tell the model what it isn't allowed to do and trust it to decline. Models are good at declining. They do it politely and they do it most of the time.",
+          },
+          {
+            text: "Most of the time is exactly the problem.",
+          },
+          {
+            text: "If your model refuses correctly ninety-nine times in a hundred, that's fine when the hundredth failure is a bad paragraph someone rereads and ignores. It isn't fine when the hundredth failure is airborne. A model that usually refuses isn't a control. It's a habit, and habits are the wrong thing to put between a person and a machine that can hurt someone.",
+          },
+          {
+            text: "So the refusal can't be something the model chooses to do. It has to be something that happens to the request, somewhere the model can't argue with, and what the pilot sees on screen has to come from that stop rather than from the model's account of it.",
           },
         ],
       },
       {
-        heading: "The problem with the obvious build",
+        heading: "Where the check has to live",
         paragraphs: [
           {
-            text: "Record, transcribe, summarise, ship. That's the obvious version, and for technical subjects it produces something worse than nothing.",
+            text: "Once you accept that, the question stops being how to refuse and becomes where.",
           },
           {
-            text: "Speech recognition handles ordinary conversation well and mangles technical vocabulary. A specific tool name comes out as two unrelated English words. A standard term in machine learning comes back as something unrecognisable. That would be a minor annoyance if the transcript were the product, but it isn't. The transcript feeds the summariser, and a summariser handed a corrupted transcript will confidently produce a clean, well-organised summary of the wrong thing.",
+            text: "Not on the pilot's own machine. Anyone can edit an app running on their own laptop, and a limit enforced by the thing being limited isn't a limit at all. That one's quick.",
           },
           {
-            text: "That's the actual problem, and it took me a while to see it clearly. It isn't that transcription is imperfect. It's that every later stage inherits the earlier mistakes and hides them, so the output looks more trustworthy the further it gets from the error.",
+            text: "Not at the layer that checks credentials, which was less obvious and took me longer. That layer knows who's asking and roughly what they're asking for, but it doesn't see the actual numbers inside the request. And an approval limit is entirely about numbers. Whether a location is inside the area someone is cleared to fly in is a question you can only answer if you can read the location.",
+          },
+          {
+            text: "So the check has to happen at the first point that both sees the real values and sits outside the user's control. Not because that's convenient, but because everywhere else either can't see enough or can't be trusted.",
+          },
+          {
+            text: "I like this kind of problem. There's no cleverness in the answer, and the entire difficulty is in ruling out the places it can't go until only one is left.",
           },
         ],
       },
       {
-        heading: "The decisions I'd defend",
+        heading: "The scariest thing I've found",
         paragraphs: [
           {
-            text: "Two passes instead of one. I split the language model work into a correction step and a summarisation step, and ran them separately. The correction step gets the raw transcript along with the lecturer's own slides, so the model has something authoritative to check the terminology against, and fixes the transcript before anything else touches it. Only then does the summarising happen.",
+            text: "I was running the tool with an old conversation still on screen. I asked a question I'd asked earlier, and the model answered from what it had already said instead of actually checking anything.",
           },
           {
-            text: "Doing both at once is cheaper and simpler and it's what most tools do. It also means the model is guessing at what was said and deciding what mattered in the same breath, with no way to signal which parts it guessed at. Separating them is the single thing that made the output usable.",
+            text: "The answer was perfect. Correct limits, correct conclusion, stated with complete confidence. Nothing had been checked. Nothing had been refused. No record of it existed anywhere, because nothing had happened.",
           },
           {
-            text: "No search index. The correction step needs the slides as a reference, which is exactly the problem that search infrastructure exists to solve, and I didn't build any. At the scale we were running, a lecture's slides fit comfortably into what the model can read at once. Adding a search layer would have meant an indexing step, a storage layer, and a week of work, for no accuracy gain against a set of documents small enough to just hand over. I'd revisit that at thousands of lectures. At ours, it saved weeks.",
+            text: "The only way to tell was that no check appeared on screen, and that's an absence. You don't notice absences, especially not glancing at a display while doing something else.",
           },
           {
-            text: "Technical terms stay in English inside the Chinese notes. Translating a term like backpropagation into Mandarin produces something technically correct and practically useless, because the student then can't match it to the English textbook, the English slides, or the English exam. So the notes aren't a translation. The explanation is in one language and the vocabulary stays in the other. That came out of the survey, not out of me thinking about it.",
+            text: "That's the failure mode I think about most now, and it isn't the one people expect. Everyone worries about AI saying something obviously wrong, and obviously wrong is survivable, because people catch it. The dangerous version is fluent, confident, and completely fabricated, describing a safety check that never ran. Put that in front of hardware and it's genuinely frightening.",
           },
           {
-            text: "Organised by topic, not in order. The natural structure is the order the lecture happened in, because that's the order the audio arrives. Students don't revise that way. They jump to the thing they don't understand. Restructuring by concept meant the notes stopped mirroring the recording and started mirroring how they'd actually be used.",
-          },
-          {
-            text: "Deadlines pulled out separately. Students kept describing the same failure: an assignment deadline mentioned once, forty minutes into a lecture, missed entirely. So announcements and dates got their own section instead of sitting in the summary where they'd be technically present and functionally invisible.",
+            text: "It also changed what I think the interface is for. An answer that came from a real check has to look different from one that didn't. That's not decoration, it's part of the safety system.",
           },
         ],
       },
       {
-        heading: "What we got wrong",
+        heading: "What I think this generalises to",
         paragraphs: [
           {
-            text: "We built it for students, and that was the mistake.",
+            text: "Most of the work on making AI safe has grown up around AI that produces text. Text is reversible. You can read it, disagree with it, delete it, try again. Almost every technique in that space quietly assumes there's a person in the loop with time to notice.",
           },
           {
-            text: "Students don't control access to lecture recordings. The university and the lecturer do. So every single user had to get hold of their own recording before our product could do anything at all, which meant the very first step depended on something outside both our control and theirs. On top of that, signing up students one at a time is a distribution problem with no leverage. Five hundred users means five hundred separate conversations.",
+            text: "AI is now being handed the ability to act, and actions don't come with an undo. Drones are an obvious case because the consequence is physical and fast, but the same thing is true of anything that moves money, changes records, or sends something irreversibly to someone else.",
           },
           {
-            text: "Switching the customer to lecturers fixed both at once. A lecturer already has the recording, and one lecturer produces notes for an entire cohort, so a single conversion serves a hundred students instead of one.",
-          },
-          {
-            text: "The part I didn't see coming is that it also fixed a trust problem we hadn't properly named. Notes generated by AI and handed straight to students are unverified material in a setting where being wrong has consequences. The same notes reviewed and released by the lecturer have a person in the loop who is already the authority on the subject. One decision changed how we reached people and whether they should believe us.",
-          },
-        ],
-      },
-      {
-        heading: "Where it landed",
-        paragraphs: [
-          {
-            text: "We shipped it. We got into an incubation programme and reached a competition final. Cost stayed under a dollar per lecture.",
-          },
-          {
-            text: "We never got meaningful adoption, and we stopped in March 2026.",
-          },
-          {
-            text: "I'd rather write that plainly than dress it up, because the outcome isn't the useful part of this. The useful part is that a survey of five hundred people gave us a real insight, and then actual usage overturned the business we'd built on top of it, and we changed instead of defending it. Building the thing was the easy half.",
+            text: "I don't think the answer is better models. A better model still fails sometimes, and sometimes is what you can't accept. I think it's that the parts of these systems that can refuse have to sit outside the parts that can be persuaded, and we should be designing them that way now rather than after something goes wrong.",
           },
         ],
       },
     ],
-    tags: ["Python", "FastAPI", "Whisper", "Gemini", "RAG", "NLP"],
-    links: [
-      {
-        label: "GitHub",
-        url: "https://github.com/arshinsikka/lectureai-mvp",
-        kind: "github",
-      },
-      { label: "Website", url: "https://lectureai.co", kind: "website" },
-    ],
+    tags: ["Agentic AI", "LLM Safety", "Systems Design", "Drones"],
+    links: [],
     hasDetailPage: true,
   },
   {
@@ -129,7 +116,7 @@ export const projects: Project[] = [
     title: "SARA — Guardrails for a Production LLM Assistant",
     role: "Data Science Intern, SP Digital",
     dates: "Jan 2026 – Jun 2026",
-    tier: "featured",
+    tier: "standard",
     group: "production",
     summary:
       "Before this I'd built AI apps that worked. This was the first one where someone was paid to break it, and it changed what I think the job is.",
@@ -358,6 +345,123 @@ export const projects: Project[] = [
         url: "https://github.com/arshinsikka/ofi-regime-tradability",
         kind: "github",
       },
+    ],
+    hasDetailPage: true,
+  },
+  {
+    slug: "lecture-ai",
+    title: "Lecture AI",
+    role: "Co-Founder",
+    dates: "Jul 2025 – Mar 2026",
+    tier: "featured",
+    group: "ventures",
+    accolades: [
+      { text: "BLOCK71-backed" },
+      { text: "VIP@SoC Finalist" },
+    ],
+    summary:
+      "We surveyed 500 students, found a gap nobody was serving, built for it, and then discovered we'd picked the wrong customer entirely.",
+    body: [],
+    sections: [
+      {
+        heading: "Overview",
+        paragraphs: [
+          {
+            text: "Lecture AI turned recorded lectures into structured study notes, in two languages, for under a dollar a lecture. I co-founded it in July 2025. We shipped a working product, got into an incubation programme, reached the finals of a university venture competition, and stopped in March 2026 without meaningful adoption.",
+          },
+          {
+            text: "It started with a survey rather than an idea, which I still think was the right way round. My co-founder ran it: 500 students, and two numbers came back that mattered. Most of them rewatched recorded lectures because they'd missed something the first time. And a couple of hundred wanted study material in Mandarin, which essentially didn't exist.",
+          },
+          {
+            text: "The second number was the interesting one. Everyone building in this space was serving students who study in English. Nobody was serving students who follow the lecture fine but revise in a different language.",
+          },
+        ],
+      },
+      {
+        heading: "Who did what",
+        paragraphs: [
+          {
+            text: "I designed and built the whole technical pipeline, and I did the market research and go-to-market work. My co-founder ran the student survey and handled conversations with potential customers, including the university's teaching technology team.",
+          },
+        ],
+      },
+      {
+        heading: "The problem with the obvious build",
+        paragraphs: [
+          {
+            text: "Record, transcribe, summarise, ship. That's the obvious version, and for technical subjects it produces something worse than nothing.",
+          },
+          {
+            text: "Speech recognition handles ordinary conversation well and mangles technical vocabulary. A specific tool name comes out as two unrelated English words. A standard term in machine learning comes back as something unrecognisable. That would be a minor annoyance if the transcript were the product, but it isn't. The transcript feeds the summariser, and a summariser handed a corrupted transcript will confidently produce a clean, well-organised summary of the wrong thing.",
+          },
+          {
+            text: "That's the actual problem, and it took me a while to see it clearly. It isn't that transcription is imperfect. It's that every later stage inherits the earlier mistakes and hides them, so the output looks more trustworthy the further it gets from the error.",
+          },
+        ],
+      },
+      {
+        heading: "The decisions I'd defend",
+        paragraphs: [
+          {
+            text: "Two passes instead of one. I split the language model work into a correction step and a summarisation step, and ran them separately. The correction step gets the raw transcript along with the lecturer's own slides, so the model has something authoritative to check the terminology against, and fixes the transcript before anything else touches it. Only then does the summarising happen.",
+          },
+          {
+            text: "Doing both at once is cheaper and simpler and it's what most tools do. It also means the model is guessing at what was said and deciding what mattered in the same breath, with no way to signal which parts it guessed at. Separating them is the single thing that made the output usable.",
+          },
+          {
+            text: "No search index. The correction step needs the slides as a reference, which is exactly the problem that search infrastructure exists to solve, and I didn't build any. At the scale we were running, a lecture's slides fit comfortably into what the model can read at once. Adding a search layer would have meant an indexing step, a storage layer, and a week of work, for no accuracy gain against a set of documents small enough to just hand over. I'd revisit that at thousands of lectures. At ours, it saved weeks.",
+          },
+          {
+            text: "Technical terms stay in English inside the Chinese notes. Translating a term like backpropagation into Mandarin produces something technically correct and practically useless, because the student then can't match it to the English textbook, the English slides, or the English exam. So the notes aren't a translation. The explanation is in one language and the vocabulary stays in the other. That came out of the survey, not out of me thinking about it.",
+          },
+          {
+            text: "Organised by topic, not in order. The natural structure is the order the lecture happened in, because that's the order the audio arrives. Students don't revise that way. They jump to the thing they don't understand. Restructuring by concept meant the notes stopped mirroring the recording and started mirroring how they'd actually be used.",
+          },
+          {
+            text: "Deadlines pulled out separately. Students kept describing the same failure: an assignment deadline mentioned once, forty minutes into a lecture, missed entirely. So announcements and dates got their own section instead of sitting in the summary where they'd be technically present and functionally invisible.",
+          },
+        ],
+      },
+      {
+        heading: "What we got wrong",
+        paragraphs: [
+          {
+            text: "We built it for students, and that was the mistake.",
+          },
+          {
+            text: "Students don't control access to lecture recordings. The university and the lecturer do. So every single user had to get hold of their own recording before our product could do anything at all, which meant the very first step depended on something outside both our control and theirs. On top of that, signing up students one at a time is a distribution problem with no leverage. Five hundred users means five hundred separate conversations.",
+          },
+          {
+            text: "Switching the customer to lecturers fixed both at once. A lecturer already has the recording, and one lecturer produces notes for an entire cohort, so a single conversion serves a hundred students instead of one.",
+          },
+          {
+            text: "The part I didn't see coming is that it also fixed a trust problem we hadn't properly named. Notes generated by AI and handed straight to students are unverified material in a setting where being wrong has consequences. The same notes reviewed and released by the lecturer have a person in the loop who is already the authority on the subject. One decision changed how we reached people and whether they should believe us.",
+          },
+        ],
+      },
+      {
+        heading: "Where it landed",
+        paragraphs: [
+          {
+            text: "We shipped it. We got into an incubation programme and reached a competition final. Cost stayed under a dollar per lecture.",
+          },
+          {
+            text: "We never got meaningful adoption, and we stopped in March 2026.",
+          },
+          {
+            text: "I'd rather write that plainly than dress it up, because the outcome isn't the useful part of this. The useful part is that a survey of five hundred people gave us a real insight, and then actual usage overturned the business we'd built on top of it, and we changed instead of defending it. Building the thing was the easy half.",
+          },
+        ],
+      },
+    ],
+    tags: ["Python", "FastAPI", "Whisper", "Gemini", "RAG", "NLP"],
+    links: [
+      {
+        label: "GitHub",
+        url: "https://github.com/arshinsikka/lectureai-mvp",
+        kind: "github",
+      },
+      { label: "Website", url: "https://lectureai.co", kind: "website" },
     ],
     hasDetailPage: true,
   },
