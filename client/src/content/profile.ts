@@ -78,7 +78,7 @@ export const about = {
   paragraphs: [
     "I'm in my final year of Computer Science at NUS, specialising in AI. Right now I'm at Garuda Robotics through NUS Overseas Colleges, where I own an AI tool for drone operations end to end — the app a pilot talks to, everything behind it, and the part that decides whether the system is allowed to act on what it just worked out.",
     "The thing I look for in a project is how many people it ends up touching. That's what's kept me interested in the work I've done so far, and it's what I'll pick on next.",
-    "Eventually I want to be the one starting those companies. I'm not there yet, and the fastest way to get there is to keep finding out what I'm bad at.",
+    "Eventually I want to start something of my own that does exactly that. I'm not there yet, and the fastest way to get there is to keep finding out what I'm bad at.",
   ],
 };
 
