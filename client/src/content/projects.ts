@@ -93,7 +93,7 @@ export const projects: Project[] = [
     tier: "standard",
     group: "production",
     summary:
-      "Before this I'd built AI apps that worked. This was the first one where someone was paid to break it, and it changed what I think the job is.",
+      "My first system where someone was paid to break it. That changed how I build.",
     body: [],
     sections: [
       {
@@ -103,7 +103,7 @@ export const projects: Project[] = [
             text: "SARA is an internal assistant at a Singapore utility. Two groups use it: fieldworkers doing physical work on the grid, and operations admins handling the paperwork behind energising and de-energising equipment. Same assistant, different permissions, and one group can see things the other shouldn't.",
           },
           {
-            text: "I spent six months there, almost all of it on the guardrails layer. That's the part deciding what the system will answer, what it won't, and how you know either way.",
+            text: "I spent six months there, almost all of it on the guardrails layer. That's the part deciding what the system answers, what it declines, and how you know either way.",
           },
         ],
       },
@@ -111,35 +111,32 @@ export const projects: Project[] = [
         heading: "What made this different",
         paragraphs: [
           {
-            text: "Everything I'd built before belonged to me. Lecture AI, coursework, side projects. If someone found a weird edge case they'd shrug and move on. If the model said something strange, that was a bug for next week.",
+            text: "Everything I'd built before belonged to me. If a user hit an edge case they'd shrug and move on.",
           },
           {
-            text: "Here the users are working on live electrical infrastructure, and the company pays an external team to attack the system on purpose.",
-          },
-          {
-            text: "That reframed the whole thing for me. I'd been treating AI applications as pipelines. Input, model, output, make the output good. What I hadn't understood is that in an enterprise the pipeline is maybe a third of the work. The rest is governance: what this system is allowed to say, to whom, how you demonstrate that, and how you know it's still true after the next change. I'd assumed that part was paperwork someone else did. It isn't. It's the actual engineering, and it's the difference between something that demos well and something you can put in front of a hundred people who have real jobs.",
+            text: "Here the users are working on live electrical infrastructure, and the company pays an external team to attack the system on purpose. That shifts where the work is. I'd been treating AI applications as pipelines: input, model, output, make the output good. In an enterprise the pipeline is maybe a third of it. The rest is governance, meaning what the system is allowed to say, to whom, how you demonstrate that, and how you know it's still true after the next change.",
           },
         ],
       },
       {
-        heading: "What I actually built",
+        heading: "What I built",
         paragraphs: [
           {
-            text: "Input controls that decide whether a request should be answered at all. Output controls that catch what shouldn't leave. A local safety classifier layered in alongside the model's own refusals. An adversarial evaluation pipeline to test all of it. And I closed the findings from a third-party penetration test, which is the only assessment of this work I didn't write myself.",
+            text: "Input controls that decide whether a request should be answered at all. Output controls that catch what shouldn't leave. A local safety classifier layered alongside the model's own refusals. An adversarial evaluation pipeline to test all of it. I also closed the findings from a third-party penetration test, which is the only assessment of this work I didn't write myself.",
           },
         ],
       },
       {
-        heading: "The decision I keep coming back to",
+        heading: "The decision I'd defend",
         paragraphs: [
           {
-            text: "Topic restriction started as keyword matching. It blocked things, so at a glance it worked. What it actually did was block the wrong things. A fieldworker asking a reasonable operational question that happened to contain a flagged word got refused. Anyone who phrased a request around the keyword list got straight through.",
+            text: "Topic restriction started as keyword matching. It blocked things, so at a glance it worked. What it actually did was block the wrong things. A fieldworker asking a reasonable operational question that happened to contain a flagged word got refused, while anyone who phrased a request around the keyword list got through.",
           },
           {
             text: "The problem is structural. Keyword matching can't tell asking about a system from asking a system to do something. Those are often the same words.",
           },
           {
-            text: "So I replaced it with classification that reads what the request is for. That costs something real: it's slower than a string comparison, it's non-deterministic, and it puts a model call in front of every request. I took the trade because of which failure worried me more. A leak is loud. Someone notices, it gets escalated, it gets fixed. A fieldworker who asks two reasonable questions, gets refused twice, and quietly stops opening the tool is a failure nobody ever files. That one shows up months later as an adoption number nobody can explain.",
+            text: "So I replaced it with classification that reads what the request is for. It's slower than a string comparison, it's non-deterministic, and it puts a model call in front of every request. I took that trade because of which failure worried me more. A leak gets noticed and escalated. A fieldworker who gets refused twice and stops opening the tool is a failure nobody files.",
           },
         ],
       },
@@ -147,13 +144,13 @@ export const projects: Project[] = [
         heading: "Measuring it",
         paragraphs: [
           {
-            text: "I spent my first stretch making guardrails better without being able to tell you whether they were better. I'd try a bypass, watch it get blocked, and feel good. That's an anecdote.",
+            text: "I spent my first stretch making guardrails better without being able to say whether they were better. I'd try a bypass, watch it get blocked, and move on. That's an anecdote.",
           },
           {
-            text: "So I built an adversarial evaluation pipeline in Langfuse: over 400 prompts across several regression sets, covering injection attempts, persona-bypass jailbreaks, and probes trying to get the system to describe its own configuration. Unsafe responses dropped roughly 60% across internal deployments. I only know that number because there was something to measure against.",
+            text: "So I built an adversarial evaluation pipeline in Langfuse: over 400 prompts across several regression sets, covering injection attempts, persona-bypass jailbreaks, and probes trying to get the system to describe its own configuration. Unsafe responses dropped roughly 60%. I only know that because there was something to measure against.",
           },
           {
-            text: "If I could tell myself one thing at the start, it would be to build the evaluation first. It feels like a detour when you want to be fixing things. It's what makes every later change legible.",
+            text: "If I were starting again I'd build the evaluation first. It feels like a detour when you want to be fixing things, and it's what makes every later change legible.",
           },
         ],
       },
@@ -161,16 +158,13 @@ export const projects: Project[] = [
         heading: "What I got wrong",
         paragraphs: [
           {
-            text: "I calibrated toward strict, because strict felt safe. Every guardrail I tightened felt like progress and had no cost I could see.",
+            text: "I calibrated toward strict, because strict felt safe. Tightening a guardrail felt like progress and had no cost I could see.",
           },
           {
-            text: "The cost was false positives, and they're invisible by nature. A blocked legitimate question doesn't raise an error or a ticket. It just makes someone decide the tool isn't worth the trouble.",
+            text: "The cost was false positives, and those are invisible. A blocked legitimate question doesn't raise an error or a ticket. It just makes someone decide the tool isn't worth the trouble.",
           },
           {
-            text: "What fixed it was writing a set of probes for questions a real fieldworker would genuinely ask, then treating a block on one of those as a defect worth the same as a successful attack. Once both failure modes had numbers, the tradeoff stopped being a feeling and became something I could look at.",
-          },
-          {
-            text: "I don't think I'd have got there from first principles. It came from watching what the keyword filter had actually been doing to people.",
+            text: "The fix was writing a set of probes for questions a real fieldworker would ask, then treating a block on one of those as a defect worth the same as a successful attack. Once both failure modes had numbers, the tradeoff was something I could look at rather than a feeling.",
           },
         ],
       },
@@ -181,7 +175,7 @@ export const projects: Project[] = [
             text: "Roughly 60% fewer unsafe responses, measured against a fixed suite rather than my own judgement. Penetration test findings closed. A topic restriction that reads intent rather than vocabulary, which cut refusals of legitimate questions substantially.",
           },
           {
-            text: "The number isn't the part I'd talk about in an interview. I went in thinking my job was to make a model behave. I came out thinking the job is making a system's behaviour provable. Everything I've built since starts with how I'm going to test it.",
+            text: "I went in thinking the job was making a model behave. I came out thinking it's making the model's behaviour provable. Everything I've built since starts with how I'm going to test it.",
           },
         ],
       },
@@ -198,37 +192,31 @@ export const projects: Project[] = [
     tier: "featured",
     group: "research",
     summary:
-      "I wrote down what I was going to do before I looked at any data. That's the only reason I caught the most interesting result I found being an illusion.",
+      "I wrote down the method before I looked at any data. Halfway through I found what I was testing for, then worked out the maths was producing it, not the market.",
     body: [],
     sections: [
       {
         heading: "Overview",
         paragraphs: [
           {
-            text: "There's a well-known signal in financial markets: if there are more buy orders than sell orders sitting on an exchange right now, the price tends to tick up in the next few seconds. That it predicts is settled. Whether it predicts well enough to make money after you pay to trade on it is a different question, and I wanted to test it properly.",
+            text: "There's a known signal in financial markets. If there are more buy orders than sell orders sitting on an exchange right now, the price tends to tick up over the next few seconds. That much is settled. Whether it predicts well enough to make money after you pay to trade on it is a different question.",
           },
           {
-            text: "I ran the study on ten days of order book data from one cryptocurrency market. The answer is no. The signal is real and it does not survive the cost of acting on it.",
-          },
-          {
-            text: "That's a boring headline. The interesting part is what happened in the middle.",
+            text: "I tested it on ten days of order book data from one cryptocurrency market. The answer is no. The signal is real and it doesn't survive the cost of acting on it.",
           },
         ],
       },
       {
-        heading: "Why this kind of work is easy to get wrong",
+        heading: "Writing the method down first",
         paragraphs: [
           {
-            text: "Financial data will hand you a profitable-looking result if you keep asking. Try enough time horizons, enough ways of slicing the market into conditions, enough assumptions about trading costs, and eventually something clears. Every choice you make after seeing the data is a chance to nudge the result in the direction you were hoping for, usually without noticing you're doing it.",
+            text: "Financial data will hand you a profitable-looking result if you keep asking. Try enough time horizons, enough ways of slicing the market, enough cost assumptions, and something eventually clears. Every choice you make after seeing the data is a chance to nudge the result toward what you were hoping for.",
           },
           {
-            text: "I find this genuinely difficult to guard against, because it doesn't feel like cheating. It feels like exploring.",
+            text: "So the first thing I wrote wasn't code. It was the protocol: which horizons I'd test, how I'd define market conditions, how I'd calculate costs, what would count as the signal being tradable, and how I'd test whether any result was real. I committed that as the first thing in the repository, before any analysis existed, so the order is checkable.",
           },
           {
-            text: "So the first thing I wrote wasn't code. It was the protocol: which time horizons I'd test, how I'd define market conditions, how I'd calculate trading costs, exactly what would count as the signal being tradable, and how I'd test whether any result was statistically real. I committed that document as the very first thing in the repository, before a single line of analysis existed, so every later piece of work sits underneath it in the history and anyone can check the order.",
-          },
-          {
-            text: 'The part that actually matters: I wrote down all four possible outcomes in advance and declared each of them valid, including "there\'s no effect here" and "there isn\'t enough data to tell." Committing to a method only works if you\'ve committed to publishing whatever it produces.',
+            text: 'I also wrote down all four possible outcomes in advance and said each was valid, including "no effect" and "not enough data to tell". Committing to a method only counts if you\'ve committed to publishing whatever it produces.',
           },
         ],
       },
@@ -236,16 +224,16 @@ export const projects: Project[] = [
         heading: "Decisions I'd defend",
         paragraphs: [
           {
-            text: "Rebuilding the data, then checking it against myself. The exchange doesn't publish the state of the order book. It publishes one snapshot and then a continuous stream of changes, so the actual state at any moment has to be rebuilt by replaying every update in order. One misapplied update silently corrupts everything after it, and there's no correct answer sitting anywhere to compare against. So I wrote a second, independent version of the rebuild and checked the two against each other at sampled points. Reimplementing something you've already built feels like wasted effort right up until it disagrees with itself.",
+            text: "Rebuilding the data and checking it against myself. The exchange doesn't publish the state of the order book. It publishes one snapshot and then a stream of changes, so you have to rebuild the state by replaying every update in order. One misapplied update quietly corrupts everything after it, and there's no correct answer anywhere to compare against. So I wrote a second, independent version of the rebuild and checked the two against each other at sampled points.",
           },
           {
-            text: 'Reading the final test data exactly once. The dataset was split into a portion for building, a portion for tuning, and a portion held back. That last portion was opened once, at the end, and every parameter applied to it was checked to be identical to values frozen before it was touched. Not "I was careful about it." Verified.',
+            text: "Reading the final test data once. The dataset was split into a portion for building, a portion for tuning, and a portion held back. The held-back portion was opened once, at the end, and every parameter applied to it was checked to be identical to values frozen beforehand.",
           },
           {
-            text: "Assuming the worst about costs. I assumed I'd pay the full gap between buy and sell prices on both entry and exit, with no favourable treatment on order queues, and I ran the whole analysis across four different fee levels rather than picking one. Picking a single fee would have made the conclusion an artifact of that choice.",
+            text: "Assuming the worst about costs. I assumed I'd pay the full gap between buy and sell prices on both entry and exit, with no favourable treatment on order queues, and ran the whole analysis across four fee levels rather than picking one.",
           },
           {
-            text: "Keeping the simpler model. I tested a more sophisticated version that uses more layers of the order book. It lost to the simple one at every horizon. The protocol said the simpler model stays unless the complex one beats it, so it stayed, and the fancier version is recorded as decorative.",
+            text: "Keeping the simpler model. I tested a more sophisticated version using more layers of the order book. It lost to the simple one at every horizon, so it stayed out.",
           },
         ],
       },
@@ -253,19 +241,16 @@ export const projects: Project[] = [
         heading: "The result that wasn't real",
         paragraphs: [
           {
-            text: "Partway through, I found what I'd set out to look for. In about a third of the tested cases, the signal's profitability appeared to diverge depending on market conditions. That's the whole thesis of the study, sitting right there.",
+            text: "Partway through, I found what I'd set out to look for. In about a third of the tested cases, the signal's profitability appeared to differ depending on market conditions. That was the whole point of the study, sitting right there.",
           },
           {
-            text: "I went looking for the mechanism, expecting to explain something about how markets work. What I found was arithmetic.",
+            text: "Then I looked at why. The measure I was ranking by is average profit minus cost, divided by volatility. At real fees the cost is far larger than the profit, and the cost barely moves between conditions. So the top of that fraction was roughly the same number everywhere, and I was really just ranking conditions by how volatile they were. Nothing to do with profitability at all.",
           },
           {
-            text: "The measure I was ranking by is roughly the average profit minus the cost, divided by how volatile that period was. On this instrument the buy-sell gap is the smallest possible increment almost all of the time, so cost barely changes between conditions. And at real fees, that cost is between eighty and thirteen hundred times larger than the average profit. When you subtract a large near-constant number from a tiny one, the top of that fraction is nearly the same everywhere, and what you're left with is a ranking by volatility wearing the costume of a ranking by profitability.",
+            text: "The giveaway is that the effect disappears at a hypothetical zero-fee level, where the cost term nearly vanishes.",
           },
           {
-            text: "The giveaway is that the whole effect disappears at a hypothetical zero-fee level, where the cost term nearly vanishes.",
-          },
-          {
-            text: "I recorded it as an artifact rather than a finding. It would have been the most impressive-looking thing in the study, and it would have been wrong.",
+            text: "I wrote it up as an artifact rather than a finding. It would have been the most impressive-looking thing in the study.",
           },
         ],
       },
@@ -273,13 +258,13 @@ export const projects: Project[] = [
         heading: "What I actually found",
         paragraphs: [
           {
-            text: "The signal predicts. That part holds up cleanly, and the strength of it fades as you look further ahead, exactly as you'd expect.",
+            text: "The signal predicts. That part holds up, and it fades as you look further ahead, which is what you'd expect.",
           },
           {
-            text: "It isn't tradable. The largest profit the model predicts anywhere in the held-out data is smaller than the cheapest realistic cost of making the trade. The rule I'd committed to, which was to trade only when expected profit exceeds cost, never fired once at any real fee level. This isn't a near miss where a better model closes the gap. The two distributions don't overlap.",
+            text: "It isn't tradable. The largest profit the model predicts anywhere in the held-out data is smaller than the cheapest realistic cost of making the trade. The rule I'd committed to, trade only when expected profit exceeds cost, never fired once at any real fee level. That isn't a near miss where a better model closes the gap.",
           },
           {
-            text: "The economic theory came out backwards. The standard model says this signal should work best in thin, jumpy markets. Measured, it works worst there, ranking last of four conditions at every horizon. Two separate parts of my analysis agreed on this independently, which is the only reason I trust it.",
+            text: "The economic theory also came out backwards. The standard model says this signal should work best in thin, jumpy markets. Measured, it works worst there. Two separate parts of the analysis found that independently, which is why I believe it.",
           },
         ],
       },
@@ -287,16 +272,13 @@ export const projects: Project[] = [
         heading: "What this doesn't prove",
         paragraphs: [
           {
-            text: "Ten days, one asset, in a fairly quiet stretch of market. Nothing here says anything about stressed markets, other instruments, or other venues.",
+            text: "Ten days, one asset, in a fairly quiet stretch of market. Nothing here says anything about stressed markets or other instruments.",
           },
           {
-            text: "The data is snapshots roughly ten times a second, not every individual event, so this is a medium-frequency study and I've drawn no high-frequency conclusions from it.",
+            text: "The data is snapshots roughly ten times a second rather than every individual event, so this is a medium-frequency study and I've drawn no high-frequency conclusions from it.",
           },
           {
-            text: "The market conditions I defined turned out to flip every few seconds, which makes them a short-lived state rather than a regime in the economic sense my own framing implied. That gap between what I measured and what I said I was measuring is real and I haven't resolved it.",
-          },
-          {
-            text: "I wrote all of that into the repository myself. A study that only lists what it proves is doing half the job, and the limitations section took longer to write than most of the analysis.",
+            text: "The market conditions I defined turned out to flip every few seconds, which makes them a short-lived state rather than a regime in the sense my own framing implied. That gap is real and I haven't resolved it.",
           },
         ],
       },
@@ -304,10 +286,10 @@ export const projects: Project[] = [
         heading: "Where it landed",
         paragraphs: [
           {
-            text: "A negative result, a contradicted hypothesis, and a striking finding I had to throw away. None of that is what I hoped for when I started.",
+            text: "A negative result, a contradicted hypothesis, and an interesting finding I had to throw away. None of that is what I hoped for.",
           },
           {
-            text: "What I'd point at is the order of operations. The protocol existed before the data did, which meant when the exciting result showed up I had no room to talk myself into it. I don't think I'd have caught it otherwise. It looked exactly like what I wanted to see.",
+            text: "The useful part is the order I did things in. The method existed before the data, so when the exciting result showed up I had no room to talk myself into it. I don't think I'd have caught it otherwise.",
           },
         ],
       },
@@ -331,20 +313,20 @@ export const projects: Project[] = [
     group: "ventures",
     accolades: [{ text: "BLOCK71-backed" }, { text: "VIP@SoC Finalist" }],
     summary:
-      "We surveyed 500 students, found a gap nobody was serving, and built it. The thing that stopped us wasn't in the product at all.",
+      "We surveyed 500 students, found a gap nobody was serving, and built it. What stopped us had nothing to do with the product.",
     body: [],
     sections: [
       {
         heading: "Overview",
         paragraphs: [
           {
-            text: "Lecture AI turned recorded lectures into structured study notes, in two languages, for under a dollar a lecture. I co-founded it in July 2025. We shipped a working product, got into an incubation programme, reached the finals of a university venture competition, and stopped in March 2026 without meaningful adoption.",
+            text: "Lecture AI turned recorded lectures into structured study notes, in two languages, for under a dollar a lecture. I co-founded it in July 2025. We shipped it, got into an incubation programme, reached the finals of a university venture competition, and stopped in March 2026.",
           },
           {
-            text: "It started with a survey rather than an idea, which I still think was the right way round. My co-founder ran it: 500 students, and two numbers came back that mattered. Most of them rewatched recorded lectures because they'd missed something the first time. And a couple of hundred wanted study material in Mandarin, which essentially didn't exist.",
+            text: "It started with a survey rather than an idea. My co-founder ran it: 500 students, two numbers that mattered. Most rewatched recordings because they'd missed something. And a couple of hundred wanted study material in Mandarin, which basically didn't exist.",
           },
           {
-            text: "The second number was the interesting one. Everyone building in this space was serving students who study in English. Nobody was serving students who follow the lecture fine but revise in a different language.",
+            text: "The second number was the interesting one. Everyone building here was serving students who study in English. Nobody was serving students who follow the lecture fine but revise in a different language.",
           },
         ],
       },
@@ -352,44 +334,44 @@ export const projects: Project[] = [
         heading: "Who did what",
         paragraphs: [
           {
-            text: "I designed and built the whole technical pipeline, and I did the market research and go-to-market work. My co-founder ran the student survey and handled conversations with potential customers, including the university's teaching technology team.",
+            text: "I designed and built the whole technical pipeline, and did the market research and go-to-market work. My co-founder ran the student survey and handled conversations with potential customers, including the university's teaching technology team.",
           },
         ],
       },
       {
-        heading: "The problem with the obvious build",
+        heading: "Why the obvious build doesn't work",
         paragraphs: [
           {
             text: "Record, transcribe, summarise, ship. That's the obvious version, and for technical subjects it produces something worse than nothing.",
           },
           {
-            text: "Speech recognition handles ordinary conversation well and mangles technical vocabulary. A specific tool name comes out as two unrelated English words. A standard term in machine learning comes back as something unrecognisable. That would be a minor annoyance if the transcript were the product, but it isn't. The transcript feeds the summariser, and a summariser handed a corrupted transcript will confidently produce a clean, well-organised summary of the wrong thing.",
+            text: "Speech recognition handles ordinary conversation well and mangles technical vocabulary. A tool name comes out as two unrelated English words. That would be a minor annoyance if the transcript were the product. It isn't. The transcript feeds the summariser, and a summariser given a corrupted transcript produces a clean, well-organised summary of the wrong thing.",
           },
           {
-            text: "That's the actual problem, and it took me a while to see it clearly. It isn't that transcription is imperfect. It's that every later stage inherits the earlier mistakes and hides them, so the output looks more trustworthy the further it gets from the error.",
+            text: "So the real problem isn't that transcription is imperfect. It's that every later stage inherits the earlier mistakes and hides them.",
           },
         ],
       },
       {
-        heading: "The decisions I'd defend",
+        heading: "Decisions I'd defend",
         paragraphs: [
           {
-            text: "Two passes instead of one. I split the language model work into a correction step and a summarisation step, and ran them separately. The correction step gets the raw transcript along with the lecturer's own slides, so the model has something authoritative to check the terminology against, and fixes the transcript before anything else touches it. Only then does the summarising happen.",
+            text: "Two passes instead of one. I split the model work into a correction step and a summarising step. The correction step gets the raw transcript plus the lecturer's own slides, so it has something authoritative to check terminology against. Only then does the summarising happen.",
           },
           {
-            text: "Doing both at once is cheaper and simpler and it's what most tools do. It also means the model is guessing at what was said and deciding what mattered in the same breath, with no way to signal which parts it guessed at. Separating them is the single thing that made the output usable.",
+            text: "Doing both at once is cheaper and it's what most tools do. It also means the model is guessing at what was said and deciding what mattered in the same breath, with no way to flag which parts it guessed. Separating them is what made the output usable.",
           },
           {
-            text: "No search index. The correction step needs the slides as a reference, which is exactly the problem that search infrastructure exists to solve, and I didn't build any. At the scale we were running, a lecture's slides fit comfortably into what the model can read at once. Adding a search layer would have meant an indexing step, a storage layer, and a week of work, for no accuracy gain against a set of documents small enough to just hand over. I'd revisit that at thousands of lectures. At ours, it saved weeks.",
+            text: "No search index. The correction step needs the slides as a reference, which is exactly what search infrastructure exists for, and I didn't build any. A lecture's slides fit into what the model can read at once. Adding a search layer would have meant an indexing step, a storage layer, and a week of work, for no accuracy gain on a set of documents small enough to just hand over.",
           },
           {
-            text: "Technical terms stay in English inside the Chinese notes. Translating a term like backpropagation into Mandarin produces something technically correct and practically useless, because the student then can't match it to the English textbook, the English slides, or the English exam. So the notes aren't a translation. The explanation is in one language and the vocabulary stays in the other. That came out of the survey, not out of me thinking about it.",
+            text: "Technical terms stay in English inside the Chinese notes. Translating a term like backpropagation into Mandarin gives you something technically correct and useless, because the student can't then match it to the English textbook, slides, or exam. So the notes aren't a translation. The explanation is in one language and the vocabulary stays in the other. That came out of the survey, not out of me thinking about it.",
           },
           {
-            text: "Organised by topic, not in order. The natural structure is the order the lecture happened in, because that's the order the audio arrives. Students don't revise that way. They jump to the thing they don't understand. Restructuring by concept meant the notes stopped mirroring the recording and started mirroring how they'd actually be used.",
+            text: "Organised by topic, not in order. The natural structure is the order the lecture happened in, because that's the order the audio arrives. Students don't revise that way. They jump to the thing they don't understand.",
           },
           {
-            text: "Deadlines pulled out separately. Students kept describing the same failure: an assignment deadline mentioned once, forty minutes into a lecture, missed entirely. So announcements and dates got their own section instead of sitting in the summary where they'd be technically present and functionally invisible.",
+            text: "Deadlines pulled out separately. Students kept describing the same failure: an assignment deadline mentioned once, forty minutes in, missed entirely. So dates got their own section instead of sitting in the summary where they'd be technically present and functionally invisible.",
           },
         ],
       },
@@ -397,25 +379,19 @@ export const projects: Project[] = [
         heading: "What we got wrong",
         paragraphs: [
           {
-            text: "We built it for students first, and that was the wrong call, though it isn't the one that stopped us.",
+            text: "We built it for students first. That was the wrong call, though it isn't what stopped us.",
           },
           {
-            text: "Students don't control access to lecture recordings. The university and the lecturer do. So every single user had to get hold of their own recording before our product could do anything at all, which meant the very first step depended on something outside both our control and theirs. On top of that, signing up students one at a time is a distribution problem with no leverage. Five hundred users means five hundred separate conversations.",
+            text: "Students don't control access to lecture recordings. The university and the lecturer do. So every user had to get hold of their own recording before the product could do anything, which meant the first step depended on something outside our control and theirs. Signing up students one at a time is also a distribution problem with no leverage.",
           },
           {
-            text: "Switching the customer to lecturers fixed both of those. A lecturer already has the recording, and one lecturer produces notes for an entire cohort. It also fixed a trust problem we hadn't properly named, because notes reviewed and released by the lecturer have a person in the loop who is already the authority on the subject.",
+            text: "Switching to lecturers fixed both. A lecturer already has the recording, and one lecturer produces notes for a whole cohort. It also fixed a trust problem we hadn't named, since notes released by the lecturer have someone in the loop who is already the authority on the subject.",
           },
           {
-            text: "Then we ran into the thing that actually ended it.",
+            text: "Then we hit the thing that ended it. A lecture recording has students' voices in it. In Singapore that makes it personal data, with rules about consent and who is allowed to hold it. Every conversation started running into some version of that. Nobody said no. They just didn't want to be the person who signed off on it, and I don't blame them.",
           },
           {
-            text: "A lecture recording has students' voices in it. In Singapore that makes it personal data, and personal data comes with rules about consent, handling, and who is allowed to hold it. Every conversation we had started running into some version of that. Nobody ever said no. They just didn't want to be the person who signed off on it, and I don't blame them.",
-          },
-          {
-            text: "At that point we didn't have a technical problem. We had a product that nobody could adopt without starting a legal conversation they had no reason to start, and no amount of making the notes better was going to change that.",
-          },
-          {
-            text: "What I took from it is uncomfortable and I think correct. I'd spent almost all of my thinking on whether we could build the thing and almost none on how it would reach anybody. Distribution isn't the part you work out once the product is good enough. For this one it was the entire problem, and it was knowable before we wrote a line of code if we'd thought to ask.",
+            text: "At that point we didn't have a technical problem. We had a product nobody could adopt without starting a legal conversation they had no reason to start.",
           },
         ],
       },
@@ -423,13 +399,10 @@ export const projects: Project[] = [
         heading: "Where it landed",
         paragraphs: [
           {
-            text: "We shipped it. We got into an incubation programme and reached a competition final. Cost stayed under a dollar per lecture.",
+            text: "We shipped it, got into an incubation programme, and reached a competition final. Cost stayed under a dollar per lecture. We never got meaningful adoption and we stopped in March 2026.",
           },
           {
-            text: "We never got meaningful adoption, and we stopped in March 2026.",
-          },
-          {
-            text: "I'd rather write that plainly than dress it up, because the outcome isn't the useful part of this. The useful part is that a survey of five hundred people gave us a real insight, and then actual usage overturned the business we'd built on top of it, and we changed instead of defending it. Building the thing was the easy half.",
+            text: "What I took from it is that I'd spent almost all my thinking on whether we could build the thing and almost none on how it would reach anybody. Distribution isn't the part you work out once the product is good enough. Here it was the whole problem, and it was knowable before we wrote a line of code.",
           },
         ],
       },
