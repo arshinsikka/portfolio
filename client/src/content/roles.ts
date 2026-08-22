@@ -89,19 +89,19 @@ export const roles: Role[] = [
     location: "Gurugram",
     dates: "May 2025 – Aug 2025",
     description:
-      "Built an agentic RAG system using LangChain and Azure OpenAI for document retrieval across hundreds of internal consulting documents. Shipped source-PDF retrieval and structured Excel extraction workflows, reducing knowledge lookup time by ~40–50% for 12+ person teams.",
+      "Built an agentic RAG system using LangChain and Azure OpenAI for document retrieval across 200+ internal consulting documents. Shipped source-PDF retrieval and structured Excel extraction workflows, reducing knowledge lookup time by ~40–50% for 12+ person teams.",
     body: [
       {
-        text: "A twelve-person consulting team kept everything it knew in a shared document store. Hundreds of files, findable only if you already knew roughly what you were looking for and what someone had called it. The cost wasn't dramatic. A few minutes lost, several times a day, across everyone, plus the invisible cost of redoing work because you couldn't find the thing that already existed.",
+        text: "A twelve-person consulting team kept everything it knew in a shared document store. Over 200 files, findable only if you already knew roughly what you were looking for and what someone had called it. The cost wasn't dramatic. A few minutes lost, several times a day, across everyone, plus the invisible cost of redoing work because you couldn't find the thing that already existed.",
       },
       {
-        text: "I built a system that let them ask a question instead of searching. It reads the documents, finds the relevant parts, and answers from them.",
+        text: "I built a system that let them ask a question instead of searching. It's an agentic setup rather than a single retrieval pass. It decides what to look for, retrieves, and goes back for more if the first pass doesn't answer the question. That mattered here, because consulting questions usually need pieces from several documents rather than one good paragraph.",
       },
       {
-        text: "The decision I'd defend hardest is the boring one. I used FAISS, a library that holds the search index in memory inside the same process, rather than a managed vector database running as its own service. At a few hundred documents the whole collection fits in memory on the machine that's already running. A managed service would have meant provisioning it, depending on it, managing who can reach it, and paying for it monthly, in exchange for the ability to scale to a size we were nowhere near. At a different order of magnitude I'd choose differently. At this one the simpler thing was correct, and I think people reach for infrastructure because it feels more serious rather than because the problem asks for it.",
+        text: "The chunking took a few attempts to get right. Long PDFs split naively produce chunks that end mid-argument, and the model fills the gap with something plausible. I moved to 1000-token chunks with 200 tokens of overlap, so a point that straddles a boundary appears whole in at least one chunk. That fixed most of the wrong answers I was seeing.",
       },
       {
-        text: "What I underestimated was that finding the answer wasn't the hard part. An answer a consultant can't verify is an answer they won't use, and reasonably so, because what they produce goes to a client with their name on it. So I added the part that shows where each answer came from: a link back to the specific source document, and proper handling of spreadsheets so numbers came back as numbers rather than as mangled text.",
+        text: "The bigger thing I underestimated was trust. Consultants didn't just want the answer, they wanted to know where it came from, which is fair when their name goes on what they send a client. So every response returns the top four supporting documents as links alongside it, and spreadsheets are handled properly so numbers come back as numbers rather than mangled text.",
       },
       {
         text: "Retrieval made the answers fast. Being able to check them is what made anyone use them. Lookup time dropped by 40 to 50 percent.",
