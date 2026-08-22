@@ -78,16 +78,17 @@ export const about = {
   paragraphs: [
     "I'm in my final year of Computer Science at NUS, specialising in AI. Right now I'm at Garuda Robotics through NUS Overseas Colleges, working on the layer that decides whether an AI system is allowed to act on what it just decided.",
     "Most of what I've worked on comes back to the same question in different clothes: how do you know whether this thing actually works? Guardrails, evaluation pipelines, refusals, pre-registered studies. I've found that the interesting problem is rarely how to build something. It's working out where AI genuinely helps and where it's an expensive way to do something simpler.",
-    "I also teach. I've been a teaching assistant for Digital and AI Ethics at NUS, and for two summer programmes. Explaining something to someone who hasn't seen it before is the fastest way to find out whether you understand it yourself.",
+    "I also teach. I've been a teaching assistant for Digital and AI Ethics at NUS, and for two summer CS courses. Explaining something to someone who hasn't seen it before is the fastest way to find out whether you understand it yourself.",
   ],
 };
 
 export const education = {
   heading: "Education",
   degree: "B.Comp (Hons) Computer Science — National University of Singapore",
-  meta: "Aug 2023 – May 2027",
+  meta: "Aug 2023 – May 2027 · AI specialisation · Certificate of Distinction",
   notes: [
-    "Teaching Assistant, Digital & AI Ethics (IS1108) — Aug 2025 – Dec 2025. Supported student learning on ethical implications of AI, graded assignments, and facilitated seminar discussions on responsible AI development.",
+    "Selected for the NUS Overseas Colleges programme, which is how I ended up at Garuda Robotics.",
+    "Teaching Assistant for Digital & AI Ethics (IS1108), and for two summer CS courses.",
   ],
 };
 
