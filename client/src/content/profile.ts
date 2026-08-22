@@ -172,6 +172,12 @@ export const sectionCopy = {
     homeHeading: "Selected work",
     subtitle:
       "Things I've built, studies I've run, and ventures I've tried to get off the ground.",
+    /**
+     * Marks a row that leads to a case study. Stored in sentence case and
+     * uppercased by the mono label class, exactly as tags are, so the casing
+     * stays a rendering decision rather than something baked into the copy.
+     */
+    caseStudyLabel: "Case study",
     /** Keyed by `ProjectGroup`. A group with no records never renders. */
     groups: {
       production: "Production systems",

@@ -15,6 +15,15 @@ function ProjectRow({ project }: { project: Project }) {
       href={detailHref(project)}
       date={project.dates}
       tags={project.tags}
+      /*
+        Four of sixteen rows on this page lead anywhere. Without a resting
+        label the only signals are the title's underline and a hover arrow,
+        and neither survives a glance down the list — the arrow does not exist
+        on touch at all.
+      */
+      marker={
+        project.hasDetailPage ? sectionCopy.projects.caseStudyLabel : undefined
+      }
     >
       <Prose className="text-small">{project.summary}</Prose>
 

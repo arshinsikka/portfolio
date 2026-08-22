@@ -14,16 +14,7 @@ export const roles: Role[] = [
         text: "I'm building the part of a drone operations tool that decides whether a request is allowed to happen at all. A pilot types a question in plain English, a language model works out what they're asking for, and the system either does it or refuses. Before this, approving a single flight meant a person cross-checking five different screens by hand.",
       },
       {
-        text: "The thing I keep coming back to is where the refusal lives. You could ask the model to decline politely when someone asks for something outside their approval. Models are good at that, and they comply most of the time. Most of the time is the problem. A model that usually refuses is not a control, it's a habit.",
-      },
-      {
-        text: "So the refusal happens somewhere the model can't reach, and what the pilot sees on screen is drawn from that stop rather than from the model's description of it. Working out where \"somewhere\" is took longer than building it. Not the pilot's own laptop, because anyone can edit their copy of an app running on their own machine, and a limit enforced by the thing being limited isn't a limit. Not the layer that checks credentials either: it knows who is asking and what they're asking for, but not the specific values in the request, and an approval limit is entirely about values. Whether a coordinate is inside someone's approved area is a question about the numbers. So it has to happen at the first point that both sees the numbers and sits outside the user's control. That's not a convenient answer, it's the only correct one.",
-      },
-      {
-        text: "The most useful thing I've found so far was an accident. Running the tool with an old conversation still on screen, the model answered from what it had said earlier instead of actually checking anything. The answer was word perfect: right limits, right conclusion, stated confidently. Nothing had been checked and nothing had been refused. The only way to tell was that no check appeared on screen, which is a very weak signal for anyone glancing at it.",
-      },
-      {
-        text: "That reframed what I think the risk is with tools like this. It isn't that the model says something obviously wrong, because people catch that. It's that it says something fluent and reassuring that nobody verified. Which means the interface has a job too: an answer that came from a real check has to look different from one that didn't.",
+        text: "The interesting part has been working out where a refusal has to live when the thing on the other end is hardware and there's no undo. I've written that up properly as a case study.",
       },
     ],
     tags: ["Agentic AI", "LLMs", "Computer Vision", "LangGraph", "FastAPI"],

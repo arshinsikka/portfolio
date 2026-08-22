@@ -49,7 +49,16 @@ function HeroRail() {
         height={448}
         // Above the fold and the largest paint on the page: never lazy.
         loading="eager"
-        fetchPriority="high"
+        // Lowercase, and spread rather than written as an attribute. React 18
+        // does not recognise the camelCase `fetchPriority`: it warns on every
+        // render and then drops the attribute, so the hint never reached the
+        // browser. The lowercase spelling is passed straight through to the
+        // DOM. It has to be spread because @types/react 18 declares only the
+        // camelCase name — the one spelling that does not work — so writing
+        // `fetchpriority` as a plain attribute is a type error. React 19
+        // supports the camelCase form and this can go back to being an
+        // ordinary prop then.
+        {...{ fetchpriority: "high" }}
         decoding="async"
         className="aspect-square w-[9rem] rounded-sm object-cover md:w-full"
       />

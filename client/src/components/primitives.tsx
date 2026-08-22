@@ -221,6 +221,7 @@ export function IndexRow({
   href,
   tags,
   current,
+  marker,
   children,
 }: {
   /** The organisation or artifact. The row's headline. */
@@ -233,6 +234,20 @@ export function IndexRow({
   tags?: string[];
   /** The one accent mark on the page: what I am doing now. */
   current?: boolean;
+  /**
+   * A short mono label under the primary, saying what kind of destination the
+   * row has. Set only where that is not already obvious: the title's underline
+   * and the hover arrow both distinguish a linked row, but the underline is
+   * easy to miss in a list and the arrow does not exist on touch.
+   *
+   * It sits in column one rather than beside the date because column one is
+   * the shortest column in every row — measured, 23–70px against column two's
+   * 95–281px at 1440 — so a line added there is free, while the same line in
+   * column two would push every linked row taller. Column one is also the
+   * column that stays adjacent to the title when the row stacks below `lg`,
+   * where column three drops to the very bottom of the row.
+   */
+  marker?: string;
   /**
    * Description, links — whatever the interior pages carry and the homepage
    * index deliberately omits. Renders inside column two, so the organisation
@@ -279,13 +294,26 @@ export function IndexRow({
         Below `lg` the row stacks instead.
       */}
       <div className="lg:grid lg:grid-cols-[minmax(0,15rem)_minmax(0,1fr)_auto] lg:items-baseline lg:gap-x-s5">
-        {href ? (
-          <Link href={href} className="block">
-            {heading}
-          </Link>
-        ) : (
-          heading
-        )}
+        {/*
+          Column one. The marker is a sibling of the link, not inside it: it
+          is metadata about the row, the same as the date and the tags, and
+          folding it into the link would append "Case study" to the link's
+          accessible name on every row that has one.
+        */}
+        <div>
+          {href ? (
+            <Link href={href} className="block">
+              {heading}
+            </Link>
+          ) : (
+            heading
+          )}
+          {marker && (
+            <p className="mt-s1 font-mono text-label uppercase text-ink-muted">
+              {marker}
+            </p>
+          )}
+        </div>
 
         <div className="min-w-0">
           {secondary && <p className="mt-s1 text-small text-ink-muted lg:mt-0">{secondary}</p>}
