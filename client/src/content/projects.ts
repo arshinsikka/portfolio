@@ -421,7 +421,7 @@ export const projects: Project[] = [
   {
     slug: "ai-architecture-strategy-engine",
     title: "AI Architecture Strategy Engine",
-    role: "Developer",
+    role: "Personal project",
     dates: "Mar 2026",
     tier: "standard",
     group: "production",
@@ -441,12 +441,12 @@ export const projects: Project[] = [
   {
     slug: "socratic-digital-twin",
     title: "Socratic Digital Twin",
-    role: "Developer",
+    role: "Developer, NUS Faculty of Dentistry × School of Computing",
     dates: "2026 – Present",
     tier: "standard",
     group: "production",
     summary:
-      "An AI tutor for dental students that is built to refuse to answer. It's for orthodontic clinical reasoning, where being handed the answer defeats the point, so the system asks questions back instead. That constraint drives everything: a multi-stage pipeline that decides what to ask next, retrieval over the faculty's own teaching material rather than the open web, and a review step where a clinician signs off on content before a student ever sees it. Paid work for a university dental faculty, currently in development.",
+      "A collaboration between the NUS Faculty of Dentistry and the School of Computing. It's an AI tutor for dental students that's built to refuse to answer. The subject is orthodontic clinical reasoning, where being handed the answer defeats the point, so the system asks questions back instead. That constraint drives everything: a multi-stage pipeline that decides what to ask next, retrieval over the faculty's own teaching material rather than the open web, and a review step where a clinician signs off on content before a student ever sees it. Currently in development.",
     body: [],
     tags: ["LangGraph", "RAG", "Postgres", "Clinical AI"],
     links: [],
@@ -503,7 +503,7 @@ export const projects: Project[] = [
   {
     slug: "singapore-society-simulation",
     title: "Singapore Society Simulation",
-    role: "Researcher",
+    role: "Researcher, NUS Odyssey",
     dates: "2026",
     tier: "standard",
     group: "research",

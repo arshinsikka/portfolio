@@ -27,7 +27,7 @@ export const research: ResearchItem[] = [
     organization: "Medanta Hospital",
     dates: "2022",
     description:
-      "I spent an internship working with clinicians on a telemedicine platform that had gone from a convenience to essential infrastructure almost overnight. Watching doctors use it, and hearing what frustrated them, turned into a question worth studying: would any of this survive once the pandemic stopped forcing the issue? I wrote the paper on that, using a year of the hospital's telemedicine data alongside surveys of both doctors and patients, looking at effectiveness across specialties and at whether access actually reached people outside major cities. I was the author, and it was published. The part I found most interesting was that adoption wasn't a technology problem. Where it worked, it was because regulation and clinician habit had moved too, and where it didn't, better software wouldn't have fixed it.",
+      "During my internship at Medanta Hospital I worked with clinicians on a telemedicine platform that had become essential almost overnight during the pandemic. I tested it and gathered feedback from doctors on what would make it work better for them and for patients. That turned into a published paper I wrote, Telemedicine — Is It Going to Stay in India?, on whether telemedicine would survive once the pandemic stopped forcing it. I used a year of the hospital's telemedicine data along with doctor and patient surveys, looking at effectiveness across specialties and at whether access reached beyond the major cities. The paper also covers the government's role in pushing it, including the Telemedicine Practice Guidelines.",
     tags: ["Telemedicine", "Healthcare", "Published Paper"],
   },
 ];
