@@ -69,7 +69,7 @@ export const hero = {
 
 export const lookingFor = {
   leadIn: "Open to opportunities.",
-  body: "Looking for full-time roles starting mid-2027, after I graduate. Software engineering, AI/ML, product, consulting, or quant. I'm less attached to the label than to whether the work is hard and someone actually uses the result. Based in Singapore, open to relocating.",
+  body: "Looking for full-time roles starting mid-2027, after I graduate. Software engineering, AI/ML, product, consulting, or quant. I want to work on things that change a very large number of people's lives. That's not a modest goal and I'd rather say it than pretend otherwise. Based in Singapore, open to relocating.",
   ctaLabel: "View Resume",
 };
 

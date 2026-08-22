@@ -360,7 +360,7 @@ export const projects: Project[] = [
       { text: "VIP@SoC Finalist" },
     ],
     summary:
-      "We surveyed 500 students, found a gap nobody was serving, and built it. Getting it into anyone's hands turned out to be a much harder problem than building it.",
+      "We surveyed 500 students, found a gap nobody was serving, and built it. The thing that stopped us wasn't in the product at all.",
     body: [],
     sections: [
       {
