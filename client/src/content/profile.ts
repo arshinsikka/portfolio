@@ -23,12 +23,40 @@ export const RESUME_URL = "/assets/Arshin_Sikka_Resume.pdf";
 
 export const hero = {
   name: "Arshin Sikka",
-  imageSrc: "/assets/arshin-profile.webp",
+  imageSrc: "/assets/arshin-portrait.webp",
   imageAlt: "Arshin Sikka",
   tagline:
     "I build AI systems, and I try hard to find out whether they actually work.",
   intro:
     "Final-year CS student at NUS. Currently at Garuda Robotics through NUS Overseas Colleges, building agentic systems for drone operations. Previously: guardrails and evaluation for a production LLM system at SP Digital, retrieval at KPMG, and co-founder of Lecture AI.",
+  /**
+   * The one line that answers "what is he doing right now". Kept as a single
+   * string so it can be edited in one place — it is the copy on the page most
+   * likely to go stale.
+   */
+  currently:
+    "Currently: building the refusal layer for drone mission planning at Garuda.",
+  /**
+   * The rail fact block under the portrait: one line each, in the order they
+   * are read. Deliberately not a sentence — this is the machine-set metadata
+   * the rail carries everywhere else on the site, applied to the person.
+   */
+  facts: ["NUS · final year", "Garuda Robotics", "Singapore"],
+  /**
+   * The phrase inside `tagline` that becomes the interactive cue. It is not a
+   * second copy of the copy: the component finds this substring inside
+   * `tagline` and splits around it, so the rendered sentence is always exactly
+   * `tagline` and the two can never drift. If the tagline is ever rewritten
+   * without this phrase in it, the cue quietly disappears and the headline
+   * renders as plain text.
+   */
+  taglineCue: "actually work",
+  /**
+   * What the cue does, for screen readers. Composed with `taglineCue` into the
+   * button's accessible name, so the heading still reads as its own sentence
+   * instead of being interrupted by a bare instruction.
+   */
+  taglineCueHint: "highlight my case studies",
   githubUrl: "https://github.com/arshinsikka",
 };
 

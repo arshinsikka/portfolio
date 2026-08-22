@@ -64,6 +64,42 @@
   --rail-w: 6rem;
   --rail-gap: 2rem;
 
+  /* The homepage rail only. The hero portrait is the one thing that ever sits
+     in a rail, and 6rem is a width sized for 11px type — at a 15px root that is
+     a 90px photo beside a 60px headline, which reads as a chat avatar rather
+     than a portrait.
+
+     Why a clamp and not a flat 14rem: the rail appears from `md` (768px) up, and
+     every pixel it takes comes out of the content column. Root font-size is
+     15px, so 14rem is 210px — and a *flat* 210px rail at a 768px viewport leaves
+     708 − 210 − 30 = 468px of content, which is narrower than --measure (510px).
+     Prose would stop reaching its own measure, which §4 says must never happen.
+     15vw tracks the viewport instead: 115px at 768 (563px of content, clear of
+     the measure), 210px from 1400 up, and the 14rem ceiling stops the rail
+     running away on a 1920 display. The 6rem floor means it can never be
+     narrower than the site-wide rail.
+
+     Measured, prose is exactly 510px at 768 / 900 / 1024 / 1280 / 1440 / 1920.
+     The h1 is capped at max-w-lead (54rem/810px) and the content column never
+     drops below 563px, so from 1024 up the h1 renders at its full 810px and its
+     line breaks are untouched: 3 lines with this rail, 3 lines with the old
+     6rem one. Applied by `.rail-home` on a wrapper around the home route, so
+     every other page keeps 6rem. */
+  --rail-w-home: clamp(6rem, 15vw, 14rem);
+
+  /* Signed distance from a text-display element's border-box top to the cap top
+     of its first line, as a fraction of the font size. Measured in the browser
+     rather than derived from font tables: a zero-height inline-block strut gives
+     the exact baseline, and a pixel scan of flat-topped caps ("HIT") gives
+     Newsreader's cap height at 0.755em. At line-height 1.02 the font's own
+     ascent+descent slightly exceeds the line box, so the half-leading is
+     *negative* and the cap top lands 0.8px ABOVE the box top at 60px — hence the
+     minus sign. It is sub-pixel, but it is the right sign, and an earlier guess
+     of +0.0704 was wrong by 5px. The hero portrait is offset by this plus the
+     name label above the h1, so the photo's top edge meets the cap height of the
+     tagline's first line rather than its line box. */
+  --display-cap-offset: -0.01333;
+
   /* Reading measure for prose only (~65ch). The content column is far wider
      than this now, so paragraphs stay at measure and the surplus width is spent
      structurally — on the index row's columns — rather than on long lines. */
@@ -208,7 +244,42 @@
   animation: nudge-in 0.18s ease-out both;
 }
 
-/* Motion is reserved for state changes and hover. Honour the OS setting. */
+/* Homepage-only rail width. Scoped to a wrapper so the token cascades to every
+   Block on the route — hero and index blocks alike — which keeps one content
+   left edge down the page. Widening the hero alone would step the h1 120px
+   right of the rows beneath it (210px rail vs 90px) and break the page's
+   spine. */
+.rail-home {
+  --rail-w: var(--rail-w-home);
+}
+
+/* The hero portrait's top offset: the name label's own line box (text-label,
+   0.6875rem at line-height 1.3), the s3 gap below it, then the correction from
+   the h1's box top to its cap top. Expressed against the same clamp the display
+   size uses, so the alignment holds at every width the rail exists at rather
+   than only at 1440.
+
+   The media query is written out here rather than applied as a `md:` variant in
+   the component: this is a hand-written class, not a Tailwind utility, so
+   Tailwind cannot generate a variant for it and `md:hero-rail-offset` silently
+   compiles to nothing. It is scoped to `md` because below that the rail
+   collapses and stacks above the content, where there is no line to align to.
+
+   If the name label's size or the h1's `mt-s3` ever change, this changes with
+   them — the three terms below are those two values plus the font metric. */
+@media (min-width: 768px) {
+  .hero-rail-offset {
+    padding-top: calc(
+      0.6875rem * 1.3 + 0.75rem + var(--display-cap-offset) *
+        clamp(2.5rem, 6.5vw, 4rem)
+    );
+  }
+}
+
+/* Motion is reserved for state changes and hover. Honour the OS setting.
+   Every hover and focus state on the homepage is a colour or opacity
+   transition, so collapsing the duration here leaves the affordance intact and
+   only removes the fade. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

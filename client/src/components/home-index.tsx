@@ -1,8 +1,10 @@
+import { Link } from "wouter";
 import { Block, IndexRow, Prose, TextLink } from "@/components/primitives";
 import { roles } from "@/content/roles";
 import { featuredProjects, standardProjects, projectBySlug } from "@/content/projects";
 import { homeResearch } from "@/content/research";
 import { sectionCopy } from "@/content/profile";
+import { cn } from "@/lib/utils";
 
 /**
  * How much of each list the homepage shows before handing off to the route that
@@ -53,7 +55,7 @@ function MoreLink({ href, children }: { href: string; children: string }) {
  * stay on the pages the rail labels link to, so this reads as an index rather
  * than a second copy of the site.
  */
-export default function HomeIndex() {
+export default function HomeIndex({ cued = false }: { cued?: boolean }) {
   return (
     <>
       {/*
@@ -64,15 +66,82 @@ export default function HomeIndex() {
         exactly that and drops every other field.
       */}
       <Block label={sectionCopy.projects.homeHeading} labelHref="/projects">
-        <ul className="space-y-s5">
+        <ul>
           {indexProjects.map((project) => (
-            <li key={project.slug}>
-              <h3 className="text-org font-medium">
-                <TextLink href={`/projects/${project.slug}`}>
+            <li
+              key={project.slug}
+              className={cn(
+                "group relative border-b border-rule py-s3 last:border-b-0",
+                "transition-colors duration-150",
+                // The tagline cue. The hairline is the half of this that reads
+                // from the top of the page: three near-invisible --rule lines
+                // across ~900px becoming three accent ones is a large-area
+                // change, where the title colour is a small-area one. Colour
+                // only — promoting the border's *width* would shift layout.
+                cued && "border-accent",
+                "hover:border-ink focus-within:border-ink",
+              )}
+            >
+              {/* The row hover arrow, unchanged from IndexRow. */}
+              <span
+                aria-hidden
+                className={cn(
+                  "pointer-events-none absolute left-[-1.25rem] top-s3 hidden font-mono text-meta text-ink-muted",
+                  "opacity-0 transition-opacity duration-150 md:block",
+                  "group-hover:opacity-100 group-focus-within:opacity-100",
+                )}
+              >
+                →
+              </span>
+
+              {/*
+                Ink with a rule-strong underline, not the accent TextLink these
+                titles used to carry. That is IndexRow's linked-heading
+                treatment, so the two lists now read as one system — and it
+                leaves the accent free to mean something here.
+              */}
+              <h3
+                className={cn(
+                  "text-org font-medium transition-colors duration-150",
+                  // Accent already means "this is the one being pointed at" in
+                  // this system — it is what IndexRow's `current` role uses. At
+                  // rest these titles are --ink like every other linked index
+                  // heading, so the unity with IndexRow is a resting state and
+                  // this transient mark does not break it.
+                  cued ? "text-accent" : "text-ink",
+                )}
+              >
+                <Link
+                  href={`/projects/${project.slug}`}
+                  className={cn(
+                    "underline decoration-rule-strong underline-offset-[3px]",
+                    "transition-colors duration-150 group-hover:decoration-accent",
+                  )}
+                >
                   {project.title}
-                </TextLink>
+                </Link>
               </h3>
+
               <Prose className="mt-s2">{project.summary}</Prose>
+
+              {/*
+                Dates and the leading tag, revealed on hover or focus. It is
+                always rendered and always occupies its line — only `opacity`
+                moves — so the row's height is identical in both states and
+                nothing below it reflows. Reserving the space this way rather
+                than animating height is also what keeps it honest under
+                prefers-reduced-motion, where the fade collapses to an instant
+                swap and the layout still never moves.
+              */}
+              <p
+                className={cn(
+                  "mt-s2 font-mono text-label uppercase text-ink-muted",
+                  "opacity-0 transition-opacity duration-150",
+                  "group-hover:opacity-100 group-focus-within:opacity-100",
+                )}
+              >
+                {[project.dates, project.tags?.[0]].filter(Boolean).join(" · ")}
+              </p>
             </li>
           ))}
         </ul>
