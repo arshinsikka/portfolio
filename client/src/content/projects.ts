@@ -426,7 +426,7 @@ export const projects: Project[] = [
     tier: "standard",
     group: "production",
     summary:
-      "Multi-agent system that helps teams choose between AI architectures (prompting, RAG, fine-tuning) under real constraints like budget, latency, and quality. Implements structured decision frameworks for AI product teams.",
+      "A tool for deciding whether to use prompting, retrieval, or fine-tuning for a given job. Most teams pick by instinct or by whatever they read about last. But the costs are all knowable, so I built something that works it out: it scores each option against your budget and latency limits, runs a thousand simulations with the numbers nudged around, and tells you where the answer flips from one to another.",
     body: [],
     tags: ["Python", "Multi-Agent", "LLMs", "System Design"],
     links: [
@@ -460,7 +460,7 @@ export const projects: Project[] = [
     tier: "standard",
     group: "production",
     summary:
-      "Echolens is a product that strips personal information out of customer call transcripts. I built the evaluation pipeline that measures how well it does that. Most of the work wasn't the measurement, it was deciding what counts: a receipt number isn't personal information, a partial email address probably isn't either, and those rules have to be written down and applied consistently before any score means anything. I scored it in a way that treats missing something as worse than being over-cautious, because those two errors are not equally bad here.",
+      "Echolens strips personal information out of customer call transcripts. I built the evaluation pipeline that measures how well it does that. Most of the work wasn't the measurement, it was deciding what counts: a receipt number isn't personal information, a partial email address probably isn't either, and those rules have to be written down and applied consistently before any score means anything. I scored it so that missing something counts as worse than being over-cautious, because those two errors aren't equally bad here.",
     body: [],
     tags: ["PII", "Evaluation", "NLP"],
     links: [],
@@ -494,7 +494,7 @@ export const projects: Project[] = [
     tier: "minor",
     group: "production",
     summary:
-      "Contributions to MarkBind, an open-source documentation site generator maintained at NUS. I was selected for this on the strength of my performance in the software engineering course, and it was the first time I'd worked inside a codebase with an established review culture that I hadn't written any of.",
+      "Contributions to MarkBind, an open-source documentation site generator maintained at NUS. I was picked for it off the back of the software engineering course. It was the first time I'd worked in a codebase I hadn't written any of, with a review process I had to satisfy.",
     body: [],
     tags: ["Open Source", "Java", "Documentation Tooling"],
     links: [],
@@ -508,7 +508,7 @@ export const projects: Project[] = [
     tier: "standard",
     group: "research",
     summary:
-      "Can AI agents grounded in real demographic data predict how a population reasons about a policy question? I built a simulation where each agent holds a demographic profile and argues from it, then compared what the group concluded against what real people said in public discussion. They diverged, substantially, and the more interesting result was that changing the demographic mix of the agents shifted the collective conclusion by a large margin. That means results from this kind of simulation depend heavily on who you put in the room, which is a caution for anyone treating synthetic populations as a substitute for asking people.",
+      "Can AI agents stand in for real people when you want to know how a population thinks about something? I gave each agent a demographic profile and had them argue a policy question, then compared what they concluded against what real people had said online. They came out quite different. Changing who was in the simulation also moved the answer a long way, which means you'd be measuring your own choice of participants as much as anything else.",
     body: [],
     tags: ["LLM Agents", "Social Simulation", "Research"],
     links: [],
@@ -536,7 +536,7 @@ export const projects: Project[] = [
     tier: "standard",
     group: "ventures",
     summary:
-      "A card game my friends and I have played for years, which existed only as a physical deck, so it needed everyone in the same room. I built the online version. What I didn't expect was what happened afterwards: it spread by word of mouth to friends of friends I'd never met, and people kept playing it. Nothing about that was technically hard. It was the first time something I built reached people I hadn't told about it, and it's a very different feeling from a project that works on my laptop.",
+      "A card game my friends and I have played for years, which existed only as a physical deck, so it needed everyone in the same room. I built the online version. It then spread by word of mouth to friends of friends I've never met, who kept playing it. Nothing about it was technically hard, and it's still the first thing I built that reached people I didn't tell about it.",
     body: [],
     tags: ["Real-time", "Multiplayer", "WebSockets"],
     links: [],
@@ -550,7 +550,7 @@ export const projects: Project[] = [
     tier: "standard",
     group: "ventures",
     summary:
-      "A cricket draft game we used to run over WhatsApp, badly. Group chats are a terrible place to hold a game with rules, because someone always has to arbitrate, someone always misses a turn, and the state of play lives in whoever scrolled back furthest. So I moved it into something that actually holds the rules and keeps everyone in sync. Same lesson as Knocks, in a different shape: the interesting problem wasn't the game, it was that the medium people were using couldn't do the job.",
+      "A cricket draft game we used to run over WhatsApp, badly. Group chats are a terrible place to hold a game with rules. Someone always has to arbitrate, someone always misses a turn, and the state of play lives in whoever scrolled back furthest. So I moved it somewhere that actually holds the rules and keeps everyone in sync.",
     body: [],
     tags: ["Real-time", "Multiplayer", "WebSockets"],
     links: [],
@@ -592,7 +592,7 @@ export const projects: Project[] = [
     tier: "minor",
     group: "earlier",
     summary:
-      "This started with me giving away things from my own house to local NGOs during the pandemic. It worked, and it obviously didn't scale, because the bottleneck was one person with a car and a limited amount of stuff. So we built a platform to connect donors with communities that needed things, working through established NGOs and logistics partners rather than trying to move goods ourselves. The lesson I took from it is that the useful thing technology did here wasn't the donating, it was removing the coordination problem that made donating hard.",
+      "This started with me giving away things from my own house to local NGOs during the pandemic. It worked, and it obviously didn't scale, because the bottleneck was one person with a car and a limited amount of stuff. So we built a platform connecting donors with communities that needed things, working through established NGOs and logistics partners rather than moving goods ourselves. The hard part was never the donating. It was that nobody could find each other.",
     body: [],
     tags: ["Social Impact", "Platform", "NGO Partnerships"],
     links: [],

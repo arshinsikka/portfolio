@@ -38,7 +38,7 @@ export const roles: Role[] = [
       "Six months on the guardrails for an internal assistant used by frontline staff at a utility, plus the adversarial test suite that showed whether they worked. Unsafe responses dropped roughly 60%.",
     body: [
       {
-        text: "The assistant is used by people doing physical work on electrical infrastructure. Almost all my time went on the guardrails: deciding what it answers and what it declines.",
+        text: "The people using it are out doing physical work on the grid. Some of them can see things the others shouldn't, so a lot of the job was working out what the assistant says to whom.",
       },
       {
         text: "This was the first thing I'd built where someone was paid to break it, and it changed what I think the work is. I've written that up properly as a case study.",

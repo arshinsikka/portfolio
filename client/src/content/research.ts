@@ -7,7 +7,7 @@ export const research: ResearchItem[] = [
     organization: "Independent",
     dates: "Aug 2026",
     description:
-      "A pre-registered study testing whether a well-documented order-flow signal stays profitable once you account for the cost of trading on it. It doesn't. The protocol was committed before any analysis code existed, which is the only reason I caught the most striking result I found being an artifact rather than a finding.",
+      "There's a signal traders use: when there are more buy orders than sell orders on an exchange, the price usually ticks up. I tested whether you can actually make money on it once you pay the trading fees. You can't. I wrote the whole method down before looking at any data, which is how I caught a result that looked real and turned out to be an accident of the maths.",
     tags: ["Market Microstructure", "Pre-registration", "Statistics"],
     projectSlug: "ofi-regime-tradability",
   },
@@ -17,7 +17,7 @@ export const research: ResearchItem[] = [
     organization: "National University of Singapore",
     dates: "2026",
     description:
-      "Whether AI agents grounded in real demographic data can predict how a population reasons about a policy question. They diverged substantially from what real people said in public discussion, and changing the demographic mix of the agents moved the collective conclusion by a large margin. Supervised research, presented at a school showcase.",
+      "I gave AI agents real demographic profiles and had them argue about a policy question, to see whether they'd reason like the actual population does. They didn't. And when I changed the mix of people in the simulation, the group's conclusion moved a lot.",
     tags: ["LLM Agents", "Social Simulation", "Policy"],
     projectSlug: "singapore-society-simulation",
   },
