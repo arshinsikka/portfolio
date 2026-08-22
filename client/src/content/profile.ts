@@ -77,7 +77,7 @@ export const about = {
   heading: "About Me",
   paragraphs: [
     "I'm in my final year of Computer Science at NUS, specialising in AI. Right now I'm at Garuda Robotics through NUS Overseas Colleges, where I own an AI tool for drone operations end to end — the app a pilot talks to, everything behind it, and the part that decides whether the system is allowed to act on what it just worked out.",
-    "What I want next is a specific kind of problem rather than a specific job title. I want to build the thing and also help decide what gets built. The work I've enjoyed most is where those two are the same conversation, and where a wrong call shows up in the real world rather than in a dashboard.",
+    "The thing I look for in a project is how many people it ends up touching. That's what's kept me interested in the work I've done so far, and it's what I'll pick on next.",
     "Eventually I want to be the one starting those companies. I'm not there yet, and the fastest way to get there is to keep finding out what I'm bad at.",
   ],
 };
