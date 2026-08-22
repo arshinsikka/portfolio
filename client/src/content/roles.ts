@@ -19,6 +19,13 @@ export const roles: Role[] = [
     ],
     tags: ["Agentic AI", "LLMs", "Computer Vision", "LangGraph", "FastAPI"],
     projectSlug: "garuda-refusal-layer",
+    links: [
+      {
+        label: "Read the case study",
+        url: "/projects/garuda-refusal-layer",
+        kind: "website",
+      },
+    ],
     isCurrent: true,
   },
   {

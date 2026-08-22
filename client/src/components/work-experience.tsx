@@ -46,41 +46,53 @@ export default function WorkExperience() {
       </p>
 
       <ul className="mt-s5">
-        {roles.map((role) => (
-          <IndexRow
-            key={role.slug}
-            primary={role.company}
-            secondary={`${role.title} · ${role.location}`}
-            href={detailHref(role.projectSlug)}
-            date={role.dates}
-            tags={role.tags}
-            current={role.slug === currentRoleSlug}
-          >
-            <Prose className="text-small">{role.description}</Prose>
-            <RoleBody body={role.body} />
-            {role.links && role.links.length > 0 && (
-              <ul className="mt-s2 flex flex-wrap gap-x-s5 gap-y-s1">
-                {role.links.map((link) => (
-                  <li key={link.url}>
-                    {/*
-                      A role link can now point back into the site (SP Digital
-                      links to its own case study), so `external` is decided by
-                      the URL rather than assumed. Hardcoding it would open an
-                      internal route in a new tab.
-                    */}
-                    <TextLink
-                      href={link.url}
-                      external={!link.url.startsWith("/")}
-                      className="text-small"
-                    >
-                      {link.label}
-                    </TextLink>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </IndexRow>
-        ))}
+        {roles.map((role) => {
+          // Derived once so the marker and the destination can never disagree:
+          // a row claims to lead to a case study exactly when it leads to one.
+          const href = detailHref(role.projectSlug);
+          return (
+            <IndexRow
+              key={role.slug}
+              primary={role.company}
+              secondary={`${role.title} · ${role.location}`}
+              href={href}
+              date={role.dates}
+              tags={role.tags}
+              current={role.slug === currentRoleSlug}
+              /*
+                Same problem /projects had: three of six rows lead somewhere
+                and nothing at rest says which. Column one here is a
+                single-line company name on every row — 23px against column
+                two's 95–703px — so the label costs no row height at all.
+              */
+              marker={href ? sectionCopy.projects.caseStudyLabel : undefined}
+            >
+              <Prose className="text-small">{role.description}</Prose>
+              <RoleBody body={role.body} />
+              {role.links && role.links.length > 0 && (
+                <ul className="mt-s2 flex flex-wrap gap-x-s5 gap-y-s1">
+                  {role.links.map((link) => (
+                    <li key={link.url}>
+                      {/*
+                        A role link can point back into the site (both case
+                        study links do), so `external` is decided by the URL
+                        rather than assumed. Hardcoding it would open an
+                        internal route in a new tab.
+                      */}
+                      <TextLink
+                        href={link.url}
+                        external={!link.url.startsWith("/")}
+                        className="text-small"
+                      >
+                        {link.label}
+                      </TextLink>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </IndexRow>
+          );
+        })}
       </ul>
     </Block>
   );
