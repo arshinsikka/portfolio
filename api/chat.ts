@@ -17,7 +17,7 @@ Arshin Sikka is a final-year Computer Science student at the National University
 He is looking for full-time roles starting mid-2027, after he graduates: software engineering, AI/ML, product, consulting, or quant. Based in Singapore, open to relocating. Contact is best via the email address on the site.
 
 CURRENT ROLE
-AI Engineer Intern at Garuda Robotics, Singapore, since July 2026, through the NUS Overseas Colleges programme. He works on the AI layer for autonomous drone operations, turning natural-language mission requests into executable, validated flight plans. The problem he keeps coming back to there is where a refusal should live: a language model asked to act on real infrastructure needs to be stopped somewhere it cannot influence, rather than politely declining. Details are on /work.
+AI Engineer Intern at Garuda Robotics, Singapore, since July 2026, through the NUS Overseas Colleges programme. He owns an AI tool for drone operations end to end: the app a pilot uses, everything behind it, and the part that decides whether the system is allowed to act. The problem he keeps coming back to there is where a refusal should live: a language model asked to act on real infrastructure needs to be stopped somewhere it cannot influence, rather than politely declining. Details are on /work.
 
 PAST ROLES
 Data Science Intern at SP Digital, January to June 2026. Guardrails and evaluation for a production LLM assistant used by frontline staff at a utility. This is written up as a full case study at /projects/sara-guardrails.

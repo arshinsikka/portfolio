@@ -25,7 +25,7 @@ export const projects: Project[] = [
             text: "Every guardrail I'd built before this was, underneath, a filter in front of something reversible. A bad answer gets deleted. A bad write gets rolled back. A bad deploy gets reverted. You design for detection, because you can always correct afterwards.",
           },
           {
-            text: "I'm now working on a tool where a pilot asks for something in plain English, a language model works out what they mean, and the system either does it or refuses. On the other end of that are drones.",
+            text: "I'm now building a tool, end to end, where a pilot asks for something in plain English, a language model works out what they mean, and the system either does it or refuses. On the other end of that are drones.",
           },
           {
             text: "A drone that has taken off has taken off. There's no undo, there's no rollback, and whatever happens next happens in physical space, at speed, in front of people. The moment that's true, the shape of the safety problem inverts. You can't lean on detecting and correcting, because detection arrives after the fact and there's nowhere for the correction to happen. All you have left is prevention.",

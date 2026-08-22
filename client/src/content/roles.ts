@@ -8,10 +8,10 @@ export const roles: Role[] = [
     location: "Singapore",
     dates: "Jul 2026 – Present",
     description:
-      "Building the AI layer for autonomous drone operations — turning natural-language mission requests into executable, validated flight plans.",
+      "Building an AI tool for drone operations end to end. A pilot asks for something in plain English and the system works out what they mean, checks whether they're allowed to do it, and either does it or refuses.",
     body: [
       {
-        text: "I'm building the part of a drone operations tool that decides whether a request is allowed to happen at all. A pilot types a question in plain English, a language model works out what they're asking for, and the system either does it or refuses. Before this, approving a single flight meant a person cross-checking five different screens by hand.",
+        text: "I own this one end to end: the app a pilot uses, everything running behind it, and the part that decides whether a request is allowed to happen at all. A pilot types a question in plain English, a language model works out what they're asking for, and the system either does it or refuses. Before this, approving a single flight meant a person cross-checking five different screens by hand.",
       },
       {
         text: "The interesting part has been working out where a refusal has to live when the thing on the other end is hardware and there's no undo. I've written that up properly as a case study.",

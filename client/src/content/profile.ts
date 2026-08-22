@@ -42,7 +42,7 @@ export const hero = {
    * likely to go stale.
    */
   currently:
-    "Currently at Garuda Robotics through NUS Overseas Colleges, building the layer that decides whether a drone mission is allowed to happen.",
+    "Currently at Garuda Robotics through NUS Overseas Colleges, building an AI tool for drone operations end to end.",
   /**
    * The rail fact block under the portrait: one line each, in the order they
    * are read. Deliberately not a sentence — this is the machine-set metadata
@@ -76,9 +76,9 @@ export const lookingFor = {
 export const about = {
   heading: "About Me",
   paragraphs: [
-    "I'm in my final year of Computer Science at NUS, specialising in AI. Right now I'm at Garuda Robotics through NUS Overseas Colleges, working on the layer that decides whether an AI system is allowed to act on what it just decided.",
-    "Most of what I've worked on comes back to the same question in different clothes: how do you know whether this thing actually works? Guardrails, evaluation pipelines, refusals, pre-registered studies. I've found that the interesting problem is rarely how to build something. It's working out where AI genuinely helps and where it's an expensive way to do something simpler.",
-    "I also teach. I've been a teaching assistant for Digital and AI Ethics at NUS, and for two summer CS courses. Explaining something to someone who hasn't seen it before is the fastest way to find out whether you understand it yourself.",
+    "I'm in my final year of Computer Science at NUS, specialising in AI. Right now I'm at Garuda Robotics through NUS Overseas Colleges, where I own an AI tool for drone operations end to end — the app a pilot talks to, everything behind it, and the part that decides whether the system is allowed to act on what it just worked out.",
+    "What I want next is a specific kind of problem rather than a specific job title. I want to build the thing and also help decide what gets built. The work I've enjoyed most is where those two are the same conversation, and where a wrong call shows up in the real world rather than in a dashboard.",
+    "Eventually I want to be the one starting those companies. I'm not there yet, and the fastest way to get there is to keep finding out what I'm bad at.",
   ],
 };
 
