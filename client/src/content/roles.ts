@@ -61,7 +61,7 @@ export const roles: Role[] = [
     location: "Singapore",
     dates: "Jul 2025 – Mar 2026",
     description:
-      "Built an end-to-end pipeline that converts lecture recordings into structured bilingual study notes in <15 minutes for <$1. Features Whisper transcription, slide-context RAG for correction, topic segmentation, and Mandarin translation. VIP@SoC finalist, backed by BLOCK71.",
+      "The one where I spent months building for the wrong customer. We surveyed 500 students, found a gap nobody was serving, and then discovered students don't control access to the thing our product needed.",
     tags: ["AI", "NLP", "RAG", "Startup", "Product"],
     projectSlug: "lecture-ai",
     links: [
