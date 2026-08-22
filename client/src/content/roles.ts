@@ -66,6 +66,11 @@ export const roles: Role[] = [
     projectSlug: "lecture-ai",
     links: [
       {
+        label: "Read the case study",
+        url: "/projects/lecture-ai",
+        kind: "website",
+      },
+      {
         label: "View GitHub",
         url: "https://github.com/arshinsikka/lectureai-mvp",
         kind: "github",
