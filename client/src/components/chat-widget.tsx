@@ -141,14 +141,14 @@ export default function ChatWidget() {
       {/* Mobile backdrop */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          className="fixed inset-0 z-40 bg-black/50 md:hidden"
           onClick={() => setIsOpen(false)}
         />
       )}
 
       {/* Chat panel */}
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex flex-col overflow-hidden border-rule bg-paper md:inset-auto md:bottom-[84px] md:right-s5 md:h-[520px] md:w-[380px] md:rounded-sm md:border">
+        <div className="fixed top-0 left-0 z-50 flex h-dvh w-full flex-col overflow-hidden border-rule bg-paper md:inset-auto md:bottom-[84px] md:right-s5 md:h-[520px] md:w-[380px] md:rounded-sm md:border">
           {/* Header */}
           <div className="flex shrink-0 items-start justify-between gap-s4 border-b border-rule px-s4 py-s3">
             <div className="flex flex-col gap-s1">
@@ -169,10 +169,12 @@ export default function ChatWidget() {
           </div>
 
           {/* Messages */}
-          <div className="min-h-0 flex-1 space-y-s5 overflow-y-auto px-s4 py-s4">
+          <div className="min-h-0 flex-auto space-y-s5 overflow-y-auto px-s4 py-s4">
             {/* Welcome message */}
             <div>
-              <p className="font-mono text-label uppercase text-ink-muted">My AI</p>
+              <p className="font-mono text-label uppercase text-ink-muted">
+                My AI
+              </p>
               <p className="mt-s1 text-small text-ink">
                 Hi! I'm an AI assistant on Arshin's portfolio. Ask me anything
                 about his experience, projects, or background.
@@ -180,11 +182,20 @@ export default function ChatWidget() {
             </div>
 
             {messages.map((msg, i) => (
-              <div key={i} className={msg.role === "user" ? "border-l-2 border-rule-strong pl-s3" : undefined}>
+              <div
+                key={i}
+                className={
+                  msg.role === "user"
+                    ? "border-l-2 border-rule-strong pl-s3"
+                    : undefined
+                }
+              >
                 <p className="font-mono text-label uppercase text-ink-muted">
                   {msg.role === "user" ? "You" : "My AI"}
                 </p>
-                <p className="mt-s1 whitespace-pre-wrap text-small text-ink">{msg.text}</p>
+                <p className="mt-s1 whitespace-pre-wrap text-small text-ink">
+                  {msg.text}
+                </p>
               </div>
             ))}
 
@@ -209,7 +220,7 @@ export default function ChatWidget() {
           )}
 
           {/* Input */}
-          <div className="shrink-0 border-t border-rule px-s4 pb-s4 pt-s3">
+          <div className="shrink-0 border-t border-rule px-s4 pt-s3 pb-[calc(1rem+env(safe-area-inset-bottom))]">
             <div className="flex items-center gap-s2 rounded-sm border border-rule-strong px-s3 py-s2 focus-within:border-accent">
               <input
                 ref={inputRef}
@@ -217,17 +228,23 @@ export default function ChatWidget() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder={isLoading ? "Thinking…" : isCoolingDown ? "Just a moment…" : "Ask something…"}
+                placeholder={
+                  isLoading
+                    ? "Thinking…"
+                    : isCoolingDown
+                    ? "Just a moment…"
+                    : "Ask something…"
+                }
                 className="flex-1 bg-transparent text-small text-ink outline-none placeholder:text-ink-muted"
                 disabled={isLoading || isCoolingDown}
               />
               <button
                 onClick={() => sendMessage(input)}
                 disabled={!input.trim() || isLoading || isCoolingDown}
-                className="p-0.5 text-accent transition-colors duration-150 hover:text-accent-hover disabled:cursor-not-allowed disabled:opacity-30"
+                className="p-3 text-accent transition-colors duration-150 hover:text-accent-hover disabled:cursor-not-allowed disabled:opacity-30"
                 aria-label="Send message"
               >
-                <Send className="w-4 h-4" />
+                <Send className="h-4 w-4" />
               </button>
             </div>
           </div>
@@ -238,12 +255,11 @@ export default function ChatWidget() {
       <div className="group fixed bottom-s5 right-s5 z-50">
         {/* "Try me!" nudge bubble */}
         {showNudge && !isOpen && (
-          <div className="animate-nudge-in absolute bottom-full right-0 mb-3 pointer-events-none">
+          <div className="pointer-events-none absolute bottom-full right-0 mb-3 animate-nudge-in">
             <div className="whitespace-nowrap rounded-sm bg-ink px-s3 py-s2 font-mono text-label uppercase text-on-ink">
               Try me! 👋
             </div>
             {/* Caret */}
-            
           </div>
         )}
 
@@ -251,13 +267,14 @@ export default function ChatWidget() {
         {!showNudge && !isOpen && (
           <div className="pointer-events-none absolute bottom-full right-0 mb-s2 whitespace-nowrap rounded-sm bg-ink px-s3 py-s1 font-mono text-label uppercase text-on-ink opacity-0 transition-opacity duration-150 group-hover:opacity-100">
             Ask my AI anything!
-            
           </div>
         )}
 
         <button
           onClick={() => setIsOpen((o) => !o)}
-          className="grid h-12 w-12 place-items-center rounded-sm border border-rule-strong bg-paper text-ink transition-colors duration-150 hover:border-ink hover:bg-ink hover:text-on-ink"
+          className={`h-12 w-12 place-items-center rounded-sm border border-rule-strong bg-paper text-ink transition-colors duration-150 hover:border-ink hover:bg-ink hover:text-on-ink ${
+            isOpen ? "hidden" : "grid"
+          }`}
           aria-label={isOpen ? "Close AI chat" : "Open AI chat"}
         >
           {/*
