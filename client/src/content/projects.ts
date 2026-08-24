@@ -9,7 +9,7 @@ import type { Project } from "./types";
 export const projects: Project[] = [
   {
     slug: "garuda-refusal-layer",
-    title: "The Refusal Layer — When AI Controls Hardware",
+    title: "Building a drone assistant that can say no",
     role: "AI Engineer Intern, Garuda Robotics",
     dates: "Jul 2026 – Present",
     tier: "featured",
@@ -19,64 +19,98 @@ export const projects: Project[] = [
     body: [],
     sections: [
       {
-        heading: "The constraint",
+        heading: "What it is",
         paragraphs: [
           {
-            text: "Before this, everything I built could be undone. A bad answer gets deleted. A bad write gets rolled back. So you design for catching mistakes after they happen.",
+            text: "Drone pilots have to clear a lot before a single flight: is the airspace open, is the aircraft healthy, is the weather workable, does the flight plan conform. That information lives in five different places and none of them talk to each other. Approving one mission is a manual sweep, and it doesn't get faster as the fleet grows.",
           },
           {
-            text: "Now I'm building a tool for drone pilots. They ask for a flight in plain English. The system either runs it or refuses.",
-          },
-          {
-            text: "Catching mistakes afterwards doesn't help here. By the time you notice, the drone is already flying. You have to stop it before it starts.",
+            text: "I'm building a desktop app where a pilot asks the question in plain English and gets a real answer from the live flight platform. A small model runs on the pilot's own laptop. It knows nothing about airspace and is told never to answer from memory. Its only job is to work out which real system holds the answer, go and get it, and read it back.",
           },
         ],
       },
       {
-        heading: "Why asking the model nicely isn't enough",
+        heading:
+          "The part that made this different from anything I'd built before",
         paragraphs: [
           {
-            text: "The easy approach is to tell the model what it can't do. Models are good at saying no. They get it right most of the time.",
+            text: "Every pilot is cleared for a specific area and a maximum altitude. Ask for something outside that and the system has to refuse.",
           },
           {
-            text: "Most of the time is fine if the mistake is a bad paragraph. It isn't fine if the mistake is in the air.",
+            text: "Everything I'd worked on before was reversible. A bad answer gets deleted, a bad write gets rolled back, so you design to catch mistakes after they happen. That doesn't work here. By the time anyone notices, the drone is in the air.",
           },
           {
-            text: "So the model doesn't get to make that call. Something else does. And what the pilot sees has to come from that check, not from the model's summary of it.",
+            text: "The obvious approach is to tell the model what it isn't allowed to do. Models are good at declining. They get it right most of the time, and most of the time is a perfectly good standard for a chatbot. It isn't one for a flight.",
+          },
+          {
+            text: "So the model doesn't get to make that call. Something further down the line does, somewhere the model can't reach, and what the pilot sees on screen comes from that decision rather than the model's description of it.",
           },
         ],
       },
       {
-        heading: "Where the check goes",
+        heading: "Working out where that check goes",
         paragraphs: [
           {
-            text: "Not on the pilot's laptop. Anyone can edit an app on their own machine. A limit you can delete isn't a limit.",
+            text: "Three candidate places, and only one of them survives.",
           },
           {
-            text: "Not at the login layer either. That part knows who's asking. It doesn't see the numbers in the request. And the approval limit is all about numbers. Is this location inside the area you're cleared for? You need to see the coordinates to answer that.",
+            text: "Not the pilot's own app. It runs on their machine, where anyone can open it up and delete the check. A limit enforced by the thing being limited isn't really a limit.",
           },
           {
-            text: "That leaves one place. The first point that sees the real numbers and sits outside the pilot's control.",
+            text: "Not the security layer that sits in front of everything, which is where I assumed it belonged. That layer knows who is asking, which sounds exactly right until you notice that being cleared for an area is a fact about numbers. To enforce it you have to be able to read the numbers in the request, and that layer can't. I only found this by testing it directly, and it turned out one of our own architecture diagrams had it wrong.",
           },
           {
-            text: "There's nothing clever about the answer. The work was ruling out everywhere else.",
+            text: "That leaves the service at the far end, the one that actually receives the request and runs somewhere the pilot can't touch. First place that sees both the request and the rules.",
           },
         ],
       },
       {
-        heading: "A failure I didn't expect",
+        heading: "The thing I didn't see coming",
         paragraphs: [
           {
-            text: "I was testing with an old chat still open. I asked something I'd asked earlier. The model answered from its own history instead of running the check.",
+            text: "Once you lay it out, the security layer knows who is asking but not what they asked. The service that enforces the limits knows what was asked but not who asked it. Nothing in the chain knows both at once.",
           },
           {
-            text: "The answer was right. Correct limits, correct conclusion, stated with confidence. Nothing had actually been checked.",
+            text: "Almost every unfinished thing in this project comes back to that one split. The approved limits are currently a single set applied to everyone, rather than per-pilot, because the part enforcing them has no idea whose limits to apply. The record of every decision has no name attached for the same reason. I could have put one in. A made-up name in a safety record is worse than an honest gap.",
+          },
+        ],
+      },
+      {
+        heading: "Three answers a pilot must never confuse",
+        paragraphs: [
+          {
+            text: "Restricted means we checked the airspace and you can't fly there.\nRefused means you're not cleared to ask, so nothing was checked.\nUnverified means the check itself failed and nobody knows either way.",
           },
           {
-            text: "The only clue was what wasn't there. No check appeared on screen. Missing things are easy to miss.",
+            text: "Giving these three different colours felt like fussing over the interface until I wrote them next to each other. Confusing the second for the first has a pilot believing a location was surveyed when it never was.",
+          },
+        ],
+      },
+      {
+        heading: "A refusal that never happened",
+        paragraphs: [
+          {
+            text: "I was testing with an old conversation still open, and asked something I'd asked earlier. The model answered from its own memory of the previous exchange instead of going and checking again.",
           },
           {
-            text: "That changed how I think about the interface. It isn't just showing the result. An answer that came from a real check has to look different from one that didn't. That's part of the safety system, not decoration.",
+            text: "The answer was correct. Right limits, right conclusion, stated with total confidence. Nothing had actually been checked.",
+          },
+          {
+            text: "The only clue was what wasn't there: no sign of the system having gone and looked. Absences are very easy to miss when you're glancing at a screen.",
+          },
+          {
+            text: "That changed how I think about the interface. It isn't just displaying a result. An answer that came from a real check has to visibly look different from one that didn't, which makes that part of the screen a piece of the safety system rather than decoration.",
+          },
+        ],
+      },
+      {
+        heading: "Where it actually is",
+        paragraphs: [
+          {
+            text: "The whole path works on a laptop: the question, the check, the refusal, and a record of the decision written down before the pilot ever sees the answer.",
+          },
+          {
+            text: "What isn't done: pilots don't log in yet, so the system can't tell them apart. The limits are shared rather than personal. Nothing runs anywhere but my machine. And the harder version, refusing a request that would change something rather than just refusing to look something up, is designed but not built.",
           },
         ],
       },
@@ -87,7 +121,7 @@ export const projects: Project[] = [
   },
   {
     slug: "sara-guardrails",
-    title: "SARA — Guardrails for a Production LLM Assistant",
+    title: "Six months making an AI assistant refuse the right things",
     role: "Data Science Intern, SP Digital",
     dates: "Jan 2026 – Jun 2026",
     tier: "standard",
@@ -97,32 +131,41 @@ export const projects: Project[] = [
     body: [],
     sections: [
       {
-        heading: "Overview",
+        heading: "What it is",
         paragraphs: [
           {
-            text: "SARA is an internal assistant at a Singapore utility. Two groups use it: fieldworkers doing physical work on the grid, and operations admins handling the paperwork behind energising and de-energising equipment. Same assistant, different permissions, and one group can see things the other shouldn't.",
+            text: "A utility company built an internal assistant so staff could ask questions in plain English instead of digging through documentation. Two groups use it: engineers doing physical work on the electrical grid, and the admin staff who handle the paperwork behind switching equipment on and off. Same assistant, same underlying information, but one group is allowed to see things the other isn't.",
           },
           {
-            text: "I spent six months there, almost all of it on the guardrails layer. That's the part deciding what the system answers, what it declines, and how you know either way.",
+            text: "I spent six months there, almost all of it on the guardrails. That's the layer deciding what the system answers, what it declines, and how anyone can tell which just happened.",
           },
         ],
       },
       {
-        heading: "What made this different",
+        heading: "Why this wasn't the same job as before",
         paragraphs: [
           {
-            text: "Everything I'd built before belonged to me. If a user hit an edge case they'd shrug and move on.",
+            text: "Everything I'd built until then was mine. If someone hit an awkward edge they'd shrug and move on.",
           },
           {
-            text: "Here the users are working on live electrical infrastructure, and the company pays an external team to attack the system on purpose. That shifts where the work is. I'd been treating AI applications as pipelines: input, model, output, make the output good. In an enterprise the pipeline is maybe a third of it. The rest is governance, meaning what the system is allowed to say, to whom, how you demonstrate that, and how you know it's still true after the next change.",
+            text: "Here the people asking questions are working on live electrical infrastructure, and the company pays an outside team to attack the system on purpose twice a year. That changes where the work actually is. I'd been thinking about AI applications as a pipeline: take an input, run a model, make the output good. In a company that size the pipeline is maybe a third of it. The rest is proving what the system is allowed to say, to whom, and knowing whether that's still true after the next change.",
           },
         ],
       },
       {
-        heading: "What I built",
+        heading: "What a guardrail actually has to do",
         paragraphs: [
           {
-            text: "Input controls that decide whether a request should be answered at all. Output controls that catch what shouldn't leave. A local safety classifier layered alongside the model's own refusals. An adversarial evaluation pipeline to test all of it. I also closed the findings from a third-party penetration test, which is the only assessment of this work I didn't write myself.",
+            text: "I'd assumed a guardrail was one thing, a filter you put somewhere. It's several things doing different jobs.",
+          },
+          {
+            text: "Something has to decide whether a question should be answered at all, before anything runs. Something else has to check what's about to go out, because a perfectly reasonable question can pull back an answer containing something the person asking isn't cleared to see. The same question from two different people should sometimes get two different answers, which means permissions have to reach into the answer itself rather than just the front door.",
+          },
+          {
+            text: "Then there's the category of attack where nobody is asking the assistant for information at all. They're asking it about itself: how it's configured, what it's connected to, what it was told not to do. That's a different failure. The system isn't leaking data, it's handing over the map.",
+          },
+          {
+            text: "And none of it should rest on the model alone. The model has its own refusals and they're decent, but they're the same component being asked to police itself. I ran a separate classifier alongside it, trained for local context, so an unsafe request had to get past two things that could fail differently rather than one thing twice.",
           },
         ],
       },
@@ -130,52 +173,77 @@ export const projects: Project[] = [
         heading: "The decision I'd defend",
         paragraphs: [
           {
-            text: "Topic restriction started as keyword matching. It blocked things, so at a glance it worked. What it actually did was block the wrong things. A fieldworker asking a reasonable operational question that happened to contain a flagged word got refused, while anyone who phrased a request around the keyword list got through.",
+            text: "Topic restriction started as keyword matching. It blocked things, so at a glance it worked.",
           },
           {
-            text: "The problem is structural. Keyword matching can't tell asking about a system from asking a system to do something. Those are often the same words.",
+            text: "What it actually did was block the wrong things. An engineer asking a completely reasonable operational question that happened to contain a flagged word got refused, while anyone who phrased a request around the list got straight through.",
           },
           {
-            text: "So I replaced it with classification that reads what the request is for. It's slower than a string comparison, it's non-deterministic, and it puts a model call in front of every request. I took that trade because of which failure worried me more. A leak gets noticed and escalated. A fieldworker who gets refused twice and stops opening the tool is a failure nobody files.",
-          },
-        ],
-      },
-      {
-        heading: "Measuring it",
-        paragraphs: [
-          {
-            text: "I spent my first stretch making guardrails better without being able to say whether they were better. I'd try a bypass, watch it get blocked, and move on. That's an anecdote.",
+            text: "The problem is structural rather than a matter of tuning the list. Keyword matching can't tell the difference between asking about something and asking the system to do it. Those are usually the same words.",
           },
           {
-            text: "So I built an adversarial evaluation pipeline in Langfuse: over 400 prompts across several regression sets, covering injection attempts, persona-bypass jailbreaks, and probes trying to get the system to describe its own configuration. Unsafe responses dropped roughly 60%. I only know that because there was something to measure against.",
-          },
-          {
-            text: "If I were starting again I'd build the evaluation first. It feels like a detour when you want to be fixing things, and it's what makes every later change legible.",
+            text: "So I replaced it with classification that reads what a request is for. It's slower than comparing strings, it isn't perfectly repeatable, and it puts another model call in front of every question. I took that trade because of which failure worried me more, which brings me to the thing I got wrong.",
           },
         ],
       },
       {
-        heading: "What I got wrong",
+        heading: "The failure nobody reports",
         paragraphs: [
           {
-            text: "I calibrated toward strict, because strict felt safe. Tightening a guardrail felt like progress and had no cost I could see.",
+            text: "I spent the first stretch calibrating toward strict, because strict felt safe. Tightening a guardrail felt like progress and had no cost I could see.",
           },
           {
-            text: "The cost was false positives, and those are invisible. A blocked legitimate question doesn't raise an error or a ticket. It just makes someone decide the tool isn't worth the trouble.",
+            text: "The cost was blocked legitimate questions, and those are completely invisible. A leak gets noticed, escalated, written up. Someone who asks two reasonable questions, gets refused both times, and quietly decides the tool isn't worth the bother doesn't file anything. There's no error, no ticket, no signal at all. The system looks like it's working perfectly right up until nobody is using it.",
           },
           {
-            text: "The fix was writing a set of probes for questions a real fieldworker would ask, then treating a block on one of those as a defect worth the same as a successful attack. Once both failure modes had numbers, the tradeoff was something I could look at rather than a feeling.",
+            text: "The fix was writing a set of questions a real engineer would actually ask, then treating a block on one of those as a defect worth exactly as much as a successful attack. Once both kinds of failure had numbers next to them, the trade-off was something I could look at instead of something I was feeling my way through.",
           },
         ],
       },
       {
-        heading: "Where it landed",
+        heading: "How I know any of it worked",
         paragraphs: [
           {
-            text: "Roughly 60% fewer unsafe responses, measured against a fixed suite rather than my own judgement. Penetration test findings closed. A topic restriction that reads intent rather than vocabulary, which cut refusals of legitimate questions substantially.",
+            text: "For a while I didn't. I'd try a bypass, watch it get blocked, feel good, move on. That's an anecdote, not evidence, and it doesn't survive the question \"is it better than last week\".",
           },
           {
-            text: "I went in thinking the job was making a model behave. I came out thinking it's making the model's behaviour provable. Everything I've built since starts with how I'm going to test it.",
+            text: "So I built a test suite that runs attacks automatically: over 400 prompts across several sets, covering attempts to override the system's instructions, attempts to talk it into a different persona, and probes trying to get it to describe its own setup. Unsafe responses dropped by around 60%. I only know that number because there was something fixed to measure against.",
+          },
+          {
+            text: "If I were starting again I'd build the measurement first. It feels like a detour when you want to be fixing things, and it's the only reason any later change means anything.",
+          },
+        ],
+      },
+      {
+        heading: "The part I didn't grade myself",
+        paragraphs: [
+          {
+            text: "An external security team tested the system and I closed what they found. It's the only assessment of this work I didn't write, which makes it the only one I'd quote without qualifying it.",
+          },
+        ],
+      },
+      {
+        heading: "A second strand: proving the redaction worked",
+        paragraphs: [
+          {
+            text: "Separately I evaluated the system that strips personal information out of customer call transcripts before anything else touches them.",
+          },
+          {
+            text: "Most of the work wasn't the scoring. It was deciding what counts. Is a receipt number personal information? A partial email address? A street name with no number? Those had to be written down as rules and applied consistently across a manually reviewed set before any score meant anything, because a number measured against inconsistent labels is worse than no number.",
+          },
+          {
+            text: "The one genuinely interesting choice was the metric. The standard measure treats a miss and a false alarm as equally bad. Here they obviously aren't. Redacting something harmless is an inconvenience. Missing an actual phone number is the thing you built the system to prevent. So I weighted the score toward catching everything, and said so explicitly rather than reaching for the default.",
+          },
+        ],
+      },
+      {
+        heading: "What I took from it",
+        paragraphs: [
+          {
+            text: "I went in thinking the job was getting a model to behave. I came out thinking the job is making its behaviour provable, to someone who wasn't there and doesn't take your word for it.",
+          },
+          {
+            text: "Everything I've built since starts with how I'm going to test it.",
           },
         ],
       },
@@ -186,7 +254,7 @@ export const projects: Project[] = [
   },
   {
     slug: "ofi-regime-tradability",
-    title: "Does a Known Market Signal Survive the Cost of Trading It?",
+    title: "Testing whether a known market signal actually makes money",
     role: "Independent study",
     dates: "Aug 2026",
     tier: "featured",
@@ -196,44 +264,52 @@ export const projects: Project[] = [
     body: [],
     sections: [
       {
-        heading: "Overview",
+        heading: "The question",
         paragraphs: [
           {
-            text: "There's a known signal in financial markets. If there are more buy orders than sell orders sitting on an exchange right now, the price tends to tick up over the next few seconds. That much is settled. Whether it predicts well enough to make money after you pay to trade on it is a different question.",
+            text: "There's a well-known pattern in financial markets. If there are more buy orders than sell orders sitting on an exchange at a given moment, the price tends to tick up over the next few seconds. That much is settled and has been for years.",
           },
           {
-            text: "I tested it on ten days of order book data from one cryptocurrency market. The answer is no. The signal is real and it doesn't survive the cost of acting on it.",
+            text: "Whether it predicts well enough to be worth trading on is a different question, because trading isn't free. Every trade pays a fee and gives up a little on the gap between what buyers offer and what sellers ask. So the real question isn't \"does this predict\", it's \"does it predict by more than it costs to act on\".",
+          },
+          {
+            text: "I tested it on ten days of order book data from one cryptocurrency market. The answer is no.",
           },
         ],
       },
       {
-        heading: "Writing the method down first",
+        heading: "Writing the method down before looking at anything",
         paragraphs: [
           {
-            text: "Financial data will hand you a profitable-looking result if you keep asking. Try enough time horizons, enough ways of slicing the market, enough cost assumptions, and something eventually clears. Every choice you make after seeing the data is a chance to nudge the result toward what you were hoping for.",
+            text: "Financial data will hand you a profitable-looking result if you keep asking. Try enough time horizons, enough ways of slicing the market, enough assumptions about cost, and something eventually clears. Every choice you make after seeing the data is a chance to nudge things toward what you were hoping for, usually without noticing you're doing it.",
           },
           {
-            text: "So the first thing I wrote wasn't code. It was the protocol: which horizons I'd test, how I'd define market conditions, how I'd calculate costs, what would count as the signal being tradable, and how I'd test whether any result was real. I committed that as the first thing in the repository, before any analysis existed, so the order is checkable.",
+            text: "So the first thing I wrote wasn't code. It was the method: which horizons I'd test, how I'd define different market conditions, how I'd calculate costs, what would count as the signal being worth trading, and how I'd test whether any result was real rather than noise. I committed that as the very first thing in the project, before any analysis existed, so the order is checkable by anyone who looks.",
           },
           {
-            text: 'I also wrote down all four possible outcomes in advance and said each was valid, including "no effect" and "not enough data to tell". Committing to a method only counts if you\'ve committed to publishing whatever it produces.',
+            text: "I also wrote down all four possible outcomes in advance and said each was a valid finding, including \"no effect\" and \"not enough data to tell\". That's the part that matters. Committing to a method only counts if you've committed to publishing whatever it produces.",
           },
         ],
       },
       {
-        heading: "Decisions I'd defend",
+        heading: "Rebuilding the data, then checking it against myself",
         paragraphs: [
           {
-            text: "Rebuilding the data and checking it against myself. The exchange doesn't publish the state of the order book. It publishes one snapshot and then a stream of changes, so you have to rebuild the state by replaying every update in order. One misapplied update quietly corrupts everything after it, and there's no correct answer anywhere to compare against. So I wrote a second, independent version of the rebuild and checked the two against each other at sampled points.",
+            text: "The exchange doesn't publish what its order book looked like at any given moment. It publishes one snapshot and then a continuous stream of changes, so the actual state at any point in time exists nowhere in the file. You have to rebuild it by replaying every update in order.",
           },
           {
-            text: "Reading the final test data once. The dataset was split into a portion for building, a portion for tuning, and a portion held back. The held-back portion was opened once, at the end, and every parameter applied to it was checked to be identical to values frozen beforehand.",
+            text: "One misapplied update silently corrupts everything after it, and there's no correct answer anywhere to compare against. So I wrote a second, completely separate version of the rebuild and checked the two against each other at sampled points. Writing the same thing twice feels like wasted effort right up until it's the only way to know you got it right.",
           },
           {
-            text: "Assuming the worst about costs. I assumed I'd pay the full gap between buy and sell prices on both entry and exit, with no favourable treatment on order queues, and ran the whole analysis across four fee levels rather than picking one.",
+            text: "That produced 8.5 million rows from about seven gigabytes of raw feed.",
           },
+        ],
+      },
+      {
+        heading: "Assuming the worst about costs",
+        paragraphs: [
           {
-            text: "Keeping the simpler model. I tested a more sophisticated version using more layers of the order book. It lost to the simple one at every horizon, so it stayed out.",
+            text: "I gave myself no favourable treatment anywhere. I assumed I'd always pay the full gap between buy and sell prices, on both entry and exit, and get no priority in the queue. Then I ran the entire analysis across four different fee levels rather than picking one, because picking one makes the answer a consequence of that choice.",
           },
         ],
       },
@@ -241,16 +317,19 @@ export const projects: Project[] = [
         heading: "The result that wasn't real",
         paragraphs: [
           {
-            text: "Partway through, I found what I'd set out to look for. In about a third of the tested cases, the signal's profitability appeared to differ depending on market conditions. That was the whole point of the study, sitting right there.",
+            text: "Partway through, I found exactly what I'd set out to look for. In about a third of the cases I tested, the signal appeared to be profitable in some market conditions and not others. That was the whole point of the study, sitting right there.",
           },
           {
-            text: "Then I looked at why. The measure I was ranking by is average profit minus cost, divided by volatility. At real fees the cost is far larger than the profit, and the cost barely moves between conditions. So the top of that fraction was roughly the same number everywhere, and I was really just ranking conditions by how volatile they were. Nothing to do with profitability at all.",
+            text: "Then I looked at why.",
           },
           {
-            text: "The giveaway is that the effect disappears at a hypothetical zero-fee level, where the cost term nearly vanishes.",
+            text: "The measure I was ranking things by is roughly average profit, minus cost, divided by how volatile the market was. At realistic fees the cost is far larger than the profit, and the cost barely changes between one market condition and another. So the top of that fraction was essentially the same number everywhere, and what I was actually ranking was volatility. Nothing to do with profitability at all.",
           },
           {
-            text: "I wrote it up as an artifact rather than a finding. It would have been the most impressive-looking thing in the study.",
+            text: "The giveaway is that the whole effect disappears if you set fees to zero, where the cost term nearly vanishes.",
+          },
+          {
+            text: "I wrote it up as an artefact rather than a finding. It would have been the most impressive-looking thing in the study.",
           },
         ],
       },
@@ -258,27 +337,30 @@ export const projects: Project[] = [
         heading: "What I actually found",
         paragraphs: [
           {
-            text: "The signal predicts. That part holds up, and it fades as you look further ahead, which is what you'd expect.",
+            text: "The signal predicts. That part holds up cleanly, and its power fades the further ahead you look, which is what the theory says should happen.",
           },
           {
-            text: "It isn't tradable. The largest profit the model predicts anywhere in the held-out data is smaller than the cheapest realistic cost of making the trade. The rule I'd committed to, trade only when expected profit exceeds cost, never fired once at any real fee level. That isn't a near miss where a better model closes the gap.",
+            text: "It isn't tradable. The largest edge the model predicts anywhere in the held-back data is smaller than the cheapest realistic cost of making the trade. The rule I'd committed to in advance, trade only when expected profit exceeds cost, never fired once at any real fee level. That isn't a near miss where a better model closes the gap. The two distributions don't overlap.",
           },
           {
-            text: "The economic theory also came out backwards. The standard model says this signal should work best in thin, jumpy markets. Measured, it works worst there. Two separate parts of the analysis found that independently, which is why I believe it.",
+            text: "The economics also came out backwards. The standard theory says this signal should work best in thin, jumpy markets where individual orders move the price more. Measured, it works worst there. Two separate parts of the analysis found that independently, which is the main reason I believe it.",
+          },
+          {
+            text: "I also tested a more sophisticated version using more layers of the order book. It lost to the simple one at every horizon, so it stayed out.",
           },
         ],
       },
       {
-        heading: "What this doesn't prove",
+        heading: "What this doesn't show",
         paragraphs: [
           {
-            text: "Ten days, one asset, in a fairly quiet stretch of market. Nothing here says anything about stressed markets or other instruments.",
+            text: "Ten days, one asset, in a fairly calm stretch of market. Nothing here says anything about stressed conditions or other instruments.",
           },
           {
-            text: "The data is snapshots roughly ten times a second rather than every individual event, so this is a medium-frequency study and I've drawn no high-frequency conclusions from it.",
+            text: "The data is snapshots roughly ten times a second rather than every individual event, so this is a medium-speed study and I've drawn no high-frequency conclusions from it.",
           },
           {
-            text: "The market conditions I defined turned out to flip every few seconds, which makes them a short-lived state rather than a regime in the sense my own framing implied. That gap is real and I haven't resolved it.",
+            text: "And the market conditions I defined turned out to flip every few seconds, which makes them a short-lived state rather than a regime in the sense my own framing implied. That gap is real and I haven't resolved it.",
           },
         ],
       },
@@ -286,10 +368,10 @@ export const projects: Project[] = [
         heading: "Where it landed",
         paragraphs: [
           {
-            text: "A negative result, a contradicted hypothesis, and an interesting finding I had to throw away. None of that is what I hoped for.",
+            text: "A negative result, a contradicted theory, and the most interesting thing I found turning out to be an artefact of my own arithmetic. None of that is what I was hoping for.",
           },
           {
-            text: "The useful part is the order I did things in. The method existed before the data, so when the exciting result showed up I had no room to talk myself into it. I don't think I'd have caught it otherwise.",
+            text: "The useful part is the order I did things in. The method existed before the data, so when the exciting result appeared I had no room to talk myself into it. I don't think I'd have caught it otherwise.",
           },
         ],
       },
@@ -371,7 +453,7 @@ export const projects: Project[] = [
             text: "Organised by topic, not in order. The natural structure is the order the lecture happened in, because that's the order the audio arrives. Students don't revise that way. They jump to the thing they don't understand.",
           },
           {
-            text: "Deadlines pulled out separately. Students kept describing the same failure: an assignment deadline mentioned once, forty minutes in, missed entirely. So dates got their own section instead of sitting in the summary where they'd be technically present and functionally invisible.",
+            text: "Deadlines pulled out separately. Students kept describing the same failure: an assignment deadline mentioned once, forty minutes in, missed entirely. So dates got their own section instead of in the summary where they'd be technically present and functionally invisible.",
           },
         ],
       },
