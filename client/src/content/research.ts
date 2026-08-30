@@ -2,6 +2,16 @@ import type { ResearchItem } from "./types";
 
 export const research: ResearchItem[] = [
   {
+    slug: "oulad-early-warning-research",
+    title: "Predicting Who Drops Out, and the Metric That Couldn't Tell",
+    organization: "Independent",
+    dates: "Aug 2026",
+    description:
+      "I built a model to predict which university students would drop out of a course. It was good at ranking them by risk, but the evaluation metric I'd committed to in advance couldn't tell the difference between my model and just flagging every single student. The project also showed that standard methods for detecting model drift would have failed, and my attempt at a causal analysis was invalidated by its own checks.",
+    tags: ["Machine Learning", "Evaluation", "Pre-registration", "Causal Inference"],
+    projectSlug: "oulad-early-warning",
+  },
+  {
     slug: "ofi-regime-tradability-research",
     title: "Does a Known Market Signal Survive the Cost of Trading It?",
     organization: "Independent",
