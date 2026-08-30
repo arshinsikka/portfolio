@@ -508,7 +508,7 @@ export const projects: Project[] = [
     tier: "featured",
     group: "research",
     summary:
-      "I picked the numbers that decided half my results after I'd already seen the results. The only reason I noticed is that I'd written down what I was going to do first.",
+      "The model worked, but the metric was worthless and the monitoring was blind. A study in how machine learning projects fail even when the model itself is good.",
     body: [],
     sections: [
       {
