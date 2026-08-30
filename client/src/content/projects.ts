@@ -124,7 +124,7 @@ export const projects: Project[] = [
     title: "Six months making an AI assistant refuse the right things",
     role: "Data Science Intern, SP Digital",
     dates: "Jan 2026 – Jun 2026",
-    tier: "standard",
+    tier: "featured",
     group: "production",
     summary:
       "My first system where someone was paid to break it. That changed how I build.",
@@ -250,6 +250,120 @@ export const projects: Project[] = [
     ],
     tags: ["LLM Safety", "Guardrails", "Evaluation", "Langfuse", "LangGraph"],
     links: [],
+    hasDetailPage: true,
+  },
+  {
+    slug: "lecture-ai",
+    title: "Lecture AI",
+    role: "Co-Founder",
+    dates: "Jul 2025 – Mar 2026",
+    tier: "featured",
+    group: "ventures",
+    accolades: [{ text: "BLOCK71-backed" }, { text: "VIP@SoC Finalist" }],
+    summary:
+      "We surveyed 500 students, found a gap nobody was serving, and built it. What stopped us had nothing to do with the product.",
+    body: [],
+    sections: [
+      {
+        heading: "Overview",
+        paragraphs: [
+          {
+            text: "Lecture AI turned recorded lectures into structured study notes, in two languages, for under a dollar a lecture. I co-founded it in July 2025. We shipped it, got into an incubation programme, reached the finals of a university venture competition, and stopped in March 2026.",
+          },
+          {
+            text: "It started with a survey rather than an idea. My co-founder ran it: 500 students, two numbers that mattered. Most rewatched recordings because they'd missed something. And a couple of hundred wanted study material in Mandarin, which basically didn't exist.",
+          },
+          {
+            text: "The second number was the interesting one. Everyone building here was serving students who study in English. Nobody was serving students who follow the lecture fine but revise in a different language.",
+          },
+        ],
+      },
+      {
+        heading: "Who did what",
+        paragraphs: [
+          {
+            text: "I designed and built the whole technical pipeline, and did the market research and go-to-market work. My co-founder ran the student survey and handled conversations with potential customers, including with the university's teaching technology team.",
+          },
+        ],
+      },
+      {
+        heading: "Why the obvious build doesn't work",
+        paragraphs: [
+          {
+            text: "Record, transcribe, summarise, ship. That's the obvious version, and for technical subjects it produces something worse than nothing.",
+          },
+          {
+            text: "Speech recognition handles ordinary conversation well and mangles technical vocabulary. A tool name comes out as two unrelated English words. That would be a minor annoyance if the transcript were the product. It isn't. The transcript feeds the summariser, and a summariser given a corrupted transcript produces a clean, well-organised summary of the wrong thing.",
+          },
+          {
+            text: "So the real problem isn't that transcription is imperfect. It's that every later stage inherits the earlier mistakes and hides them.",
+          },
+        ],
+      },
+      {
+        heading: "Decisions I'd defend",
+        paragraphs: [
+          {
+            text: "Two passes instead of one. I split the model work into a correction step and a summarising step. The correction step gets the raw transcript plus the lecturer's own slides, so it has something authoritative to check terminology against. Only then does the summarising happen.",
+          },
+          {
+            text: "Doing both at once is cheaper and it's what most tools do. It also means the model is guessing at what was said and deciding what mattered in the same breath, with no way to flag which parts it guessed. Separating them is what made the output usable.",
+          },
+          {
+            text: "No search index. The correction step needs the slides as a reference, which is exactly what search infrastructure exists for, and I didn't build any. A lecture's slides fit into what the model can read at once. Adding a search layer would have meant an indexing step, a storage layer, and a week of work, for no accuracy gain on a set of documents small enough to just hand over.",
+          },
+          {
+            text: "Technical terms stay in English inside the Chinese notes. Translating a term like backpropagation into Mandarin gives you something technically correct and useless, because the student can't then match it to the English textbook, slides, or exam. So the notes aren't a translation. The explanation is in one language and the vocabulary stays in the other. That came out of the survey, not out of me thinking about it.",
+          },
+          {
+            text: "Organised by topic, not in order. The natural structure is the order the lecture happened in, because that's the order the audio arrives. Students don't revise that way. They jump to the thing they don't understand.",
+          },
+          {
+            text: "Deadlines pulled out separately. Students kept describing the same failure: an assignment deadline mentioned once, forty minutes in, missed entirely. So dates got their own section instead of in the summary where they'd be technically present and functionally invisible.",
+          },
+        ],
+      },
+      {
+        heading: "What we got wrong",
+        paragraphs: [
+          {
+            text: "We built it for students first. That was the wrong call, though it isn't what stopped us.",
+          },
+          {
+            text: "Students don't control access to lecture recordings. The university and the lecturer do. So every user had to get hold of their own recording before the product could do anything, which meant the first step depended on something outside our control and theirs. Signing up students one at a time is also a distribution problem with no leverage.",
+          },
+          {
+            text: "Switching to lecturers fixed both. A lecturer already has the recording, and one lecturer produces notes for a whole cohort. It also fixed a trust problem we hadn't named, since notes released by the lecturer have someone in the loop who is already the authority on the subject.",
+          },
+          {
+            text: "Then we hit the thing that ended it. A lecture recording has students' voices in it. In Singapore that makes it personal data, with rules about consent and who is allowed to hold it. Every conversation started running into some version of that. Nobody said no. They just didn't want to be the person who signed off on it, and I don't blame them.",
+          },
+          {
+            text: "At that point we didn't have a technical problem. We had a product nobody could adopt without starting a legal conversation they had no reason to start.",
+          },
+        ],
+      },
+      {
+        heading: "Where it landed",
+        paragraphs: [
+          {
+            text: "We shipped it, got into an incubation programme, and reached a competition final. Cost stayed under a dollar per lecture. We never got meaningful adoption and we stopped in March 2026.",
+          },
+          {
+            text: "What I took from it is that I'd spent almost all my thinking on whether we could build the thing and almost none on how it would reach anybody. Distribution isn't the part you work out once the product is good enough. Here it was the whole problem, and it was knowable before we wrote a line of code.",
+          },
+        ],
+      },
+    ],
+    tags: ["Python", "FastAPI", "Whisper", "Gemini", "RAG", "NLP"],
+    links: [
+      {
+        label: "GitHub",
+        url: "https://github.com/arshinsikka/lectureai-mvp",
+        kind: "github",
+      },
+      { label: "Website", url: "https://lectureai.co", kind: "website" },
+    ],
     hasDetailPage: true,
   },
   {
@@ -538,120 +652,6 @@ export const projects: Project[] = [
     hasDetailPage: true,
   },
   {
-    slug: "lecture-ai",
-    title: "Lecture AI",
-    role: "Co-Founder",
-    dates: "Jul 2025 – Mar 2026",
-    tier: "featured",
-    group: "ventures",
-    accolades: [{ text: "BLOCK71-backed" }, { text: "VIP@SoC Finalist" }],
-    summary:
-      "We surveyed 500 students, found a gap nobody was serving, and built it. What stopped us had nothing to do with the product.",
-    body: [],
-    sections: [
-      {
-        heading: "Overview",
-        paragraphs: [
-          {
-            text: "Lecture AI turned recorded lectures into structured study notes, in two languages, for under a dollar a lecture. I co-founded it in July 2025. We shipped it, got into an incubation programme, reached the finals of a university venture competition, and stopped in March 2026.",
-          },
-          {
-            text: "It started with a survey rather than an idea. My co-founder ran it: 500 students, two numbers that mattered. Most rewatched recordings because they'd missed something. And a couple of hundred wanted study material in Mandarin, which basically didn't exist.",
-          },
-          {
-            text: "The second number was the interesting one. Everyone building here was serving students who study in English. Nobody was serving students who follow the lecture fine but revise in a different language.",
-          },
-        ],
-      },
-      {
-        heading: "Who did what",
-        paragraphs: [
-          {
-            text: "I designed and built the whole technical pipeline, and did the market research and go-to-market work. My co-founder ran the student survey and handled conversations with potential customers, including the university's teaching technology team.",
-          },
-        ],
-      },
-      {
-        heading: "Why the obvious build doesn't work",
-        paragraphs: [
-          {
-            text: "Record, transcribe, summarise, ship. That's the obvious version, and for technical subjects it produces something worse than nothing.",
-          },
-          {
-            text: "Speech recognition handles ordinary conversation well and mangles technical vocabulary. A tool name comes out as two unrelated English words. That would be a minor annoyance if the transcript were the product. It isn't. The transcript feeds the summariser, and a summariser given a corrupted transcript produces a clean, well-organised summary of the wrong thing.",
-          },
-          {
-            text: "So the real problem isn't that transcription is imperfect. It's that every later stage inherits the earlier mistakes and hides them.",
-          },
-        ],
-      },
-      {
-        heading: "Decisions I'd defend",
-        paragraphs: [
-          {
-            text: "Two passes instead of one. I split the model work into a correction step and a summarising step. The correction step gets the raw transcript plus the lecturer's own slides, so it has something authoritative to check terminology against. Only then does the summarising happen.",
-          },
-          {
-            text: "Doing both at once is cheaper and it's what most tools do. It also means the model is guessing at what was said and deciding what mattered in the same breath, with no way to flag which parts it guessed. Separating them is what made the output usable.",
-          },
-          {
-            text: "No search index. The correction step needs the slides as a reference, which is exactly what search infrastructure exists for, and I didn't build any. A lecture's slides fit into what the model can read at once. Adding a search layer would have meant an indexing step, a storage layer, and a week of work, for no accuracy gain on a set of documents small enough to just hand over.",
-          },
-          {
-            text: "Technical terms stay in English inside the Chinese notes. Translating a term like backpropagation into Mandarin gives you something technically correct and useless, because the student can't then match it to the English textbook, slides, or exam. So the notes aren't a translation. The explanation is in one language and the vocabulary stays in the other. That came out of the survey, not out of me thinking about it.",
-          },
-          {
-            text: "Organised by topic, not in order. The natural structure is the order the lecture happened in, because that's the order the audio arrives. Students don't revise that way. They jump to the thing they don't understand.",
-          },
-          {
-            text: "Deadlines pulled out separately. Students kept describing the same failure: an assignment deadline mentioned once, forty minutes in, missed entirely. So dates got their own section instead of in the summary where they'd be technically present and functionally invisible.",
-          },
-        ],
-      },
-      {
-        heading: "What we got wrong",
-        paragraphs: [
-          {
-            text: "We built it for students first. That was the wrong call, though it isn't what stopped us.",
-          },
-          {
-            text: "Students don't control access to lecture recordings. The university and the lecturer do. So every user had to get hold of their own recording before the product could do anything, which meant the first step depended on something outside our control and theirs. Signing up students one at a time is also a distribution problem with no leverage.",
-          },
-          {
-            text: "Switching to lecturers fixed both. A lecturer already has the recording, and one lecturer produces notes for a whole cohort. It also fixed a trust problem we hadn't named, since notes released by the lecturer have someone in the loop who is already the authority on the subject.",
-          },
-          {
-            text: "Then we hit the thing that ended it. A lecture recording has students' voices in it. In Singapore that makes it personal data, with rules about consent and who is allowed to hold it. Every conversation started running into some version of that. Nobody said no. They just didn't want to be the person who signed off on it, and I don't blame them.",
-          },
-          {
-            text: "At that point we didn't have a technical problem. We had a product nobody could adopt without starting a legal conversation they had no reason to start.",
-          },
-        ],
-      },
-      {
-        heading: "Where it landed",
-        paragraphs: [
-          {
-            text: "We shipped it, got into an incubation programme, and reached a competition final. Cost stayed under a dollar per lecture. We never got meaningful adoption and we stopped in March 2026.",
-          },
-          {
-            text: "What I took from it is that I'd spent almost all my thinking on whether we could build the thing and almost none on how it would reach anybody. Distribution isn't the part you work out once the product is good enough. Here it was the whole problem, and it was knowable before we wrote a line of code.",
-          },
-        ],
-      },
-    ],
-    tags: ["Python", "FastAPI", "Whisper", "Gemini", "RAG", "NLP"],
-    links: [
-      {
-        label: "GitHub",
-        url: "https://github.com/arshinsikka/lectureai-mvp",
-        kind: "github",
-      },
-      { label: "Website", url: "https://lectureai.co", kind: "website" },
-    ],
-    hasDetailPage: true,
-  },
-  {
     slug: "ai-architecture-strategy-engine",
     title: "AI Architecture Strategy Engine",
     role: "Personal project",
@@ -838,8 +838,8 @@ export const standardProjects = projects.filter((p) => p.tier === "standard");
 
 /**
  * The project index, in group order. A group with no records is dropped here
- * rather than filtered in the component, so "an empty group renders nothing at
- * all" is a property of the content model rather than of one page. Heading
+ * rather than filtered in the component, so \"an empty group renders nothing at
+ * all\" is a property of the content model rather than of one page. Heading
  * copy lives in `sectionCopy.projects.groups`, with every other heading.
  */
 export const projectGroups = (
