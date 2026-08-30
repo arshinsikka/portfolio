@@ -387,6 +387,157 @@ export const projects: Project[] = [
     hasDetailPage: true,
   },
   {
+    slug: "oulad-early-warning",
+    title: "Predicting who drops out, and the metric that couldn't tell",
+    role: "Independent study",
+    dates: "Aug 2026",
+    tier: "featured",
+    group: "research",
+    summary:
+      "I picked the numbers that decided half my results after I'd already seen the results. The only reason I noticed is that I'd written down what I was going to do first.",
+    body: [],
+    sections: [
+      {
+        heading: "What it is",
+        paragraphs: [
+          {
+            text: "A third of the students on a typical distance-learning course don't finish it. Some fail, more just stop showing up. Universities know this happens and mostly find out too late to do anything, because by the time the marks come in the person has been gone for months.",
+          },
+          {
+            text: "So the obvious thing to build is something that spots them early. Score every student a few weeks into the course using only what's known by then, flag the ones heading for trouble, and hand that list to whoever does the reaching out.",
+          },
+          {
+            text: "I built it on thirty thousand students from the Open University, and it works. It also turned out to be worth almost nothing, for a reason that had nothing to do with the model.",
+          },
+        ],
+      },
+      {
+        heading: "Deciding everything before looking at anything",
+        paragraphs: [
+          {
+            text: "The first thing in the repository isn't code. It's the method: which features, which weeks I'd score at, how I'd split the data, which metrics counted, what an intervention costs against what a lost student costs, and nine possible outcomes I committed to reporting whichever one turned up.",
+          },
+          {
+            text: "I did this on a previous project and it's the only reason I trusted that result, so it's now how I start. The commit history proves the order, which is the whole point. You can't quietly move the goalposts if they're timestamped.",
+          },
+          {
+            text: "Seven amendments follow it, each recording something I got wrong. That's the part I didn't expect to be the most useful thing in the repository.",
+          },
+        ],
+      },
+      {
+        heading: "The result, and the metric that couldn't see it",
+        paragraphs: [
+          {
+            text: "The model separates people well. Take the top five percent of the cohort by risk score and you've caught about ninety-three percent of everyone that budget could possibly catch. A tutor working from that list would spend almost none of their time on people who were fine.",
+          },
+          {
+            text: "Now the metric I'd committed to. It weighs a missed student ten times heavier than a false alarm, and it says the model beats a policy of flagging literally every student on the course by under one percent. The simpler baseline, plain logistic regression, actually does slightly worse than flagging everyone.",
+          },
+          {
+            text: "Both of those are true at once. The model ranks well and the metric can't see it.",
+          },
+          {
+            text: "The reason is that four in ten students don't finish. When the thing you're predicting is that common and missing it is that expensive, alerting on everybody is nearly free and almost optimal, so the arithmetic stops caring how good your ranking is. Ten to one is a sensible ratio for fraud or credit, where these events happen to one person in fifty. Here it was the wrong number, and I'd fixed it in writing before I saw any data, so it stayed.",
+          },
+        ],
+      },
+      {
+        heading: "Marking my own homework",
+        paragraphs: [
+          {
+            text: "The nine outcomes I'd declared in advance turned out to be worded like \"substantially worse\" and \"materially worse\", with nothing anywhere saying what those meant.",
+          },
+          {
+            text: "When I first read the results I filled the gaps: a ten percent drop here, fifteen percent there. It took me longer than it should have to notice all three numbers were chosen after I could see which side of them the answer fell on, and all three happened to land conveniently. So I withdrew them, and four of the six outcomes are now reported as undetermined with the raw figures printed and no verdict at all.",
+          },
+          {
+            text: "Committing to a question in advance does nothing if you haven't also committed to what the answer looks like. I thought I'd already learned this lesson. Apparently only half of it.",
+          },
+        ],
+      },
+      {
+        heading: "The monitor that would have missed it",
+        paragraphs: [
+          {
+            text: "The model got worse between one year's cohort and the next, losing about a seventh of its discriminating power.",
+          },
+          {
+            text: "The standard way to catch this in production is to watch each input for drift, checking whether the distribution of a feature has shifted since training. So I ran that.",
+          },
+          {
+            text: "The features that moved are not the features the model uses. The single thing it leans on hardest, a count of assignments due but not handed in, is among the most stable measurements in the whole study. The third most important feature is the second most stable of all of them. Only one of the top five drifting features appears anywhere near the top of what the model actually cares about.",
+          },
+          {
+            text: "Drift monitoring watches each input on its own. What went wrong was the relationship between the inputs and the outcome, and nothing that watches inputs in isolation can see that. The alarm most teams have wired up would have stayed silent through the entire decline.",
+          },
+          {
+            text: "One thing I'd written down as a worry turned out not to be true. Students can take more than one course, so some of the people the model was tested on had appeared in its training data, and I'd flagged in advance that it might simply be remembering them. It isn't. Measured against their own rates, it ranks the returning students worse than the ones it had never seen.",
+          },
+        ],
+      },
+      {
+        heading: "Asking whether any of it helps",
+        paragraphs: [
+          {
+            text: "Ranking people by risk says nothing about whether contacting them changes the ending. That's a different question and a model can't answer it.",
+          },
+          {
+            text: "There's no intervention recorded anywhere in this data, so the only honest way at it is to find something that behaves like an accident. Assignments are marked out of a hundred and pass at forty. Someone who scores thirty-nine and someone who scores forty-one are, on average, the same student having a slightly different day, and they get told different things about themselves. If that changes outcomes, the difference should show up as a step at exactly forty.",
+          },
+          {
+            text: "It doesn't, because the mark isn't an accident. There's a pile-up of scores sitting right at the pass line, more above it than below, which is what happens when markers nudge borderline work over. That invalidates the whole approach.",
+          },
+          {
+            text: "I'd written down in advance that a failed check here means the design is dead, which was useful, because scores heap at every round number and forty isn't even the worst one. There was a real argument for carrying on. Making it after seeing the check fail would have been choosing the rule to fit the answer.",
+          },
+          {
+            text: "What survives is the sample size calculation, which says a proper trial would need about fourteen hundred students per group to detect a five point effect. That number is more useful than a result I couldn't have believed.",
+          },
+        ],
+      },
+      {
+        heading: "The students it can't see",
+        paragraphs: [
+          {
+            text: "The pass-mark analysis only covers people who handed in the first assignment. The early warning model covers everyone still enrolled.",
+          },
+          {
+            text: "Fourteen percent of the students the model scores never submitted anything, and around five in six of them don't finish the course. They are, by a distance, the group most worth reaching.",
+          },
+          {
+            text: "They're also invisible to the only part of this study that could have said whether reaching them works. I flagged that mismatch in the protocol as a possibility before I started. Seeing the size of it was worse than I'd expected and I haven't fixed it.",
+          },
+        ],
+      },
+      {
+        heading: "Where it landed",
+        paragraphs: [
+          {
+            text: "A model that ranks well, a headline metric that can't tell, three thresholds I invented to flatter myself, a drift monitor that would have slept through the failure, and a causal design that died on its own pre-registered check.",
+          },
+          {
+            text: "I'd have preferred a clean number. What I have instead is a fairly complete map of the ways this kind of project can look like it's working when it isn't, and I only have that because I wrote down what I was going to do before I did it.",
+          },
+        ],
+      },
+    ],
+    tags: [
+      "Machine Learning",
+      "Evaluation",
+      "Pre-registration",
+      "Causal Inference",
+    ],
+    links: [
+      {
+        label: "GitHub",
+        url: "https://github.com/arshinsikka/oulad-early-warning",
+        kind: "github",
+      },
+    ],
+    hasDetailPage: true,
+  },
+  {
     slug: "lecture-ai",
     title: "Lecture AI",
     role: "Co-Founder",
