@@ -42,7 +42,7 @@ export const hero = {
    * likely to go stale.
    */
   currently:
-    "Currently at Garuda Robotics through NUS Overseas Colleges, building an AI tool for drone operations end to end.",
+    "Currently at Garuda Robotics through NUS Overseas Colleges, building an agent that plans drone inspection flights.",
   /**
    * The rail fact block under the portrait: one line each, in the order they
    * are read. Deliberately not a sentence — this is the machine-set metadata

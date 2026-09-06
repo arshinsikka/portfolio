@@ -22,28 +22,33 @@ export const projects: Project[] = [
         heading: "What it is",
         paragraphs: [
           {
-            text: "Drone pilots have to clear a lot before a single flight: is the airspace open, is the aircraft healthy, is the weather workable, does the flight plan conform. That information lives in five different places and none of them talk to each other. Approving one mission is a manual sweep, and it doesn't get faster as the fleet grows.",
+            text: "Planning a drone inspection is a slow, skilled job. Someone has to decide which faces of a building to fly, at what altitude, in what pattern, and with which aircraft. Then they produce a flight plan of a hundred-odd commands that has to stay inside the airspace rules, inside the area the operator is cleared for, and inside what the aircraft can manage before its battery runs out.",
           },
           {
-            text: "I'm building a desktop app where a pilot asks the question in plain English and gets a real answer from the live flight platform. A small model runs on the pilot's own laptop. It knows nothing about airspace and is told never to answer from memory. Its only job is to work out which real system holds the answer, go and get it, and read it back.",
+            text: "The platform has an API for each of those pieces. It has nothing that decides.",
+          },
+          {
+            text: "I am building an agent that does. A planner describes what they need in plain language. The agent asks the few things it genuinely cannot work out for itself, generates the plan, checks it is legal and flyable, and hands back a draft the planner opens and reviews. A licensed human pilot then flies it.",
+          },
+          {
+            text: "Two boundaries define the shape of it. The agent has no role once anything is in the air, by law rather than by choice. And it does not do the geometry. Coverage patterns, camera footprint, altitude bands and endurance are ordinary optimisation living in real services. The model's job is the conversation.",
           },
         ],
       },
       {
-        heading:
-          "The part that made this different from anything I'd built before",
+        heading: "The part that made this different from anything I had built before",
         paragraphs: [
           {
-            text: "Every pilot is cleared for a specific area and a maximum altitude. Ask for something outside that and the system has to refuse.",
+            text: "Every planner is cleared for a specific area and a maximum altitude. Ask for something outside that and the system has to refuse.",
           },
           {
-            text: "Everything I'd worked on before was reversible. A bad answer gets deleted, a bad write gets rolled back, so you design to catch mistakes after they happen. That doesn't work here. By the time anyone notices, the drone is in the air.",
+            text: "Everything I had worked on before was reversible. A bad answer gets deleted, a bad write gets rolled back, so you design to catch mistakes after they happen. That does not work here. The plan gets approved by a person who trusted it, and then it gets flown.",
           },
           {
-            text: "The obvious approach is to tell the model what it isn't allowed to do. Models are good at declining. They get it right most of the time, and most of the time is a perfectly good standard for a chatbot. It isn't one for a flight.",
+            text: "The obvious approach is to tell the model what it is not allowed to do. Models are good at declining. They get it right most of the time, and most of the time is a perfectly good standard for a chatbot. It is not one for a flight.",
           },
           {
-            text: "So the model doesn't get to make that call. Something further down the line does, somewhere the model can't reach, and what the pilot sees on screen comes from that decision rather than the model's description of it.",
+            text: "So the model does not get to make that call. Something further down the line does, somewhere the model cannot reach, and what the planner sees on screen comes from that decision rather than from the model's description of it.",
           },
         ],
       },
@@ -54,35 +59,49 @@ export const projects: Project[] = [
             text: "Three candidate places, and only one of them survives.",
           },
           {
-            text: "Not the pilot's own app. It runs on their machine, where anyone can open it up and delete the check. A limit enforced by the thing being limited isn't really a limit.",
+            text: "Not the planner's own app. It runs on their machine, where anyone can open it up and delete the check. A limit enforced by the thing being limited is not really a limit.",
           },
           {
-            text: "Not the security layer that sits in front of everything, which is where I assumed it belonged. That layer knows who is asking, which sounds exactly right until you notice that being cleared for an area is a fact about numbers. To enforce it you have to be able to read the numbers in the request, and that layer can't. I only found this by testing it directly, and it turned out one of our own architecture diagrams had it wrong.",
+            text: "Not the security layer that sits in front of everything, which is where I assumed it belonged. That layer knows who is asking, which sounds exactly right until you notice that being cleared for an area is a fact about numbers. To enforce it you have to be able to read the numbers in the request, and that layer cannot. I only found this by testing the thing directly.",
           },
           {
-            text: "That leaves the service at the far end, the one that actually receives the request and runs somewhere the pilot can't touch. First place that sees both the request and the rules.",
+            text: "That leaves the service at the far end, the one that actually receives the request and runs somewhere the planner cannot touch. First place in the chain that sees both the request and the rules at the same time.",
           },
         ],
       },
       {
-        heading: "The thing I didn't see coming",
+        heading: "The thing I did not see coming",
         paragraphs: [
           {
             text: "Once you lay it out, the security layer knows who is asking but not what they asked. The service that enforces the limits knows what was asked but not who asked it. Nothing in the chain knows both at once.",
           },
           {
-            text: "Almost every unfinished thing in this project comes back to that one split. The approved limits are currently a single set applied to everyone, rather than per-pilot, because the part enforcing them has no idea whose limits to apply. The record of every decision has no name attached for the same reason. I could have put one in. A made-up name in a safety record is worse than an honest gap.",
+            text: "Almost every unfinished thing in this project comes back to that one split.",
           },
         ],
       },
       {
-        heading: "Three answers a pilot must never confuse",
+        heading: "What asking well turned out to mean",
         paragraphs: [
           {
-            text: "Restricted means we checked the airspace and you can't fly there.\nRefused means you're not cleared to ask, so nothing was checked.\nUnverified means the check itself failed and nobody knows either way.",
+            text: "A flight plan has around twenty inputs. My first instinct was to work out how to ask twenty questions without it feeling like an interrogation.",
           },
           {
-            text: "Giving these three different colours felt like fussing over the interface until I wrote them next to each other. Confusing the second for the first has a pilot believing a location was surveyed when it never was.",
+            text: "Reading the platform's data model showed most of those inputs were already sitting there. The building outline, its height, the job type, the dates, the people assigned, all recorded before anyone opens a planning screen. A few more can be derived with a sensible default, as long as the agent says which default it used rather than choosing silently. What is genuinely left is three or four things only a person can decide.",
+          },
+          {
+            text: "So the design work was not the conversation. It was splitting twenty inputs by where they come from, and the conversation fell out of that. It is the most useful thing I have produced here and it came from reading code.",
+          },
+        ],
+      },
+      {
+        heading: "Three answers a planner must never confuse",
+        paragraphs: [
+          {
+            text: "Restricted means we checked the airspace and you cannot fly there.\nRefused means you were not cleared to ask, so nothing was checked.\nUnverified means the check itself failed and nobody knows either way.",
+          },
+          {
+            text: "Giving these three visibly different treatment felt like fussing over the interface until I wrote them next to each other. Confusing the second for the first has a planner believing a location was surveyed when it never was.",
           },
         ],
       },
@@ -90,16 +109,38 @@ export const projects: Project[] = [
         heading: "A refusal that never happened",
         paragraphs: [
           {
-            text: "I was testing with an old conversation still open, and asked something I'd asked earlier. The model answered from its own memory of the previous exchange instead of going and checking again.",
+            text: "I was testing with an old conversation still open, and asked something I had asked earlier. The model answered from its own memory of the previous exchange instead of going and checking again.",
           },
           {
             text: "The answer was correct. Right limits, right conclusion, stated with total confidence. Nothing had actually been checked.",
           },
           {
-            text: "The only clue was what wasn't there: no sign of the system having gone and looked. Absences are very easy to miss when you're glancing at a screen.",
+            text: "The only clue was what was not there: no sign of the system having gone and looked. Absences are very easy to miss when you are glancing at a screen.",
           },
           {
-            text: "That changed how I think about the interface. It isn't just displaying a result. An answer that came from a real check has to visibly look different from one that didn't, which makes that part of the screen a piece of the safety system rather than decoration.",
+            text: "That changed how I think about the interface. It is not just displaying a result. An answer that came from a real check has to visibly differ from one that did not, which makes that part of the screen a piece of the safety system rather than decoration.",
+          },
+        ],
+      },
+      {
+        heading: "Nothing the model says is taken at its word",
+        paragraphs: [
+          {
+            text: "The model supplies a centre point, a radius, a ceiling and a description. Everything else is built in code: the shape of the boundary, which way round it runs, which order the numbers go in, what units they are in. A small model asked to compose geometry gets it wrong in ways nothing catches, because a boundary drawn backwards is still a perfectly valid file.",
+          },
+          {
+            text: "That is not a hunch. Running the same set of planning prompts through a candidate model, it invented coordinates in half the cases where it met an aircraft name it did not recognise, and got them right every time on a name it did. An entity recognition failure rather than a general one, and a good enough reason to keep the model away from anything with a number in it.",
+          },
+        ],
+      },
+      {
+        heading: "The gap that argues for the whole thing",
+        paragraphs: [
+          {
+            text: "Nothing anywhere in the platform checks whether a plan is physically flyable. Testing this, I generated one with 2,640 waypoints and an estimated flight time of 10,254 minutes. Nothing complained. The parameter that would have caught it exists in the API and is wired to nothing.",
+          },
+          {
+            text: "I proposed adding the aircraft model to the plan generation call so the distance limit could be derived from its endurance, and the camera field of view from its sensor. Both endpoints were already queryable, so it needed no new infrastructure. That change was accepted.",
           },
         ],
       },
@@ -107,10 +148,13 @@ export const projects: Project[] = [
         heading: "Where it actually is",
         paragraphs: [
           {
-            text: "The whole path works on a laptop: the question, the check, the refusal, and a record of the decision written down before the pilot ever sees the answer.",
+            text: "The read path and the write path both work, both refuse before anything reaches the platform, and both write the decision down before the planner sees an answer. On writes the boundary is built first and every corner of it tested, because a centre well inside the approved area with a large enough radius puts part of the boundary outside it, and a flight partly outside the approved area is outside it.",
           },
           {
-            text: "What isn't done: pilots don't log in yet, so the system can't tell them apart. The limits are shared rather than personal. Nothing runs anywhere but my machine. And the harder version, refusing a request that would change something rather than just refusing to look something up, is designed but not built.",
+            text: "Every action now carries the individual planner's identity from the app through to the platform, rather than a shared credential. That took rebuilding the same path across three services.",
+          },
+          {
+            text: "What is not done. The planner still does not log in, so the app itself cannot tell them apart yet. The approved limits are one shared set rather than per-person, because the part enforcing them has no idea whose limits to apply. Refusals are not attributed to anyone, and that one is deliberate: the service receives an identity it has not verified for itself, and a name it cannot vouch for in a safety record is worse than an honest gap. The conversational loop is designed in full and being built.",
           },
         ],
       },

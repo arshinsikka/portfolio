@@ -8,16 +8,16 @@ export const roles: Role[] = [
     location: "Singapore",
     dates: "Jul 2026 – Present",
     description:
-      "Building an AI tool for drone operations end to end. A pilot asks for a flight in plain English and gets an answer in seconds. Before this it took someone cross-checking five screens by hand.",
+      "Building an agent that plans drone inspection flights. A planner describes what they need in plain English, answers three or four questions, and gets back a flight plan already checked against the airspace they are cleared for. Before this, someone worked out a hundred-odd commands by hand.",
     body: [
       {
-        text: "I own this one end to end: the app the pilot uses, the services behind it, and the checks that decide whether a request goes through at all.",
+        text: "I own it end to end: the app the planner uses, the service behind it, and the layer that decides whether a request is allowed to go through at all.",
       },
       {
-        text: "Most of the work has gone into those checks, and where they belong given the thing on the other end is a drone rather than a document. That's written up as a case study.",
+        text: "Most of the work has gone into that last part. The thing at the other end of this is a drone rather than a document, which changes where the checks have to live. That's written up as a case study.",
       },
     ],
-    tags: ["Agentic AI", "LLMs", "Computer Vision", "LangGraph", "FastAPI"],
+    tags: ["Agentic AI", "LLMs", "MCP", "LangGraph", "FastAPI"],
     projectSlug: "garuda-refusal-layer",
     links: [
       {
