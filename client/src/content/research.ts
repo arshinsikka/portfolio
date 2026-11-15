@@ -15,9 +15,9 @@ export const research: ResearchItem[] = [
     slug: "ofi-regime-tradability-research",
     title: "Does a Known Market Signal Survive the Cost of Trading It?",
     organization: "Independent",
-    dates: "Aug 2026",
+    dates: "Aug – Nov 2026",
     description:
-      "There's a signal traders use: when there are more buy orders than sell orders on an exchange, the price usually ticks up. I tested whether you can actually make money on it once you pay the trading fees. You can't. I wrote the whole method down before looking at any data, which is how I caught a result that looked real and turned out to be an accident of the maths.",
+      "There's a signal traders use: when there are more buy orders than sell orders on an exchange, the price usually ticks up. I tested whether you can actually make money on it once you pay the trading fees. You can't, and that held again three months later on data I hadn't seen. Writing the whole method down before looking at any data is how I caught a result that looked real but came from the maths, and how two promising leads got tested properly instead of reported.",
     tags: ["Market Microstructure", "Pre-registration", "Statistics"],
     projectSlug: "ofi-regime-tradability",
   },

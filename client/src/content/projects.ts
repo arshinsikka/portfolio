@@ -417,11 +417,11 @@ export const projects: Project[] = [
     slug: "ofi-regime-tradability",
     title: "Testing whether a known market signal actually makes money",
     role: "Independent study",
-    dates: "Aug 2026",
+    dates: "Aug – Nov 2026",
     tier: "featured",
     group: "research",
     summary:
-      "I wrote down the method before I looked at any data. Halfway through I found what I was testing for, then worked out the maths was producing it, not the market.",
+      "I wrote down the method before I looked at any data. Halfway through I found what I was testing for, then worked out the maths was producing it, not the market. Three months later, the result held on data nobody had seen.",
     body: [],
     sections: [
       {
@@ -434,7 +434,7 @@ export const projects: Project[] = [
             text: "Whether it predicts well enough to be worth trading on is a different question, because trading isn't free. Every trade pays a fee and gives up a little on the gap between what buyers offer and what sellers ask. So the real question isn't \"does this predict\", it's \"does it predict by more than it costs to act on\".",
           },
           {
-            text: "I tested it on ten days of order book data from one cryptocurrency market. The answer is no.",
+            text: "I tested it on ten days of order book data from one cryptocurrency market, then again on fourteen days from three months later. The answer is no, both times.",
           },
         ],
       },
@@ -512,10 +512,41 @@ export const projects: Project[] = [
         ],
       },
       {
+        heading: "Trying to break it",
+        paragraphs: [
+          {
+            text: "A negative result is only worth something if you've tried to overturn it, so after the main study I ran three more checks, each logged separately from the pre-registered work.",
+          },
+          {
+            text: "First, whether the straight-line model was hiding an edge at the extremes. I looked at what actually happened after the most extreme order flow, with no model involved. The best average move was 0.6 basis points, against a cost of about 3.",
+          },
+          {
+            text: "Second, whether holding longer would help, since costs are fixed per trade but price moves grow with time. The signal fades faster. Its link to future returns is gone by about two minutes, and nothing in the direction it points covers the cost at any holding period up to ten minutes.",
+          },
+          {
+            text: "Third, whether my confidence intervals were too narrow. Rerunning them in a way that allows for more dependence between neighbouring observations barely changed them.",
+          },
+        ],
+      },
+      {
+        heading: "Two leads, tested properly",
+        paragraphs: [
+          {
+            text: "The extra checks did turn something up. Trading against extreme order flow, betting that the price would snap back, came close to paying in two specific situations. I'd found them by looking at the data, which is exactly how false discoveries happen, so I didn't report them.",
+          },
+          {
+            text: "Instead I wrote down exactly how they would be tested: every threshold fixed from the original data, a minimum sample size, and a stricter bar because I was testing two things at once. I published that before downloading anything new, then ran it on fourteen days of data from November.",
+          },
+          {
+            text: "The main result held. The trading rule never fired once at a real fee. Neither lead survived: one pointed slightly the wrong way over 238 separate episodes, and the other was indistinguishable from noise.",
+          },
+        ],
+      },
+      {
         heading: "What this doesn't show",
         paragraphs: [
           {
-            text: "Ten days, one asset, in a fairly calm stretch of market. Nothing here says anything about stressed conditions or other instruments.",
+            text: "Twenty-four days, one asset, one exchange. The November window was much busier than August, so the result covers a calm stretch and a volatile one, but nothing here says anything about other coins or a real market crash.",
           },
           {
             text: "The data is snapshots roughly ten times a second rather than every individual event, so this is a medium-speed study and I've drawn no high-frequency conclusions from it.",
@@ -534,6 +565,9 @@ export const projects: Project[] = [
           {
             text: "The useful part is the order I did things in. The method existed before the data, so when the exciting result appeared I had no room to talk myself into it. I don't think I'd have caught it otherwise.",
           },
+          {
+            text: "The two leads failing is the part I'd point to first. They looked promising, and a looser process would have written them up.",
+          },
         ],
       },
     ],
@@ -543,6 +577,11 @@ export const projects: Project[] = [
         label: "GitHub",
         url: "https://github.com/arshinsikka/ofi-regime-tradability",
         kind: "github",
+      },
+      {
+        label: "Research note (PDF)",
+        url: "https://github.com/arshinsikka/ofi-regime-tradability/blob/main/docs/research_note.pdf",
+        kind: "website",
       },
     ],
     hasDetailPage: true,
