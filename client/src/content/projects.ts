@@ -126,7 +126,7 @@ export const projects: Project[] = [
         heading: "Nothing the model says is taken at its word",
         paragraphs: [
           {
-            text: "The model supplies a centre point, a radius, a ceiling and a description. Everything else is built in code: the shape of the boundary, which way round it runs, which order the numbers go in, what units they are in. A small model asked to compose geometry gets it wrong in ways nothing catches, because a boundary drawn backwards is still a perfectly valid file.",
+            text: "The model supplies four things: a centre point, a radius, a maximum altitude and a description. Everything else about the flight area is built in code: its exact outline, the direction its corner points run in, whether latitude or longitude comes first, and the units. A small model asked to write that out itself makes mistakes that nothing catches, because an outline with its corners in the wrong order is still a perfectly valid file.",
           },
           {
             text: "That is not a hunch. I ran the same set of planning prompts through a candidate model. When it met an aircraft name it did not recognise, it made up coordinates in half the cases. When it knew the name, it got them right every time. So the failure was specific to unfamiliar names, and that was reason enough to keep the model away from anything with a number in it.",
@@ -154,7 +154,7 @@ export const projects: Project[] = [
             text: "Every action now carries the individual planner's identity from the app through to the platform, rather than a shared credential. That took rebuilding the same path across three services.",
           },
           {
-            text: "What is not done. The planner still does not log in, so the app itself cannot tell them apart yet. The approved limits are one shared set rather than per-person, because the part enforcing them has no idea whose limits to apply. Refusals are not attributed to anyone, and that one is deliberate: the service receives an identity it has not verified for itself, and a name it cannot vouch for in a safety record is worse than an honest gap. The conversational loop is designed in full and being built.",
+            text: "What is not done yet. Planners don't log in to the app, so it can't yet tell one planner from another. The approved limits are one shared set rather than one per person, because the part enforcing them has no way to know whose limits to apply. Refusals aren't recorded against a named person, and that one is deliberate: the service is handed a name it has no way to check for itself, and an unchecked name in a safety record is worse than an honest blank. The conversation itself is fully designed and being built.",
           },
         ],
       },
@@ -618,7 +618,7 @@ export const projects: Project[] = [
         heading: "The monitor that would have missed it",
         paragraphs: [
           {
-            text: "The model got worse between one year's cohort and the next, losing about a seventh of its discriminating power.",
+            text: "The model got worse between one year's students and the next. Its ability to tell finishers apart from non-finishers fell by about a seventh.",
           },
           {
             text: "The standard way to catch this in production is to watch each input for drift, checking whether the distribution of a feature has shifted since training. So I ran that.",
@@ -630,7 +630,7 @@ export const projects: Project[] = [
             text: "Drift monitoring watches each input on its own. What went wrong was the relationship between the inputs and the outcome, and nothing that watches inputs in isolation can see that. The alarm most teams have wired up would have stayed silent through the entire decline.",
           },
           {
-            text: "One thing I'd written down as a worry turned out not to be true. Students can take more than one course, so some of the people the model was tested on had appeared in its training data, and I'd flagged in advance that it might simply be remembering them. It isn't. Measured against their own rates, it ranks the returning students worse than the ones it had never seen.",
+            text: "One thing I'd written down as a worry turned out not to be true. Students can take more than one course, so some of the people the model was tested on had appeared in its training data, and I'd flagged in advance that it might simply be remembering them. It isn't. Allowing for how often each group drops out, it ranks the returning students less accurately than the ones it had never seen.",
           },
         ],
       },
