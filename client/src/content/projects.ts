@@ -31,7 +31,7 @@ export const projects: Project[] = [
             text: "I am building an agent that does. A planner describes what they need in plain language. The agent asks the few things it genuinely cannot work out for itself, generates the plan, checks it is legal and flyable, and hands back a draft the planner opens and reviews. A licensed human pilot then flies it.",
           },
           {
-            text: "Two boundaries define the shape of it. The agent has no role once anything is in the air, by law rather than by choice. And it does not do the geometry. Coverage patterns, camera footprint, altitude bands and endurance are ordinary optimisation living in real services. The model's job is the conversation.",
+            text: "It has two hard limits. First, it has no role once anything is in the air. That is the law, not a design choice. Second, it does not do the geometry. Working out flight patterns, camera coverage, altitudes and battery range is ordinary maths, and it already lives in proper services. The model's job is the conversation.",
           },
         ],
       },
@@ -62,10 +62,10 @@ export const projects: Project[] = [
             text: "Not the planner's own app. It runs on their machine, where anyone can open it up and delete the check. A limit enforced by the thing being limited is not really a limit.",
           },
           {
-            text: "Not the security layer that sits in front of everything, which is where I assumed it belonged. That layer knows who is asking, which sounds exactly right until you notice that being cleared for an area is a fact about numbers. To enforce it you have to be able to read the numbers in the request, and that layer cannot. I only found this by testing the thing directly.",
+            text: "Not the security layer that sits in front of everything, which is where I assumed it belonged. That layer knows who is asking, which sounds like exactly what you need. But whether a request falls inside someone's cleared area depends on the coordinates and altitude in the request, and that layer cannot read them. I only found this by testing it directly.",
           },
           {
-            text: "That leaves the service at the far end, the one that actually receives the request and runs somewhere the planner cannot touch. First place in the chain that sees both the request and the rules at the same time.",
+            text: "That leaves the service at the far end, the one that actually receives the request and runs somewhere the planner cannot touch. It is the first place in the chain that sees both the request and the rules at the same time.",
           },
         ],
       },
@@ -129,7 +129,7 @@ export const projects: Project[] = [
             text: "The model supplies a centre point, a radius, a ceiling and a description. Everything else is built in code: the shape of the boundary, which way round it runs, which order the numbers go in, what units they are in. A small model asked to compose geometry gets it wrong in ways nothing catches, because a boundary drawn backwards is still a perfectly valid file.",
           },
           {
-            text: "That is not a hunch. Running the same set of planning prompts through a candidate model, it invented coordinates in half the cases where it met an aircraft name it did not recognise, and got them right every time on a name it did. An entity recognition failure rather than a general one, and a good enough reason to keep the model away from anything with a number in it.",
+            text: "That is not a hunch. I ran the same set of planning prompts through a candidate model. When it met an aircraft name it did not recognise, it made up coordinates in half the cases. When it knew the name, it got them right every time. So the failure was specific to unfamiliar names, and that was reason enough to keep the model away from anything with a number in it.",
           },
         ],
       },
@@ -148,7 +148,7 @@ export const projects: Project[] = [
         heading: "Where it actually is",
         paragraphs: [
           {
-            text: "The read path and the write path both work, both refuse before anything reaches the platform, and both write the decision down before the planner sees an answer. On writes the boundary is built first and every corner of it tested, because a centre well inside the approved area with a large enough radius puts part of the boundary outside it, and a flight partly outside the approved area is outside it.",
+            text: "Both directions work: reading from the platform and making changes to it. Both refuse before anything reaches the platform, and both record the decision before the planner sees an answer. When making changes, the boundary is built first and every corner of it is checked. A centre point well inside the approved area can still have a radius large enough to push part of the boundary outside it, and a flight that is partly outside the approved area counts as outside.",
           },
           {
             text: "Every action now carries the individual planner's identity from the app through to the platform, rather than a shared credential. That took rebuilding the same path across three services.",

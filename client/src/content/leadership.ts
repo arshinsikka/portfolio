@@ -7,7 +7,7 @@ export const leadership: LeadershipItem[] = [
     organization: "NUS Student Union (NUSSU)",
     dates: "Nov 2024 – Present",
     description:
-      "Leading people operations for NUS's apex student body. Designed onboarding and feedback systems supporting 100+ student leaders across cross-functional teams. Facilitated well-being check-ins and engagement initiatives to strengthen organizational culture.",
+      "I run people operations for the NUS Students' Union. I set up how new student leaders are onboarded and how feedback reaches them, for more than 100 people across teams, and I run regular check-ins on how everyone is doing.",
     tags: ["Student Governance", "HR", "Community Building"],
     isCurrent: true,
   },
@@ -17,7 +17,7 @@ export const leadership: LeadershipItem[] = [
     organization: "NUS Entrepreneurship Society (NES)",
     dates: "May 2025 – Present",
     description:
-      "Supporting CatalystX, NES's flagship incubation program, by managing operations, logistics, and program coordination. Helping student founders turn ideas into impact within a vibrant innovation community.",
+      "I handle operations and logistics for CatalystX, the society's main incubation programme, so student founders can spend their time building instead of organising.",
     tags: ["Student Leadership", "Startup Ecosystem", "Event Ops"],
     isCurrent: true,
   },
@@ -27,7 +27,7 @@ export const leadership: LeadershipItem[] = [
     organization: "India / NUS",
     dates: "Apr 2013 – Present",
     description:
-      "Represented India at 2019 Commonwealth Chess Championship. Runner-up in FIDE-rated tournament with 693 participants. Best Player at IPSC U19 Championship (2022). Captained school and NUS university teams for 10+ years, leading NUS to Inter-Faculty Games victory.",
+      "Represented India at the 2019 Commonwealth Chess Championship. Finished second out of 693 players in a FIDE-rated tournament, and was named Best Player at the IPSC Under-19 Championship in 2022. I've captained school and university teams for more than ten years, including a win at the NUS Inter-Faculty Games.",
     tags: ["Chess", "Competition", "Leadership", "Strategy"],
     isCurrent: true,
   },

@@ -89,7 +89,7 @@ export const roles: Role[] = [
     location: "Gurugram",
     dates: "May 2025 – Aug 2025",
     description:
-      "Built an agentic RAG system using LangChain and Azure OpenAI for document retrieval across 200+ internal consulting documents. Shipped source-PDF retrieval and structured Excel extraction workflows, reducing knowledge lookup time by ~40–50% for 12+ person teams.",
+      "Built an assistant that let a twelve-person consulting team ask questions of their 200+ internal documents instead of searching for them, with every answer linked back to the documents it came from. Lookup time dropped by 40 to 50 percent.",
     body: [
       {
         text: "A twelve-person consulting team kept everything it knew in a shared document store. Over 200 files, findable only if you already knew roughly what you were looking for and what someone had called it. The cost wasn't dramatic. A few minutes lost, several times a day, across everyone, plus the invisible cost of redoing work because you couldn't find the thing that already existed.",
@@ -140,7 +140,7 @@ export const roles: Role[] = [
     location: "Gurugram",
     dates: "May 2024 – Jul 2024",
     description:
-      "Developed REST APIs in Spring Boot for enterprise banking client with JWT authentication and RBAC. Wrote JUnit tests in agile production environment.",
+      "Built REST APIs in Spring Boot for an enterprise banking client, with token-based login (JWT) and role-based access control, and wrote the JUnit tests for them.",
     tags: ["Java", "Spring Boot", "REST APIs", "Enterprise"],
   },
 ];

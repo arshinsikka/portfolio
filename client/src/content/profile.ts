@@ -35,7 +35,7 @@ export const hero = {
   tagline:
     "I build AI systems and then try to break them.",
   intro:
-    "Final year at NUS, studying CS. I've spent the last two years building AI things and finding out which parts of them survive contact with real users.",
+    "Final-year Computer Science student at NUS. For the last two years I've been building AI systems and finding out which parts hold up once real people use them.",
   /**
    * The one line that answers "what is he doing right now". Kept as a single
    * string so it can be edited in one place — it is the copy on the page most
@@ -61,8 +61,8 @@ export const lookingFor = {
 export const about = {
   heading: "About Me",
   paragraphs: [
-    "I'm in my final year of Computer Science at NUS, specialising in AI. Right now I'm at Garuda Robotics through NUS Overseas Colleges, where I own an AI tool for drone operations end to end — the app a pilot talks to, everything behind it, and the part that decides whether the system is allowed to act on what it just worked out.",
-    "The thing I look for in a project is how many people it ends up touching. That's what's kept me interested in the work I've done so far, and it's what I'll pick on next.",
+    "I'm in my final year of Computer Science at NUS, specialising in AI. Right now I'm at Garuda Robotics through NUS Overseas Colleges, building an AI assistant that plans drone inspection flights. I own all of it: the app the planner talks to, the services behind it, and the safety checks that decide whether a request is allowed to go through.",
+    "The thing I look for in a project is how many people it ends up touching. That's what has kept me interested in the work I've done so far, and it's how I'll choose what to work on next.",
     "Eventually I want to start something of my own that does exactly that. I'm not there yet, and the fastest way to get there is to keep finding out what I'm bad at.",
   ],
 };
@@ -80,7 +80,7 @@ export const education = {
 export const contact = {
   heading: "Let's Connect",
   subtitle:
-    "Building something exciting? Looking to collaborate? I'd love to hear from you.",
+    "If you're hiring, building something, or want to talk about any of this, I'd like to hear from you.",
   phone: {
     heading: "Phone",
     label: "Singapore",
@@ -144,7 +144,7 @@ export const sectionCopy = {
   work: {
     heading: "Work Experience",
     subtitle:
-      "Professional experience across AI systems, full-stack engineering, and product development",
+      "Where I've worked, and what I built there.",
   },
   projects: {
     heading: "Projects",
@@ -179,6 +179,6 @@ export const sectionCopy = {
   leadership: {
     heading: "Leadership & Involvement",
     subtitle:
-      "Student governance, competitive chess, entrepreneurship, and social impact",
+      "Student union work, entrepreneurship, and chess.",
   },
 };
