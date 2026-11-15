@@ -76,7 +76,7 @@ export const projects: Project[] = [
             text: "Once you lay it out, the security layer knows who is asking but not what they asked. The service that enforces the limits knows what was asked but not who asked it. Nothing in the chain knows both at once.",
           },
           {
-            text: "Almost every unfinished thing in this project comes back to that one split.",
+            text: "That one fact decided where every check in the system lives.",
           },
         ],
       },
@@ -134,13 +134,13 @@ export const projects: Project[] = [
         ],
       },
       {
-        heading: "The gap that argues for the whole thing",
+        heading: "A plan nobody could fly",
         paragraphs: [
           {
-            text: "Nothing anywhere in the platform checks whether a plan is physically flyable. Testing this, I generated one with 2,640 waypoints and an estimated flight time of 10,254 minutes. Nothing complained. The parameter that would have caught it exists in the API and is wired to nothing.",
+            text: "While testing, I generated a plan with 2,640 waypoints and an estimated flight time of 10,254 minutes, about a week in the air, and it went through without complaint. Nothing in the pipeline was yet checking whether a plan could physically be flown.",
           },
           {
-            text: "I proposed adding the aircraft model to the plan generation call so the distance limit could be derived from its endurance, and the camera field of view from its sensor. Both endpoints were already queryable, so it needed no new infrastructure. That change was accepted.",
+            text: "I proposed adding the aircraft model to the plan generation call so the distance limit could be derived from its endurance, and the camera field of view from its sensor. Both pieces of information were already available from existing services, so it needed no new infrastructure. The change was accepted.",
           },
         ],
       },
@@ -148,13 +148,16 @@ export const projects: Project[] = [
         heading: "Where it actually is",
         paragraphs: [
           {
-            text: "Both directions work: reading from the platform and making changes to it. Both refuse before anything reaches the platform, and both record the decision before the planner sees an answer. When making changes, the boundary is built first and every corner of it is checked. A centre point well inside the approved area can still have a radius large enough to push part of the boundary outside it, and a flight that is partly outside the approved area counts as outside.",
+            text: "It runs in production. The tool service went live in October with 12 tools and 298 automated tests, and the assistant was demoed to visiting executives on 23 October.",
+          },
+          {
+            text: "Both directions work: reading from the platform and making changes to it. Both refuse before anything reaches the platform, and both record the decision before the planner sees an answer. A request outside the approved area is refused in 13 milliseconds, without a single call reaching the platform. When making changes, the boundary is built first and every corner of it is checked. A centre point well inside the approved area can still have a radius large enough to push part of the boundary outside it, and a flight that is partly outside the approved area counts as outside.",
           },
           {
             text: "Every action now carries the individual planner's identity from the app through to the platform, rather than a shared credential. That took rebuilding the same path across three services.",
           },
           {
-            text: "What is not done yet. Planners don't log in to the app, so it can't yet tell one planner from another. The approved limits are one shared set rather than one per person, because the part enforcing them has no way to know whose limits to apply. Refusals aren't recorded against a named person, and that one is deliberate: the service is handed a name it has no way to check for itself, and an unchecked name in a safety record is worse than an honest blank. The conversation itself is fully designed and being built.",
+            text: "Next is the part no code can supply. Which flight pattern suits which job is a real decision planners make, and it isn't written down anywhere, so the next piece of the agent means learning it from the operations team.",
           },
         ],
       },
@@ -164,7 +167,7 @@ export const projects: Project[] = [
     hasDetailPage: true,
   },
   {
-    slug: "sara-guardrails",
+    slug: "utility-assistant-guardrails",
     title: "Six months making an AI assistant refuse the right things",
     role: "Data Science Intern, SP Digital",
     dates: "Jan 2026 – Jun 2026",
@@ -730,14 +733,14 @@ export const projects: Project[] = [
     hasDetailPage: false,
   },
   {
-    slug: "echolens-pii",
-    title: "Echolens — PII Redaction Evaluation",
+    slug: "pii-redaction-evaluation",
+    title: "PII Redaction Evaluation",
     role: "Data Science Intern, SP Digital",
     dates: "2026",
     tier: "standard",
     group: "production",
     summary:
-      "Echolens strips personal information out of customer call transcripts. I built the evaluation pipeline that measures how well it does that. Most of the work wasn't the measurement, it was deciding what counts: a receipt number isn't personal information, a partial email address probably isn't either, and those rules have to be written down and applied consistently before any score means anything. I scored it so that missing something counts as worse than being over-cautious, because those two errors aren't equally bad here.",
+      "At SP Digital, a separate system strips personal information out of customer call transcripts. I built the evaluation pipeline that measures how well it does that. Most of the work wasn't the measurement, it was deciding what counts: a receipt number isn't personal information, a partial email address probably isn't either, and those rules have to be written down and applied consistently before any score means anything. I scored it so that missing something counts as worse than being over-cautious, because those two errors aren't equally bad here.",
     body: [],
     tags: ["PII", "Evaluation", "NLP"],
     links: [],
@@ -793,16 +796,23 @@ export const projects: Project[] = [
   },
   {
     slug: "fnb-trend-intelligence",
-    title: "Trend Intelligence for Singapore F&B",
+    title: "Counter: pricing intelligence for Singapore cafes",
     role: "Co-founder",
-    dates: "2026 – Present",
+    dates: "Aug 2026 – Present",
     tier: "standard",
     group: "ventures",
     summary:
-      "We started building a trend tracker for people deciding where to eat, and stopped when it became clear that consumers won't pay for that and Google already owns food discovery. So we moved to the other side of the counter, where the pain is sharper and there's an actual budget: restaurant operators trying to work out what to put on a menu. The idea is still unproven and I'd rather say so than pretend otherwise. We're running customer interviews now, and one objection has already killed a business model we liked, which is that you can't sell a monthly subscription into an industry where most operators never turn a profit.",
+      "Counter shows a cafe owner how their menu prices compare with the cafes around them. You upload your menu as a PDF or a photo, the AI reads it, you pick your competitors on a map, and you see where each item sits against theirs, with the source and date of every price. You can try a new price on an item before changing anything, and see new items and offers at nearby cafes. It runs on a live benchmark of more than 6,000 menu prices from over 100 Singapore cafes. The Weekly Bake, our newsletter, is how we reach owners. I'm building the Counter demo and adapting the landing page, working with three teammates from my NUS venture course. We started with food trend tracking for operators and moved to pricing in October. It's still early: we've interviewed owners in person and put a paid waitlist on the landing page to see who commits. One lesson from the first version stuck: you can't sell a monthly subscription into an industry where most shops never turn a profit.",
     body: [],
-    tags: ["Market Research", "F&B", "Product Discovery"],
-    links: [],
+    tags: ["Product", "AI", "Market Intelligence", "F&B"],
+    links: [
+      { label: "Counter", url: "https://www.countr.site", kind: "website" },
+      {
+        label: "The Weekly Bake",
+        url: "https://theweeklybake.online",
+        kind: "website",
+      },
+    ],
     hasDetailPage: false,
   },
   {

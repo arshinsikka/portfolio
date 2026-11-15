@@ -3,5 +3,12 @@
   "outputDirectory": "dist/public",
   "installCommand": "npm install",
   "framework": "vite",
-  "devCommand": "npm run dev"
+  "devCommand": "npm run dev",
+  "redirects": [
+    {
+      "source": "/projects/sara-guardrails",
+      "destination": "/projects/utility-assistant-guardrails",
+      "permanent": true
+    }
+  ]
 }

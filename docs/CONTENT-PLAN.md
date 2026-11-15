@@ -288,8 +288,8 @@ once. Ordered by what that person hits, weighted by how bad the current state is
 4. ~~**Lecture AI case study, C1–C4.**~~ — **RESOLVED.** Rewritten in full; no
    placeholders remain on any detail page.
 5. ~~**SP Digital role description.**~~ — **RESOLVED.** The role now carries a
-   `body`, and links through to the SARA case study at
-   `/projects/sara-guardrails`.
+   `body`, and links through to the utility assistant case study at
+   `/projects/utility-assistant-guardrails`.
 
 **Tier 3 — depth where it is claimed**
 

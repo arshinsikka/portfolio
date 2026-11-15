@@ -8,16 +8,26 @@ export const roles: Role[] = [
     location: "Singapore",
     dates: "Jul 2026 – Present",
     description:
-      "Building an agent that plans drone inspection flights. A planner describes what they need in plain English, answers three or four questions, and gets back a flight plan already checked against the airspace they are cleared for. Before this, someone worked out a hundred-odd commands by hand.",
+      "Building an AI assistant that plans drone inspection flights. The operations team describes a job in plain words, answers three questions, and gets a flight plan saved in the planning platform, already checked against the area they are cleared to fly. A person reviews it and a licensed pilot flies it. Before this, someone entered around twenty flight settings by hand. It has been running in production since October and was demoed to visiting executives on 23 October.",
     body: [
       {
-        text: "I own it end to end: the app the planner uses, the service behind it, and the layer that decides whether a request is allowed to go through at all.",
+        text: "I built the tool service the assistant works through, and the desktop app the team uses. The service gives the model 12 tools, is covered by 298 automated tests, and enforces the limits on what any request can do. I also chose and configured the security gateway in front of it, after comparing two open-source options.",
       },
       {
-        text: "Most of the work has gone into that last part. The thing at the other end of this is a drone rather than a document, which changes where the checks have to live. That's written up as a case study.",
+        text: "Most of the work has gone into the safety side. The thing at the other end of this is a drone, not a document, so a flight plan outside someone's approved area has to be impossible to create, not just unlikely. That's written up as a case study.",
+      },
+      {
+        text: "I also connected the assistant to live drone video, so it can raise fire and perimeter alerts and write short situation reports, and moved the service onto Kubernetes on the company's own servers, with Docker and an automated test-and-deploy pipeline. That work is the groundwork for opening the tools up to outside developers.",
       },
     ],
-    tags: ["Agentic AI", "LLMs", "MCP", "LangGraph", "FastAPI"],
+    tags: [
+      "Agentic AI",
+      "MCP",
+      "TypeScript",
+      "Electron",
+      "Local LLMs",
+      "Kubernetes",
+    ],
     projectSlug: "garuda-refusal-layer",
     links: [
       {
@@ -45,11 +55,11 @@ export const roles: Role[] = [
       },
     ],
     tags: ["LLM Systems", "Guardrails", "Enterprise AI", "Evaluation"],
-    projectSlug: "sara-guardrails",
+    projectSlug: "utility-assistant-guardrails",
     links: [
       {
         label: "Read the case study",
-        url: "/projects/sara-guardrails",
+        url: "/projects/utility-assistant-guardrails",
         kind: "website",
       },
     ],
